@@ -60,7 +60,8 @@ int main(int argc, char *argv[]) {
           iFile, mmap, binary);
       auto bytes_used = G.get_memory_size();
       std::cout << "total bytes used = " << bytes_used << "\n";
-      run_all(G, options);
+      // run_all(G, options);
+      run_bfs(G, options);
     } else {
       using graph_t =
           gbbs::Graph<asym_graph_impl, /* symmetric */ false, graph_api>;

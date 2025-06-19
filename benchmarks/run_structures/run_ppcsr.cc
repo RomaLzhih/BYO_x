@@ -256,7 +256,8 @@ int main(int argc, char *argv[]) {
           iFile, mmap, binary);
       auto bytes_used = G.get_memory_size();
       std::cout << "total bytes used = " << bytes_used << "\n";
-      run_all(G, options);
+      // run_all(G, options);
+      run_bfs(G, options);
     } else {
       std::cerr << "does not support directed graphs yet\n";
       return -1;

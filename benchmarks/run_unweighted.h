@@ -24,7 +24,8 @@
 
 namespace gbbs {
 
-template <class Graph> double Map_runner(const Graph &G, size_t rounds) {
+template <class Graph>
+double Map_runner(const Graph &G, size_t rounds) {
   std::cout << "### Application: Base Map" << std::endl;
   std::cout << "### ------------------------------------" << std::endl;
   std::cout << "### ------------------------------------" << std::endl;
@@ -114,7 +115,6 @@ double Map_Remote_runner(const Graph &G, size_t rounds) {
     }
     std::cout << "### Running Time: " << tt << std::endl;
     if (r == 0) {
-
     } else {
       total_time += tt;
     }
@@ -703,16 +703,16 @@ inline uint64_t hash64(uint64_t u) {
 // A cheap version of an inteface that should be improved
 // Allows forking a state into multiple states
 struct random {
-public:
-  random(size_t seed) : state(seed){};
-  random() : state(0){};
+ public:
+  random(size_t seed) : state(seed) {};
+  random() : state(0) {};
   random fork(uint64_t i) const { return random(hash64(hash64(i + state))); }
   random next() const { return fork(0); }
   size_t ith_rand(uint64_t i) const { return hash64(i + state); }
   size_t operator[](size_t i) const { return ith_rand(i); }
   size_t rand() { return ith_rand(0); }
 
-private:
+ private:
   uint64_t state = 0;
 };
 
@@ -727,7 +727,8 @@ inline uint32_t hash32(uint32_t a) {
   return a;
 }
 
-template <class intT> struct rMat {
+template <class intT>
+struct rMat {
   double a, ab, abc;
   intT n;
   intT h;
@@ -776,7 +777,7 @@ template <class intT> struct rMat {
     return rMatRec(n, randStart, randStride);
   }
 };
-} // namespace batch_insert_helpers
+}  // namespace batch_insert_helpers
 
 template <class Graph>
 void Batch_insert_runner(std::map<std::string, double> &time_map, Graph &G,
@@ -893,7 +894,7 @@ void Batch_insert_runner(std::map<std::string, double> &time_map, Graph &G,
 }
 
 class run_all_options {
-public:
+ public:
   uintE src = 0;
   size_t rounds = 3;
   bool dump = false;
@@ -928,6 +929,29 @@ public:
 };
 
 template <class Graph>
+void run_bfs(const Graph &G, const run_all_options &options) {
+  static constexpr bool symmetric = Graph::symmetric;
+  std::cout << "### Threads: " << num_workers() << std::endl;
+  std::cout << "### n: " << G.N() << std::endl;
+  std::cout << "### m: " << G.M() << std::endl;
+  if (options.dump) {
+    std::cout << "writing output arrays to files\n";
+  }
+  std::map<std::string, double> time_map;
+  if (!options.inserts) {
+    time_map["BFS"] = BFS_runner(G, options.src, options.rounds, options.dump);
+
+    time_map["PageRank"] =
+        PageRank_runner(G, options.rounds, options.dump, options.pagerank_iters,
+                        options.pagerank_em, options.pagerank_delta,
+                        options.pagerank_eps, options.pagerank_leps);
+  }
+  for (const auto &[alg, time_per_iter] : time_map) {
+    std::cout << "BYO: => " << alg << ", " << time_per_iter << "\n";
+  }
+}
+
+template <class Graph>
 void run_all(const Graph &G, const run_all_options &options) {
   static constexpr bool symmetric = Graph::symmetric;
   std::cout << "### Threads: " << num_workers() << std::endl;
@@ -938,7 +962,6 @@ void run_all(const Graph &G, const run_all_options &options) {
   }
   std::map<std::string, double> time_map;
   if (!options.inserts) {
-
     if constexpr (symmetric) {
       time_map["Map"] = Map_runner(G, options.rounds);
       time_map["Map_withRemote_0"] =
@@ -987,7 +1010,6 @@ void run_all(const Graph &G, const run_all_options &options) {
     // }
 
     if constexpr (symmetric) {
-
       time_map["Coloring"] = Coloring_runner(
           G, options.rounds, options.dump, options.coloringLF, options.verify);
       time_map["KCore"] =
@@ -1033,4 +1055,4 @@ void run_all(const Graph &G, const run_all_options &options) {
   }
 }
 
-} // namespace gbbs
+}  // namespace gbbs

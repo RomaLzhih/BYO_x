@@ -25,7 +25,8 @@ static constexpr bool csr_shuffle = true;
 static constexpr bool csr_shuffle = false;
 #endif
 
-template <class node_t, class edge_t, bool shuffle = false> struct CSR {
+template <class node_t, class edge_t, bool shuffle = false>
+struct CSR {
   using weight_type = gbbs::empty;
   using vertex_weight_type = double;
   size_t num_vertices() const { return n; }
@@ -35,14 +36,16 @@ template <class node_t, class edge_t, bool shuffle = false> struct CSR {
     return vertex_offsets[i + 1] - vertex_offsets[i];
   }
 
-  template <class F> void map_neighbors(size_t i, F f) const {
+  template <class F>
+  void map_neighbors(size_t i, F f) const {
     weight_type w{};
     for (edge_t j = vertex_offsets[i]; j < vertex_offsets[i + 1]; j++) {
       f(i, edges[j], w);
     }
   }
 
-  template <class F> void map_neighbors_early_exit(size_t i, F f) const {
+  template <class F>
+  void map_neighbors_early_exit(size_t i, F f) const {
     weight_type w{};
     for (edge_t j = vertex_offsets[i]; j < vertex_offsets[i + 1]; j++) {
       if (f(i, edges[j], w)) {
@@ -51,7 +54,8 @@ template <class node_t, class edge_t, bool shuffle = false> struct CSR {
     }
   }
 
-  template <class F> void parallel_map_neighbors(size_t i, F f) const {
+  template <class F>
+  void parallel_map_neighbors(size_t i, F f) const {
     weight_type w{};
     gbbs::parallel_for(vertex_offsets[i], vertex_offsets[i + 1],
                        [&](auto j) { f(i, edges[j], w); });
@@ -160,7 +164,7 @@ template <class node_t, class edge_t, bool shuffle = false> struct CSR {
   size_t N() const { return n; }
   size_t M() const { return m; }
 
-private:
+ private:
   struct free_delete {
     void operator()(void *x) { free(x); }
   };
@@ -215,7 +219,8 @@ int main(int argc, char *argv[]) {
           iFile, mmap, binary);
       auto bytes_used = G.get_memory_size();
       std::cout << "total bytes used = " << bytes_used << "\n";
-      run_all(G, options);
+      // run_all(G, options);
+      run_bfs(G, options);
     } else {
       std::cerr << "does not support directed graphs yet\n";
       return -1;

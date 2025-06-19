@@ -1,0 +1,5 @@
+Running benchmark: run_std_set
+xxxFor graph: tw.adj
+### Graph: /colddata/zmen002/graph/tw.adj
+xxxFor graph: fs.adj
+### Graph: /colddata/zmen002/graph/fs.adj

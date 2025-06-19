@@ -28,8 +28,8 @@
 namespace gbbs {
 
 struct BFS_F {
-  uintE* Parents;
-  BFS_F(uintE* _Parents) : Parents(_Parents) {}
+  uintE *Parents;
+  BFS_F(uintE *_Parents) : Parents(_Parents) {}
   inline bool update(uintE s, uintE d, [[maybe_unused]] auto w) {
     if (Parents[d] == UINT_E_MAX) {
       Parents[d] = s;
@@ -45,10 +45,10 @@ struct BFS_F {
 };
 
 template <class Graph>
-inline sequence<uintE> BFS(Graph& G, uintE src) {
+inline sequence<uintE> BFS(Graph &G, uintE src) {
   /* Creates Parents array, initialized to all -1, except for src. */
-  auto Parents =
-      sequence<uintE>::from_function(G.N(), [&](size_t i) { return UINT_E_MAX; });
+  auto Parents = sequence<uintE>::from_function(
+      G.N(), [&](size_t i) { return UINT_E_MAX; });
   Parents[src] = src;
 
   vertexSubset Frontier(G.N(), src);
