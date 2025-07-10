@@ -2,6 +2,7 @@
 *.swo
 *.swp
 *.txt
+*.vscode/
 
 *.a
 *.o

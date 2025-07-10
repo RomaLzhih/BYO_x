@@ -1,12 +1,12 @@
 #pragma once
 
-#include "gbbs/gbbs.h"
-
 #include <stdlib.h>
+
 #include <cmath>
 #include <fstream>
 #include <iostream>
 
+#include "gbbs/gbbs.h"
 #include "to_char_arr.h"
 
 namespace gbbs {
@@ -25,56 +25,58 @@ void write_graph_byte_format(Graph& GA, std::ofstream& out, bool symmetric) {
   auto degrees = parlay::sequence<uintE>(n);
   auto byte_offsets = parlay::sequence<uintT>(n + 1);
   std::cout << "# calculating size" << std::endl;
-  parallel_for(0, n,
-               [&](size_t i) {
-                 size_t total_bytes = 0;
-                 uintE last_ngh = 0;
-                 size_t deg = 0;
-                 uchar tmp[16];
-                 auto f = [&](uintE u, uintE v, W w) {
-                   long bytes = 0;
-                   if (deg == 0) {
-                     bytes = compressFirstEdge(tmp, bytes, u, v);
-                     bytes = compressWeight<W>(tmp, bytes, w);
-                   } else {
-                     bytes = compressEdge(tmp, bytes, v - last_ngh);
-                     bytes = compressWeight<W>(tmp, bytes, w);
-                   }
-                   last_ngh = v;
-                   total_bytes += bytes;
-                   deg++;
-                   return false;
-                 };
-                 GA.get_vertex(i).out_neighbors().map(f, false);
+  parallel_for(
+      0, n,
+      [&](size_t i) {
+        size_t total_bytes = 0;
+        uintE last_ngh = 0;
+        size_t deg = 0;
+        uchar tmp[16];
+        auto f = [&](uintE u, uintE v, W w) {
+          long bytes = 0;
+          if (deg == 0) {
+            bytes = compressFirstEdge(tmp, bytes, u, v);
+            bytes = compressWeight<W>(tmp, bytes, w);
+          } else {
+            bytes = compressEdge(tmp, bytes, v - last_ngh);
+            bytes = compressWeight<W>(tmp, bytes, w);
+          }
+          last_ngh = v;
+          total_bytes += bytes;
+          deg++;
+          return false;
+        };
+        GA.get_vertex(i).out_neighbors().map(f, false);
 
-                 degrees[i] = deg;
-                 byte_offsets[i] = total_bytes;
-               },
-               1);
+        degrees[i] = deg;
+        byte_offsets[i] = total_bytes;
+      },
+      1);
   byte_offsets[n] = 0;
   size_t total_space = parlay::scan_inplace(make_slice(byte_offsets));
   std::cout << "# total_space = " << total_space << std::endl;
 
   // 2. Create compressed format in-memory
   auto edges = parlay::sequence<uchar>(total_space);
-  parallel_for(0, n,
-               [&](size_t i) {
-                 uintE deg = degrees[i];
-                 assert(deg == GA.get_vertex(i).out_degree());
-                 if (deg > 0) {
-                   auto it = GA.get_vertex(i).out_neighbors().get_iter();
-                   size_t nbytes = byte::sequentialCompressEdgeSet<W>(
-                       edges.begin() + byte_offsets[i], 0, deg, (uintE)i, it);
-                   if (nbytes != (byte_offsets[i + 1] - byte_offsets[i])) {
-                     std::cout << "# nbytes = " << nbytes << " but offs = "
-                               << (byte_offsets[i + 1] - byte_offsets[i])
-                               << " deg = " << deg << " i = " << i << std::endl;
-                     exit(0);
-                   }
-                   assert(nbytes == (byte_offsets[i + 1] - byte_offsets[i]));
-                 }
-               },
-               1);
+  parallel_for(
+      0, n,
+      [&](size_t i) {
+        uintE deg = degrees[i];
+        assert(deg == GA.get_vertex(i).out_degree());
+        if (deg > 0) {
+          auto it = GA.get_vertex(i).out_neighbors().get_iter();
+          size_t nbytes = byte::sequentialCompressEdgeSet<W>(
+              edges.begin() + byte_offsets[i], 0, deg, (uintE)i, it);
+          if (nbytes != (byte_offsets[i + 1] - byte_offsets[i])) {
+            std::cout << "# nbytes = " << nbytes << " but offs = "
+                      << (byte_offsets[i + 1] - byte_offsets[i])
+                      << " deg = " << deg << " i = " << i << std::endl;
+            exit(0);
+          }
+          assert(nbytes == (byte_offsets[i + 1] - byte_offsets[i]));
+        }
+      },
+      1);
 
   long* sizes = gbbs::new_array_no_init<long>(3);
   sizes[0] = GA.n;
@@ -106,63 +108,64 @@ void write_graph_bytepd_directed(Graph& GA, std::ofstream& out) {
   {
     auto degrees = parlay::sequence<uintE>(n);
     auto byte_offsets = parlay::sequence<uintT>(n + 1);
-    parallel_for(0, n,
-                 [&](size_t i) {
-                   size_t total_bytes = 0;
-                   uintE last_ngh = 0;
-                   size_t deg = 0;
-                   uchar tmp[16];
-                   auto f = [&](uintE u, uintE v, W w) {
-                     long bytes = 0;
-                     if ((deg % PAR_DEGREE_TWO) == 0) {
-                       bytes = compressFirstEdge(tmp, bytes, u, v);
-                       bytes = compressWeight<W>(tmp, bytes, w);
-                     } else {
-                       bytes = compressEdge(tmp, bytes, v - last_ngh);
-                       bytes = compressWeight<W>(tmp, bytes, w);
-                     }
-                     last_ngh = v;
-                     total_bytes += bytes;
-                     deg++;
-                     return false;
-                   };
-                   GA.get_vertex(i).out_neighbors().map(f, false);
+    parallel_for(
+        0, n,
+        [&](size_t i) {
+          size_t total_bytes = 0;
+          uintE last_ngh = 0;
+          size_t deg = 0;
+          uchar tmp[16];
+          auto f = [&](uintE u, uintE v, W w) {
+            long bytes = 0;
+            if ((deg % PAR_DEGREE_TWO) == 0) {
+              bytes = compressFirstEdge(tmp, bytes, u, v);
+              bytes = compressWeight<W>(tmp, bytes, w);
+            } else {
+              bytes = compressEdge(tmp, bytes, v - last_ngh);
+              bytes = compressWeight<W>(tmp, bytes, w);
+            }
+            last_ngh = v;
+            total_bytes += bytes;
+            deg++;
+            return false;
+          };
+          GA.get_vertex(i).out_neighbors().map(f, false);
 
-                   if (deg > 0) {
-                     size_t n_chunks = 1 + (deg - 1) / PAR_DEGREE_TWO;
-                     // To account for the byte offsets
-                     total_bytes += (n_chunks - 1) * sizeof(uintE);
-                   }
+          if (deg > 0) {
+            size_t n_chunks = 1 + (deg - 1) / PAR_DEGREE_TWO;
+            // To account for the byte offsets
+            total_bytes += (n_chunks - 1) * sizeof(uintE);
+          }
 
-                   degrees[i] = deg;
-                   byte_offsets[i] = total_bytes;
-                 },
-                 1);
+          degrees[i] = deg;
+          byte_offsets[i] = total_bytes;
+        },
+        1);
     byte_offsets[n] = 0;
     size_t total_space = parlay::scan_inplace(make_slice(byte_offsets));
     std::cout << "# total out-space = " << total_space << std::endl;
 
     // 2. Create compressed format in-memory
     auto edges = parlay::sequence<uchar>(total_space);
-    parallel_for(0, n,
-                 [&](size_t i) {
-                   uintE deg = degrees[i];
-                   if (deg > 0) {
-                     auto it = GA.get_vertex(i).out_neighbors().get_iter();
-                     size_t nbytes = bytepd::sequentialCompressEdgeSet<W>(
-                         edges.begin() + byte_offsets[i], 0, deg, (uintE)i, it,
-                         PAR_DEGREE_TWO);
-                     if (nbytes != (byte_offsets[i + 1] - byte_offsets[i])) {
-                       std::cout << "# nbytes = " << nbytes << ". Should be: "
-                                 << (byte_offsets[i + 1] - byte_offsets[i])
-                                 << " deg = " << deg << " i = " << i
-                                 << std::endl;
-                       exit(0);
-                     }
-                     assert(nbytes == (byte_offsets[i + 1] - byte_offsets[i]));
-                   }
-                 },
-                 1);
+    parallel_for(
+        0, n,
+        [&](size_t i) {
+          uintE deg = degrees[i];
+          if (deg > 0) {
+            auto it = GA.get_vertex(i).out_neighbors().get_iter();
+            size_t nbytes = bytepd::sequentialCompressEdgeSet<W>(
+                edges.begin() + byte_offsets[i], 0, deg, (uintE)i, it,
+                PAR_DEGREE_TWO);
+            if (nbytes != (byte_offsets[i + 1] - byte_offsets[i])) {
+              std::cout << "# nbytes = " << nbytes << ". Should be: "
+                        << (byte_offsets[i + 1] - byte_offsets[i])
+                        << " deg = " << deg << " i = " << i << std::endl;
+              exit(0);
+            }
+            assert(nbytes == (byte_offsets[i + 1] - byte_offsets[i]));
+          }
+        },
+        1);
     std::cout << "# Compressed" << std::endl;
 
     long* sizes = gbbs::new_array_no_init<long>(3);
@@ -181,63 +184,64 @@ void write_graph_bytepd_directed(Graph& GA, std::ofstream& out) {
     // 1. Calculate total size
     auto degrees = parlay::sequence<uintE>(n);
     auto byte_offsets = parlay::sequence<uintT>(n + 1);
-    parallel_for(0, n,
-                 [&](size_t i) {
-                   size_t total_bytes = 0;
-                   uintE last_ngh = 0;
-                   size_t deg = 0;
-                   uchar tmp[16];
-                   auto f = [&](uintE u, uintE v, W w) {
-                     long bytes = 0;
-                     if ((deg % PAR_DEGREE_TWO) == 0) {
-                       bytes = compressFirstEdge(tmp, bytes, u, v);
-                       bytes = compressWeight<W>(tmp, bytes, w);
-                     } else {
-                       bytes = compressEdge(tmp, bytes, v - last_ngh);
-                       bytes = compressWeight<W>(tmp, bytes, w);
-                     }
-                     last_ngh = v;
-                     total_bytes += bytes;
-                     deg++;
-                     return false;
-                   };
-                   GA.get_vertex(i).in_neighbors().map(f, false);
+    parallel_for(
+        0, n,
+        [&](size_t i) {
+          size_t total_bytes = 0;
+          uintE last_ngh = 0;
+          size_t deg = 0;
+          uchar tmp[16];
+          auto f = [&](uintE u, uintE v, W w) {
+            long bytes = 0;
+            if ((deg % PAR_DEGREE_TWO) == 0) {
+              bytes = compressFirstEdge(tmp, bytes, u, v);
+              bytes = compressWeight<W>(tmp, bytes, w);
+            } else {
+              bytes = compressEdge(tmp, bytes, v - last_ngh);
+              bytes = compressWeight<W>(tmp, bytes, w);
+            }
+            last_ngh = v;
+            total_bytes += bytes;
+            deg++;
+            return false;
+          };
+          GA.get_vertex(i).in_neighbors().map(f, false);
 
-                   if (deg > 0) {
-                     size_t n_chunks = 1 + (deg - 1) / PAR_DEGREE_TWO;
-                     // To account for the byte offsets
-                     total_bytes += (n_chunks - 1) * sizeof(uintE);
-                   }
+          if (deg > 0) {
+            size_t n_chunks = 1 + (deg - 1) / PAR_DEGREE_TWO;
+            // To account for the byte offsets
+            total_bytes += (n_chunks - 1) * sizeof(uintE);
+          }
 
-                   degrees[i] = deg;
-                   byte_offsets[i] = total_bytes;
-                 },
-                 1);
+          degrees[i] = deg;
+          byte_offsets[i] = total_bytes;
+        },
+        1);
     byte_offsets[n] = 0;
     size_t total_space = parlay::scan_inplace(make_slice(byte_offsets));
     std::cout << "# total in-space = " << total_space << std::endl;
 
     // 2. Create compressed format in-memory
     auto edges = parlay::sequence<uchar>(total_space);
-    parallel_for(0, n,
-                 [&](size_t i) {
-                   uintE deg = degrees[i];
-                   if (deg > 0) {
-                     auto it = GA.get_vertex(i).in_neighbors().get_iter();
-                     size_t nbytes = bytepd::sequentialCompressEdgeSet<W>(
-                         edges.begin() + byte_offsets[i], 0, deg, (uintE)i, it,
-                         PAR_DEGREE_TWO);
-                     if (nbytes != (byte_offsets[i + 1] - byte_offsets[i])) {
-                       std::cout << "# nbytes = " << nbytes << ". Should be: "
-                                 << (byte_offsets[i + 1] - byte_offsets[i])
-                                 << " deg = " << deg << " i = " << i
-                                 << std::endl;
-                       exit(0);
-                     }
-                     assert(nbytes == (byte_offsets[i + 1] - byte_offsets[i]));
-                   }
-                 },
-                 1);
+    parallel_for(
+        0, n,
+        [&](size_t i) {
+          uintE deg = degrees[i];
+          if (deg > 0) {
+            auto it = GA.get_vertex(i).in_neighbors().get_iter();
+            size_t nbytes = bytepd::sequentialCompressEdgeSet<W>(
+                edges.begin() + byte_offsets[i], 0, deg, (uintE)i, it,
+                PAR_DEGREE_TWO);
+            if (nbytes != (byte_offsets[i + 1] - byte_offsets[i])) {
+              std::cout << "# nbytes = " << nbytes << ". Should be: "
+                        << (byte_offsets[i + 1] - byte_offsets[i])
+                        << " deg = " << deg << " i = " << i << std::endl;
+              exit(0);
+            }
+            assert(nbytes == (byte_offsets[i + 1] - byte_offsets[i]));
+          }
+        },
+        1);
     std::cout << "# Compressed" << std::endl;
     long inTotalSpace[1];
     inTotalSpace[0] = total_space;
@@ -262,37 +266,38 @@ void write_graph_bytepd_format(Graph& GA, std::ofstream& out, bool symmetric,
   // 1. Calculate total size
   auto degrees = parlay::sequence<uintE>(n);
   auto byte_offsets = parlay::sequence<uintT>(n + 1);
-  parallel_for(0, n,
-               [&](size_t i) {
-                 size_t total_bytes = 0;
-                 uintE last_ngh = 0;
-                 size_t deg = 0;
-                 uchar tmp[16];
-                 auto f = [&](uintE u, uintE v, W w) {
-                   long bytes = 0;
-                   if ((deg % PAR_DEGREE_TWO) == 0) {
-                     bytes = compressFirstEdge(tmp, bytes, u, v);
-                     bytes = compressWeight<W>(tmp, bytes, w);
-                   } else {
-                     bytes = compressEdge(tmp, bytes, v - last_ngh);
-                     bytes = compressWeight<W>(tmp, bytes, w);
-                   }
-                   last_ngh = v;
-                   total_bytes += bytes;
-                   deg++;
-                 };
-                 GA.get_vertex(i).out_neighbors().map(f, false);
+  parallel_for(
+      0, n,
+      [&](size_t i) {
+        size_t total_bytes = 0;
+        uintE last_ngh = 0;
+        size_t deg = 0;
+        uchar tmp[16];
+        auto f = [&](uintE u, uintE v, W w) {
+          long bytes = 0;
+          if ((deg % PAR_DEGREE_TWO) == 0) {
+            bytes = compressFirstEdge(tmp, bytes, u, v);
+            bytes = compressWeight<W>(tmp, bytes, w);
+          } else {
+            bytes = compressEdge(tmp, bytes, v - last_ngh);
+            bytes = compressWeight<W>(tmp, bytes, w);
+          }
+          last_ngh = v;
+          total_bytes += bytes;
+          deg++;
+        };
+        GA.get_vertex(i).out_neighbors().map(f, false);
 
-                 if (deg > 0) {
-                   size_t n_chunks = 1 + (deg - 1) / PAR_DEGREE_TWO;
-                   // To account for the byte offsets
-                   total_bytes += (n_chunks - 1) * sizeof(uintE);
-                 }
+        if (deg > 0) {
+          size_t n_chunks = 1 + (deg - 1) / PAR_DEGREE_TWO;
+          // To account for the byte offsets
+          total_bytes += (n_chunks - 1) * sizeof(uintE);
+        }
 
-                 degrees[i] = deg;
-                 byte_offsets[i] = total_bytes;
-               },
-               1);
+        degrees[i] = deg;
+        byte_offsets[i] = total_bytes;
+      },
+      1);
   byte_offsets[n] = 0;
   size_t total_space = parlay::scan_inplace(make_slice(byte_offsets));
   std::cout << "# total space = " << total_space << std::endl;
@@ -388,58 +393,59 @@ void degree_reorder(Graph& GA, std::ofstream& out, bool symmetric,
   // 1. Calculate total size
   auto degrees = parlay::sequence<uintE>(n);
   auto byte_offsets = parlay::sequence<uintT>(n + 1);
-  parallel_for(0, n,
-               [&](size_t i) {
-                 size_t total_bytes = 0;
-                 uintE last_ngh = 0;
-                 size_t deg = 0;
-                 uchar tmp[16];
+  parallel_for(
+      0, n,
+      [&](size_t i) {
+        size_t total_bytes = 0;
+        uintE last_ngh = 0;
+        size_t deg = 0;
+        uchar tmp[16];
 
-                 uintE stk[8192];
-                 uintE* nghs = (uintE*)stk;
-                 auto vtx = GA.get_vertex(i);
-                 if (vtx.out_degree() > 0) {
-                   if (vtx.out_degree() > 8192) {
-                     nghs = gbbs::new_array_no_init<uintE>(deg);
-                   }
+        uintE stk[8192];
+        uintE* nghs = (uintE*)stk;
+        auto vtx = GA.get_vertex(i);
+        if (vtx.out_degree() > 0) {
+          if (vtx.out_degree() > 8192) {
+            nghs = gbbs::new_array_no_init<uintE>(deg);
+          }
 
-                   size_t k = 0;
-                   auto map_ngh_f = [&](const uintE& u, const uintE& w,
-                                        const W& wgh) { nghs[k++] = rank[w]; };
-                   vtx.out_neighbors().map(map_ngh_f, false);
+          size_t k = 0;
+          auto map_ngh_f = [&](const uintE& u, const uintE& w, const W& wgh) {
+            nghs[k++] = rank[w];
+          };
+          vtx.out_neighbors().map(map_ngh_f, false);
 
-                   auto new_ngh_seq = gbbs::make_slice(nghs, deg);
-                   parlay::sample_sort_inplace(new_ngh_seq, std::less<uintE>());
+          auto new_ngh_seq = gbbs::make_slice(nghs, deg);
+          parlay::sample_sort_inplace(new_ngh_seq, std::less<uintE>());
 
-                   uintE our_new_id = rank[i];
+          uintE our_new_id = rank[i];
 
-                   for (size_t j = 0; j < new_ngh_seq.size(); j++) {
-                     long bytes = 0;
-                     uintE ngh_id = new_ngh_seq[j];
-                     if ((deg % PAR_DEGREE_TWO) == 0) {
-                       bytes =
-                           compressFirstEdge(tmp, bytes, our_new_id, ngh_id);
-                     } else {
-                       bytes = compressEdge(tmp, bytes, ngh_id - last_ngh);
-                     }
-                     last_ngh = ngh_id;
-                     total_bytes += bytes;
-                     deg++;
-                   }
+          for (size_t j = 0; j < new_ngh_seq.size(); j++) {
+            long bytes = 0;
+            uintE ngh_id = new_ngh_seq[j];
+            if ((deg % PAR_DEGREE_TWO) == 0) {
+              bytes = compressFirstEdge(tmp, bytes, our_new_id, ngh_id);
+            } else {
+              bytes = compressEdge(tmp, bytes, ngh_id - last_ngh);
+            }
+            last_ngh = ngh_id;
+            total_bytes += bytes;
+            deg++;
+          }
 
-                   if (deg > 0) {
-                     size_t n_chunks = 1 + (deg - 1) / PAR_DEGREE_TWO;
-                     // To account for the byte offsets
-                     total_bytes += (n_chunks - 1) * sizeof(uintE);
-                   }
-                   if (vtx.out_degree() > 8192) {
-                     gbbs::free_array(nghs, deg);
-                   }
-                 }
-                 degrees[i] = deg;
-                 byte_offsets[i] = total_bytes;
-               },
-               1);
+          if (deg > 0) {
+            size_t n_chunks = 1 + (deg - 1) / PAR_DEGREE_TWO;
+            // To account for the byte offsets
+            total_bytes += (n_chunks - 1) * sizeof(uintE);
+          }
+          if (vtx.out_degree() > 8192) {
+            gbbs::free_array(nghs, deg);
+          }
+        }
+        degrees[i] = deg;
+        byte_offsets[i] = total_bytes;
+      },
+      1);
   byte_offsets[n] = 0;
   size_t total_space = parlay::scan_inplace(make_slice(byte_offsets));
   std::cout << "# total space = " << total_space << std::endl;
@@ -497,7 +503,7 @@ void degree_reorder(Graph& GA, std::ofstream& out, bool symmetric,
   out.close();
 }
 
-};  // namespace bytepd_amortized
+};  // namespace bytepd
 
 namespace bytepd_amortized {
 
@@ -516,42 +522,43 @@ void write_graph_bytepd_amortized_directed(Graph& GA, std::ofstream& out) {
   {
     auto degrees = parlay::sequence<uintE>(n);
     auto byte_offsets = parlay::sequence<uintT>(n + 1);
-    parallel_for(0, n,
-                 [&](size_t i) {
-                   size_t total_bytes = 0;
-                   uintE last_ngh = 0;
-                   size_t deg = 0;
-                   uchar tmp[16];
-                   auto f = [&](uintE u, uintE v, W w) {
-                     long bytes = 0;
-                     if ((deg % PAR_DEGREE_TWO) == 0) {
-                       bytes = compressFirstEdge(tmp, bytes, u, v);
-                       bytes = compressWeight<W>(tmp, bytes, w);
-                     } else {
-                       bytes = compressEdge(tmp, bytes, v - last_ngh);
-                       bytes = compressWeight<W>(tmp, bytes, w);
-                     }
-                     last_ngh = v;
-                     total_bytes += bytes;
-                     deg++;
-                     return false;
-                   };
-                   GA.get_vertex(i).out_neighbors().map(f, false);
+    parallel_for(
+        0, n,
+        [&](size_t i) {
+          size_t total_bytes = 0;
+          uintE last_ngh = 0;
+          size_t deg = 0;
+          uchar tmp[16];
+          auto f = [&](uintE u, uintE v, W w) {
+            long bytes = 0;
+            if ((deg % PAR_DEGREE_TWO) == 0) {
+              bytes = compressFirstEdge(tmp, bytes, u, v);
+              bytes = compressWeight<W>(tmp, bytes, w);
+            } else {
+              bytes = compressEdge(tmp, bytes, v - last_ngh);
+              bytes = compressWeight<W>(tmp, bytes, w);
+            }
+            last_ngh = v;
+            total_bytes += bytes;
+            deg++;
+            return false;
+          };
+          GA.get_vertex(i).out_neighbors().map(f, false);
 
-                   if (deg > 0) {
-                     size_t n_chunks = 1 + (deg - 1) / PAR_DEGREE_TWO;
-                     // To account for the byte offsets
-                     total_bytes += (n_chunks - 1) * sizeof(uintE);
-                     // To account for the per-block counters
-                     total_bytes += (n_chunks) * sizeof(uintE);
-                     // To account for the virtual degree
-                     total_bytes += sizeof(uintE);
-                   }
+          if (deg > 0) {
+            size_t n_chunks = 1 + (deg - 1) / PAR_DEGREE_TWO;
+            // To account for the byte offsets
+            total_bytes += (n_chunks - 1) * sizeof(uintE);
+            // To account for the per-block counters
+            total_bytes += (n_chunks) * sizeof(uintE);
+            // To account for the virtual degree
+            total_bytes += sizeof(uintE);
+          }
 
-                   degrees[i] = deg;
-                   byte_offsets[i] = total_bytes;
-                 },
-                 1);
+          degrees[i] = deg;
+          byte_offsets[i] = total_bytes;
+        },
+        1);
     byte_offsets[n] = 0;
     size_t total_space = parlay::scan_inplace(make_slice(byte_offsets));
     std::cout << "# total out-space = " << total_space << std::endl;
@@ -595,42 +602,43 @@ void write_graph_bytepd_amortized_directed(Graph& GA, std::ofstream& out) {
     // 1. Calculate total size
     auto degrees = parlay::sequence<uintE>(n);
     auto byte_offsets = parlay::sequence<uintT>(n + 1);
-    parallel_for(0, n,
-                 [&](size_t i) {
-                   size_t total_bytes = 0;
-                   uintE last_ngh = 0;
-                   size_t deg = 0;
-                   uchar tmp[16];
-                   auto f = [&](uintE u, uintE v, W w) {
-                     long bytes = 0;
-                     if ((deg % PAR_DEGREE_TWO) == 0) {
-                       bytes = compressFirstEdge(tmp, bytes, u, v);
-                       bytes = compressWeight<W>(tmp, bytes, w);
-                     } else {
-                       bytes = compressEdge(tmp, bytes, v - last_ngh);
-                       bytes = compressWeight<W>(tmp, bytes, w);
-                     }
-                     last_ngh = v;
-                     total_bytes += bytes;
-                     deg++;
-                     return false;
-                   };
-                   GA.get_vertex(i).in_neighbors().map(f, false);
+    parallel_for(
+        0, n,
+        [&](size_t i) {
+          size_t total_bytes = 0;
+          uintE last_ngh = 0;
+          size_t deg = 0;
+          uchar tmp[16];
+          auto f = [&](uintE u, uintE v, W w) {
+            long bytes = 0;
+            if ((deg % PAR_DEGREE_TWO) == 0) {
+              bytes = compressFirstEdge(tmp, bytes, u, v);
+              bytes = compressWeight<W>(tmp, bytes, w);
+            } else {
+              bytes = compressEdge(tmp, bytes, v - last_ngh);
+              bytes = compressWeight<W>(tmp, bytes, w);
+            }
+            last_ngh = v;
+            total_bytes += bytes;
+            deg++;
+            return false;
+          };
+          GA.get_vertex(i).in_neighbors().map(f, false);
 
-                   if (deg > 0) {
-                     size_t n_chunks = 1 + (deg - 1) / PAR_DEGREE_TWO;
-                     // To account for the byte offsets
-                     total_bytes += (n_chunks - 1) * sizeof(uintE);
-                     // To account for the per-block counters
-                     total_bytes += (n_chunks) * sizeof(uintE);
-                     // To account for the virtual degree
-                     total_bytes += sizeof(uintE);
-                   }
+          if (deg > 0) {
+            size_t n_chunks = 1 + (deg - 1) / PAR_DEGREE_TWO;
+            // To account for the byte offsets
+            total_bytes += (n_chunks - 1) * sizeof(uintE);
+            // To account for the per-block counters
+            total_bytes += (n_chunks) * sizeof(uintE);
+            // To account for the virtual degree
+            total_bytes += sizeof(uintE);
+          }
 
-                   degrees[i] = deg;
-                   byte_offsets[i] = total_bytes;
-                 },
-                 1);
+          degrees[i] = deg;
+          byte_offsets[i] = total_bytes;
+        },
+        1);
     byte_offsets[n] = 0;
     size_t total_space = parlay::scan_inplace(make_slice(byte_offsets));
     std::cout << "# total in-space = " << total_space << std::endl;
@@ -680,41 +688,42 @@ void write_graph_bytepd_amortized_format(Graph& GA, std::ofstream& out,
   // 1. Calculate total size
   auto degrees = parlay::sequence<uintE>(n);
   auto byte_offsets = parlay::sequence<uintT>(n + 1);
-  parallel_for(0, n,
-               [&](size_t i) {
-                 size_t total_bytes = 0;
-                 uintE last_ngh = 0;
-                 size_t deg = 0;
-                 uchar tmp[16];
-                 auto f = [&](uintE u, uintE v, W w) {
-                   long bytes = 0;
-                   if ((deg % PAR_DEGREE_TWO) == 0) {
-                     bytes = compressFirstEdge(tmp, bytes, u, v);
-                     bytes = compressWeight<W>(tmp, bytes, w);
-                   } else {
-                     bytes = compressEdge(tmp, bytes, v - last_ngh);
-                     bytes = compressWeight<W>(tmp, bytes, w);
-                   }
-                   last_ngh = v;
-                   total_bytes += bytes;
-                   deg++;
-                 };
-                 GA.get_vertex(i).out_neighbors().map(f, false);
+  parallel_for(
+      0, n,
+      [&](size_t i) {
+        size_t total_bytes = 0;
+        uintE last_ngh = 0;
+        size_t deg = 0;
+        uchar tmp[16];
+        auto f = [&](uintE u, uintE v, W w) {
+          long bytes = 0;
+          if ((deg % PAR_DEGREE_TWO) == 0) {
+            bytes = compressFirstEdge(tmp, bytes, u, v);
+            bytes = compressWeight<W>(tmp, bytes, w);
+          } else {
+            bytes = compressEdge(tmp, bytes, v - last_ngh);
+            bytes = compressWeight<W>(tmp, bytes, w);
+          }
+          last_ngh = v;
+          total_bytes += bytes;
+          deg++;
+        };
+        GA.get_vertex(i).out_neighbors().map(f, false);
 
-                 if (deg > 0) {
-                   size_t n_chunks = 1 + (deg - 1) / PAR_DEGREE_TWO;
-                   // To account for the byte offsets
-                   total_bytes += (n_chunks - 1) * sizeof(uintE);
-                   // To account for the per-block counters
-                   total_bytes += (n_chunks) * sizeof(uintE);
-                   // To account for the virtual degree
-                   total_bytes += sizeof(uintE);
-                 }
+        if (deg > 0) {
+          size_t n_chunks = 1 + (deg - 1) / PAR_DEGREE_TWO;
+          // To account for the byte offsets
+          total_bytes += (n_chunks - 1) * sizeof(uintE);
+          // To account for the per-block counters
+          total_bytes += (n_chunks) * sizeof(uintE);
+          // To account for the virtual degree
+          total_bytes += sizeof(uintE);
+        }
 
-                 degrees[i] = deg;
-                 byte_offsets[i] = total_bytes;
-               },
-               1);
+        degrees[i] = deg;
+        byte_offsets[i] = total_bytes;
+      },
+      1);
   byte_offsets[n] = 0;
   size_t total_space = parlay::scan_inplace(make_slice(byte_offsets));
   std::cout << "# total space = " << total_space << std::endl;
@@ -810,62 +819,63 @@ void degree_reorder(Graph& GA, std::ofstream& out, bool symmetric,
   // 1. Calculate total size
   auto degrees = parlay::sequence<uintE>(n);
   auto byte_offsets = parlay::sequence<uintT>(n + 1);
-  parallel_for(0, n,
-               [&](size_t i) {
-                 size_t total_bytes = 0;
-                 uintE last_ngh = 0;
-                 size_t deg = 0;
-                 uchar tmp[16];
+  parallel_for(
+      0, n,
+      [&](size_t i) {
+        size_t total_bytes = 0;
+        uintE last_ngh = 0;
+        size_t deg = 0;
+        uchar tmp[16];
 
-                 uintE stk[8192];
-                 uintE* nghs = (uintE*)stk;
-                 auto vtx = GA.get_vertex(i);
-                 if (vtx.out_degree() > 0) {
-                   if (vtx.out_degree() > 8192) {
-                     nghs = gbbs::new_array_no_init<uintE>(deg);
-                   }
+        uintE stk[8192];
+        uintE* nghs = (uintE*)stk;
+        auto vtx = GA.get_vertex(i);
+        if (vtx.out_degree() > 0) {
+          if (vtx.out_degree() > 8192) {
+            nghs = gbbs::new_array_no_init<uintE>(deg);
+          }
 
-                   size_t k = 0;
-                   auto map_ngh_f = [&](const uintE& u, const uintE& w,
-                                        const W& wgh) { nghs[k++] = rank[w]; };
-                   vtx.out_neighbors().map(map_ngh_f, false);
+          size_t k = 0;
+          auto map_ngh_f = [&](const uintE& u, const uintE& w, const W& wgh) {
+            nghs[k++] = rank[w];
+          };
+          vtx.out_neighbors().map(map_ngh_f, false);
 
-                   auto new_ngh_seq = gbbs::make_slice(nghs, deg);
-                   parlay::sample_sort_inplace(new_ngh_seq, std::less<uintE>());
+          auto new_ngh_seq = gbbs::make_slice(nghs, deg);
+          parlay::sample_sort_inplace(new_ngh_seq, std::less<uintE>());
 
-                   uintE our_new_id = rank[i];
+          uintE our_new_id = rank[i];
 
-                   for (size_t j = 0; j < new_ngh_seq.size(); j++) {
-                     long bytes = 0;
-                     uintE ngh_id = new_ngh_seq[j];
-                     if ((deg % PAR_DEGREE_TWO) == 0) {
-                       bytes =
-                           compressFirstEdge(tmp, bytes, our_new_id, ngh_id);
-                     } else {
-                       bytes = compressEdge(tmp, bytes, ngh_id - last_ngh);
-                     }
-                     last_ngh = ngh_id;
-                     total_bytes += bytes;
-                     deg++;
-                   }
+          for (size_t j = 0; j < new_ngh_seq.size(); j++) {
+            long bytes = 0;
+            uintE ngh_id = new_ngh_seq[j];
+            if ((deg % PAR_DEGREE_TWO) == 0) {
+              bytes = compressFirstEdge(tmp, bytes, our_new_id, ngh_id);
+            } else {
+              bytes = compressEdge(tmp, bytes, ngh_id - last_ngh);
+            }
+            last_ngh = ngh_id;
+            total_bytes += bytes;
+            deg++;
+          }
 
-                   if (deg > 0) {
-                     size_t n_chunks = 1 + (deg - 1) / PAR_DEGREE_TWO;
-                     // To account for the byte offsets
-                     total_bytes += (n_chunks - 1) * sizeof(uintE);
-                     // To account for the per-block counters
-                     total_bytes += (n_chunks) * sizeof(uintE);
-                     // To account for the virtual degree
-                     total_bytes += sizeof(uintE);
-                   }
-                   if (vtx.out_degree() > 8192) {
-                     gbbs::free_array(nghs, deg);
-                   }
-                 }
-                 degrees[i] = deg;
-                 byte_offsets[i] = total_bytes;
-               },
-               1);
+          if (deg > 0) {
+            size_t n_chunks = 1 + (deg - 1) / PAR_DEGREE_TWO;
+            // To account for the byte offsets
+            total_bytes += (n_chunks - 1) * sizeof(uintE);
+            // To account for the per-block counters
+            total_bytes += (n_chunks) * sizeof(uintE);
+            // To account for the virtual degree
+            total_bytes += sizeof(uintE);
+          }
+          if (vtx.out_degree() > 8192) {
+            gbbs::free_array(nghs, deg);
+          }
+        }
+        degrees[i] = deg;
+        byte_offsets[i] = total_bytes;
+      },
+      1);
   byte_offsets[n] = 0;
   size_t total_space = parlay::scan_inplace(make_slice(byte_offsets));
   std::cout << "# total space = " << total_space << std::endl;
@@ -1095,18 +1105,18 @@ void edgearray(Graph& GA, std::ofstream& out) {
 
   auto edges = parlay::sequence<std::tuple<uintE, uintE, W>>(m);
 
-  parallel_for(0, n,
-               [&](size_t i) {
-                 size_t off = degs[i];
-                 size_t k = 0;
-                 auto map_f = [&](const uintE& u, const uintE& v,
-                                  const W& wgh) {
-                   edges[off + k++] = std::make_tuple(u, v, wgh);
-                 };
-                 GA.get_vertex(i).out_neighbors().map(map_f, false);
-                 assert(k == GA.get_vertex(i).out_degree());
-               },
-               1);
+  parallel_for(
+      0, n,
+      [&](size_t i) {
+        size_t off = degs[i];
+        size_t k = 0;
+        auto map_f = [&](const uintE& u, const uintE& v, const W& wgh) {
+          edges[off + k++] = std::make_tuple(u, v, wgh);
+        };
+        GA.get_vertex(i).out_neighbors().map(map_f, false);
+        assert(k == GA.get_vertex(i).out_degree());
+      },
+      1);
 
   writeArrayToStream(out, edges);  // m edge triples
   out.close();

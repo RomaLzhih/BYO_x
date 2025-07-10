@@ -810,26 +810,6 @@ void Batch_insert_runner(std::map<std::string, double> &time_map, Graph &G,
         timer st;
         timer sort_timer;
         double batch_sort_time = 0;
-        // if constexpr (Graph::support_insert_grouped_batch) {
-        //   sort_timer.start();
-        //   auto groups = semisort::group_by(updates.cut(0, updates.size()),
-        //     [](auto elem) {return std::get<0>(elem);},
-        //     [](auto elem) {return std::get<1>(elem);});
-        //   parlay::parallel_for(0, groups.size(), [&](size_t i) {
-        //     parlay::integer_sort_inplace(groups[i].second);
-        //     auto seq = parlay::unique(groups[i].second);
-        //     groups[i].second = seq;
-        //   });
-        //   batch_sort_time = sort_timer.stop();
-        //   st.start();
-        //   G.insert_sorted_grouped_batch(groups);
-        // } else {
-        //   sort_timer.start();
-        //   auto elements = parlay::unique(parlay::sort(updates));
-        //   batch_sort_time = sort_timer.stop();
-        //   st.start();
-        //   G.insert_sorted_batch(elements.data(), elements.size());
-        // }
         st.start();
         G.insert_batch(updates.data(), updates.size());
 
@@ -853,22 +833,6 @@ void Batch_insert_runner(std::map<std::string, double> &time_map, Graph &G,
 
       {
         timer st;
-        // if constexpr (Graph::support_insert_grouped_batch) {
-        //   auto groups = semisort::group_by(updates.cut(0, updates.size()),
-        //     [](auto elem) {return std::get<0>(elem);},
-        //     [](auto elem) {return std::get<1>(elem);});
-        //   parlay::parallel_for(0, groups.size(), [&](size_t i) {
-        //     parlay::integer_sort_inplace(groups[i].second);
-        //     auto seq = parlay::unique(groups[i].second);
-        //     groups[i].second = seq;
-        //   });
-        //   st.start();
-        //   G.remove_sorted_grouped_batch(groups);
-        // } else {
-        //   auto elements = parlay::unique(parlay::sort(updates));
-        //   st.start();
-        //   G.remove_sorted_batch(elements.data(), elements.size());
-        // }
         st.start();
         G.remove_batch(updates.data(), updates.size());
         double batch_time = st.stop();
@@ -946,9 +910,94 @@ void run_bfs(const Graph &G, const run_all_options &options) {
                         options.pagerank_em, options.pagerank_delta,
                         options.pagerank_eps, options.pagerank_leps);
   }
+  if (options.inserts) {
+    auto edges = G.edges();
+    for (int i = 0; i < 10; i++) {
+      std::cout << std::get<0>(edges[i]) << ", " << std::get<1>(edges[i])
+                << "\n";
+    }
+    if constexpr (Graph::support_insert_batch) {
+      // Batch_insert_runner(time_map, const_cast<Graph &>(G), options.rounds,
+      //                     options.max_batch, options.dump);
+      parlay::random_shuffle(edges);
+      G.remove_batch(edges.data(), edges.size());
+    }
+  }
   for (const auto &[alg, time_per_iter] : time_map) {
     std::cout << "BYO: => " << alg << ", " << time_per_iter << "\n";
   }
+}
+
+template <class Graph>
+void run_incre_alg(const Graph &G, const run_all_options &options) {
+  static constexpr bool symmetric = Graph::symmetric;
+  std::cout << "### Threads: " << num_workers() << std::endl;
+  std::cout << "### n: " << G.N() << std::endl;
+  std::cout << "### m: " << G.M() << std::endl;
+  if (options.dump) {
+    std::cout << "writing output arrays to files\n";
+  }
+  if constexpr (!Graph::support_insert_batch) {
+    std::cout << "Graph does not support batch insertions, skipping.\n";
+    return;
+  }
+
+  using pair_vertex = std::tuple<uintE, uintE>;
+  auto edges = G.edges();
+  auto batch_edges = parlay::tabulate(edges.size(), [&](size_t i) {
+    return pair_vertex(std::get<0>(edges[i]), std::get<1>(edges[i]));
+  });
+  parlay::random_shuffle(batch_edges);
+
+  // parlay::sequence<size_t> sizes = {1, 10, 100, 1000, 10000, 100000,
+  // 1000000};
+  parlay::sequence<size_t> sizes = {10};
+  const int batch_num = 10;
+  for (size_t i = 0; i < sizes.size(); i++) {
+    size_t batch_size = sizes[i];
+    std::cout << "batch size: " << batch_size << "\n";
+    if (batch_num * batch_size > edges.size()) {
+      std::cout
+          << "skipping, total batch size is larger than number of edges\n";
+      continue;
+    }
+
+    // remove last batch_size * batch_num edges from the graph
+    size_t remove_edges_num = batch_num * batch_size;
+    size_t remaining_edges_num = edges.size() - remove_edges_num;
+    auto new_graph(G);
+    new_graph.remove_batch(batch_edges.data() + remaining_edges_num,
+                           remove_edges_num);
+    printf("new graph has %zu edges\n", new_graph.M());
+
+    // begin insert batch
+    for (int j = 0; j < batch_num; j++) {
+      timer t;
+      t.start();
+      new_graph.insert_batch(
+          batch_edges.data() + remaining_edges_num + j * batch_size,
+          batch_size);
+      double tt = t.stop();
+      std::cout << "inserted " << batch_size << " edges in " << tt << "\n";
+    }
+
+    std::cout << "inserted " << batch_size << " edges\n";
+  }
+
+  // std::map<std::string, double> time_map;
+  // if (!options.inserts) {
+  //   time_map["BFS"] = BFS_runner(G, options.src, options.rounds,
+  //   options.dump);
+
+  //   time_map["PageRank"] =
+  //       PageRank_runner(G, options.rounds, options.dump,
+  //       options.pagerank_iters,
+  //                       options.pagerank_em, options.pagerank_delta,
+  //                       options.pagerank_eps, options.pagerank_leps);
+  // }
+  // for (const auto &[alg, time_per_iter] : time_map) {
+  //   std::cout << "BYO: => " << alg << ", " << time_per_iter << "\n";
+  // }
 }
 
 template <class Graph>

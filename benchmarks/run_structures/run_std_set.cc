@@ -60,7 +60,8 @@ int main(int argc, char *argv[]) {
           iFile, mmap, binary);
       auto bytes_used = G.get_memory_size();
       std::cout << "total bytes used = " << bytes_used << "\n";
-      run_bfs(G, options);
+      run_incre_alg(G, options);
+      // run_bfs(G, options);
       // run_all(G, options);
     } else {
       using graph_t =
