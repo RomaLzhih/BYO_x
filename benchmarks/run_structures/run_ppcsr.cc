@@ -176,38 +176,46 @@ template <class W> struct symmetric_ppcsr_graph {
   //     other.vertex_weights = nullptr;
   //   */
   // }
-  // /*
-  // // Move assignment
-  // symmetric_terrace_graph &
-  // operator=(symmetric_terrace_graph &&other) noexcept {
+  // copy assignment
+  // symmetric_ppcsr_graph &operator=(symmetric_ppcsr_graph &other) noexcept {
   //   nodes = other.nodes;
-  //   vertex_weights = other.vertex_weights;
-  //   other.vertex_weights = nullptr;
-  // }
-  // */
-  // // Copy constructor
-  // symmetric_terrace_graph(const symmetric_terrace_graph &other)
-  //     : nodes(other.N()) {
-  //   printf("copy constructor\n");
-  //   for (size_t i = 0; i < N(); i++) {
-  //     other.map_neighbors(
-  //         i, [&](auto src, auto dest, auto val) { nodes.add_edge(src, dest);
-  //         });
-  //   }
-
-  //   vertex_weights = nullptr;
   //   if (other.vertex_weights != nullptr) {
   //     vertex_weights = gbbs::new_array_no_init<vertex_weight_type>(N());
   //     gbbs::parallel_for(0, N(), [&](size_t i) {
   //       vertex_weights[i] = other.vertex_weights[i];
   //     });
   //   }
-  //   deletion_fn = [&]() {
-  //     if (vertex_weights != nullptr) {
-  //       gbbs::free_array(vertex_weights, N());
-  //     }
-  //   };
+  //   return *this;
+  //   // other.vertex_weights = nullptr;
   // }
+
+  // Copy constructor
+  symmetric_ppcsr_graph(const symmetric_ppcsr_graph &other) : nodes(other.N()) {
+    // printf("copy constructor\n");
+    // TODO: change to parallel add
+    for (size_t i = 0; i < N(); i++) {
+      other.map_neighbors(i, [&](auto src, auto dest, auto val) {
+        if constexpr (std::same_as<decltype(val), gbbs::empty>) {
+          nodes.add_edge(src, dest, 0);
+        } else {
+          nodes.add_edge(src, dest, val);
+        }
+      });
+    }
+    vertex_weights = nullptr;
+    if (other.vertex_weights != nullptr) {
+      vertex_weights = gbbs::new_array_no_init<vertex_weight_type>(N());
+      gbbs::parallel_for(0, N(), [&](size_t i) {
+        vertex_weights[i] = other.vertex_weights[i];
+      });
+    }
+    deletion_fn = [&]() {
+      if (vertex_weights != nullptr) {
+        gbbs::free_array(vertex_weights, N());
+      }
+    };
+  }
+
   ~symmetric_ppcsr_graph() { deletion_fn(); }
 
   void insert_batch(std::tuple<uint32_t, uint32_t> *es, size_t n) {
