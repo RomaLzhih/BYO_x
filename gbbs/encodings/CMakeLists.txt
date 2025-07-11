@@ -1,0 +1,4 @@
+# GBBS Encodings
+add_library(gbbs_encodings_decoders INTERFACE)
+target_include_directories(gbbs_encodings_decoders INTERFACE .)
+target_link_libraries(gbbs_encodings_decoders INTERFACE gbbs_bridge)

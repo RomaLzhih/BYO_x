@@ -1,0 +1,16 @@
+# GBBS Helpers
+add_library(gbbs_helpers_parse_command_line INTERFACE)
+target_include_directories(gbbs_helpers_parse_command_line INTERFACE .)
+target_link_libraries(gbbs_helpers_parse_command_line INTERFACE gbbs_macros)
+
+add_library(gbbs_helpers_dyn_arr INTERFACE)
+target_include_directories(gbbs_helpers_dyn_arr INTERFACE .)
+target_link_libraries(gbbs_helpers_dyn_arr INTERFACE gbbs_bridge)
+
+add_library(gbbs_helpers_histogram INTERFACE)
+target_include_directories(gbbs_helpers_histogram INTERFACE .)
+target_link_libraries(gbbs_helpers_histogram INTERFACE gbbs_bridge)
+
+add_library(gbbs_helpers_sparse_table INTERFACE)
+target_include_directories(gbbs_helpers_sparse_table INTERFACE .)
+target_link_libraries(gbbs_helpers_sparse_table INTERFACE gbbs_bridge)

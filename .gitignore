@@ -2,7 +2,9 @@
 *.swo
 *.swp
 *.txt
+!CMakeLists.txt
 *.vscode/
+build/
 
 *.a
 *.o
