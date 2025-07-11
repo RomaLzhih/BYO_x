@@ -72,11 +72,10 @@ struct symmetric_graph {
   size_t num_edges() const { return m; }
 
   // ======== Graph operators that perform packing ========
-  template <class P>
-  uintE packNeighbors(uintE id, P &p, uint8_t *tmp) {
+  template <class P> uintE packNeighbors(uintE id, P &p, uint8_t *tmp) {
     uintE new_degree =
         get_vertex(id).out_neighbors().pack(p, (std::tuple<uintE, W> *)tmp);
-    v_data[id].degree = new_degree;  // updates the degree
+    v_data[id].degree = new_degree; // updates the degree
     return new_degree;
   }
 
@@ -119,12 +118,10 @@ struct symmetric_graph {
         granularity);
   }
 
-  template <class F>
-  void map_neighbors(size_t i, F f) const {
+  template <class F> void map_neighbors(size_t i, F f) const {
     get_vertex(i).out_neighbors().map(f, false);
   }
-  template <class F>
-  void map_neighbors_early_exit(size_t i, F f) const {
+  template <class F> void map_neighbors_early_exit(size_t i, F f) const {
     constexpr bool support_map_early_exit =
         requires() { get_vertex(i).out_neighbors().map_early_exit(f, false); };
     if constexpr (support_map_early_exit) {
@@ -140,8 +137,7 @@ struct symmetric_graph {
       }
     }
   }
-  template <class F>
-  void parallel_map_neighbors(size_t i, F f) const {
+  template <class F> void parallel_map_neighbors(size_t i, F f) const {
     get_vertex(i).out_neighbors().map(f, true);
   }
 
@@ -193,21 +189,13 @@ struct symmetric_graph {
 
   // ======================= Constructors and fields  ========================
   symmetric_graph()
-      : v_data(nullptr),
-        e0(nullptr),
-        vertex_weights(nullptr),
-        n(0),
-        m(0),
+      : v_data(nullptr), e0(nullptr), vertex_weights(nullptr), n(0), m(0),
         deletion_fn([]() {}) {}
 
   symmetric_graph(vertex_data *v_data, size_t n, size_t m,
                   std::function<void()> _deletion_fn, edge_type *_e0,
                   vertex_weight_type *_vertex_weights = nullptr)
-      : v_data(v_data),
-        e0(_e0),
-        vertex_weights(_vertex_weights),
-        n(n),
-        m(m),
+      : v_data(v_data), e0(_e0), vertex_weights(_vertex_weights), n(n), m(m),
         deletion_fn(_deletion_fn) {}
 
   size_t get_memory_size() {
@@ -302,11 +290,10 @@ struct symmetric_ptr_graph {
   size_t num_edges() const { return m; }
 
   // ======== Graph operators that perform packing ========
-  template <class P>
-  uintE packNeighbors(uintE id, P &p, uint8_t *tmp) {
+  template <class P> uintE packNeighbors(uintE id, P &p, uint8_t *tmp) {
     uintE new_degree =
         get_vertex(id).out_neighbors().pack(p, (std::tuple<uintE, W> *)tmp);
-    vertices[id].degree = new_degree;  // updates the degree
+    vertices[id].degree = new_degree; // updates the degree
     return new_degree;
   }
 
@@ -338,8 +325,7 @@ struct symmetric_ptr_graph {
     return edges;
   }
 
-  template <class F>
-  void mapEdges(F f, bool parallel_inner_map = true) const {
+  template <class F> void mapEdges(F f, bool parallel_inner_map = true) const {
     parallel_for(
         0, n,
         [&](size_t i) {
@@ -359,23 +345,15 @@ struct symmetric_ptr_graph {
 
   // ======================= Constructors and fields  ========================
   symmetric_ptr_graph()
-      : n(0),
-        m(0),
-        vertices(nullptr),
-        edge_list_sizes(nullptr),
-        vertex_weights(nullptr),
-        deletion_fn([]() {}) {}
+      : n(0), m(0), vertices(nullptr), edge_list_sizes(nullptr),
+        vertex_weights(nullptr), deletion_fn([]() {}) {}
 
   symmetric_ptr_graph(size_t n, size_t m, vertex *_vertices,
                       std::function<void()> _deletion_fn,
                       vertex_weight_type *_vertex_weights = nullptr,
                       uintE *_edge_list_sizes = nullptr)
-      : n(n),
-        m(m),
-        vertices(_vertices),
-        edge_list_sizes(_edge_list_sizes),
-        vertex_weights(_vertex_weights),
-        deletion_fn(_deletion_fn) {}
+      : n(n), m(m), vertices(_vertices), edge_list_sizes(_edge_list_sizes),
+        vertex_weights(_vertex_weights), deletion_fn(_deletion_fn) {}
 
   // Move constructor
   symmetric_ptr_graph(symmetric_ptr_graph &&other) noexcept {
@@ -514,26 +492,16 @@ struct asymmetric_graph {
   }
 
   asymmetric_graph()
-      : n(0),
-        m(0),
-        deletion_fn([]() {}),
-        v_out_data(nullptr),
-        v_in_data(nullptr),
-        out_edges(nullptr),
-        in_edges(nullptr),
+      : n(0), m(0), deletion_fn([]() {}), v_out_data(nullptr),
+        v_in_data(nullptr), out_edges(nullptr), in_edges(nullptr),
         vertex_weights(nullptr) {}
 
   asymmetric_graph(vertex_data *v_out_data, vertex_data *v_in_data, size_t n,
                    size_t m, std::function<void()> _deletion_fn,
                    edge_type *_out_edges, edge_type *_in_edges,
                    vertex_weight_type *_vertex_weights = nullptr)
-      : n(n),
-        m(m),
-        deletion_fn(_deletion_fn),
-        v_out_data(v_out_data),
-        v_in_data(v_in_data),
-        out_edges(_out_edges),
-        in_edges(_in_edges),
+      : n(n), m(m), deletion_fn(_deletion_fn), v_out_data(v_out_data),
+        v_in_data(v_in_data), out_edges(_out_edges), in_edges(_in_edges),
         vertex_weights(_vertex_weights) {}
 
   // Move constructor
@@ -606,8 +574,7 @@ struct asymmetric_graph {
 
   ~asymmetric_graph() { deletion_fn(); }
 
-  template <class F>
-  void mapEdges(F f, bool parallel_inner_map = true) const {
+  template <class F> void mapEdges(F f, bool parallel_inner_map = true) const {
     parallel_for(
         0, n,
         [&](size_t i) {
@@ -616,22 +583,18 @@ struct asymmetric_graph {
         1);
   }
 
-  template <class F>
-  void map_in_neighbors(size_t i, F f) const {
+  template <class F> void map_in_neighbors(size_t i, F f) const {
     auto f2 = [f](auto a, auto b, auto... args) { return f(b, a, args...); };
     get_vertex(i).in_neighbors().map(f2, false);
   }
-  template <class F>
-  void map_out_neighbors(size_t i, F f) const {
+  template <class F> void map_out_neighbors(size_t i, F f) const {
     get_vertex(i).out_neighbors().map(f, false);
   }
-  template <class F>
-  void parallel_map_in_neighbors(size_t i, F f) const {
+  template <class F> void parallel_map_in_neighbors(size_t i, F f) const {
     auto f2 = [f](auto a, auto b, auto... args) { return f(b, a, args...); };
     get_vertex(i).in_neighbors().map(f2, true);
   }
-  template <class F>
-  void parallel_map_out_neighbors(size_t i, F f) const {
+  template <class F> void parallel_map_out_neighbors(size_t i, F f) const {
     get_vertex(i).out_neighbors().map(f, true);
   }
 
@@ -668,19 +631,13 @@ struct asymmetric_ptr_graph {
   vertex get_vertex(size_t i) const { return vertices[i]; }
 
   asymmetric_ptr_graph()
-      : n(0),
-        m(0),
-        vertices(nullptr),
-        deletion_fn([]() {}),
+      : n(0), m(0), vertices(nullptr), deletion_fn([]() {}),
         vertex_weights(nullptr) {}
 
   asymmetric_ptr_graph(size_t n, size_t m, vertex *_vertices,
                        std::function<void()> _deletion_fn,
                        vertex_weight_type *_vertex_weights = nullptr)
-      : n(n),
-        m(m),
-        vertices(_vertices),
-        deletion_fn(_deletion_fn),
+      : n(n), m(m), vertices(_vertices), deletion_fn(_deletion_fn),
         vertex_weights(_vertex_weights) {}
 
   // Move constructor
@@ -772,8 +729,7 @@ struct asymmetric_ptr_graph {
 
   ~asymmetric_ptr_graph() { deletion_fn(); }
 
-  template <class F>
-  void mapEdges(F f, bool parallel_inner_map = true) const {
+  template <class F> void mapEdges(F f, bool parallel_inner_map = true) const {
     parallel_for(
         0, n,
         [&](size_t i) {
@@ -783,8 +739,7 @@ struct asymmetric_ptr_graph {
   }
 };
 
-template <class W, class set_type, bool inplace_ = false>
-struct set_wrapper {
+template <class W, class set_type, bool inplace_ = false> struct set_wrapper {
   using weight_type = W;
   static constexpr bool binary = std::is_same_v<gbbs::empty, W>;
   static constexpr bool inplace = inplace_;
@@ -1028,8 +983,7 @@ struct set_wrapper {
     sorted_batch_insert_no_inplace(es, es + n);
   }
 
-  template <bool sorted>
-  void insert_range(auto range) {
+  template <bool sorted> void insert_range(auto range) {
     if constexpr (!inplace) {
       sorted_batch_insert_no_inplace(range.begin(), range.end());
       return;
@@ -1151,8 +1105,7 @@ struct set_wrapper {
     }
   }
 
-  template <bool sorted>
-  void remove_range(auto range) {
+  template <bool sorted> void remove_range(auto range) {
     if constexpr (!inplace) {
       sorted_batch_remove_no_inplace(range.begin(), range.end());
       return;
@@ -1187,9 +1140,9 @@ struct set_wrapper {
             return inplace_count == max_inplace_edge_count;
           });
           if (num_written < inplace_count) {
-            sorted_batch_remove_no_inplace(
-                inplace_array.data() + num_written,
-                inplace_array.data() + inplace_count);
+            sorted_batch_remove_no_inplace(inplace_array.data() + num_written,
+                                           inplace_array.data() +
+                                               inplace_count);
           }
         }
         return;
@@ -1260,8 +1213,7 @@ struct set_wrapper {
     sorted_batch_remove_no_inplace(es, n);
   }
 
-  template <bool inplace_done = false, class F>
-  void map(F f) const {
+  template <bool inplace_done = false, class F> void map(F f) const {
     if constexpr (inplace && !inplace_done) {
       for (int i = 0; i < inplace_count; i++) {
         if constexpr (binary) {
@@ -1288,8 +1240,7 @@ struct set_wrapper {
     }
   }
 
-  template <bool inplace_done = false, class F>
-  void map_early_exit(F f) const {
+  template <bool inplace_done = false, class F> void map_early_exit(F f) const {
     if constexpr (inplace && !inplace_done) {
       for (int i = 0; i < inplace_count; i++) {
         if constexpr (binary) {
@@ -1326,8 +1277,7 @@ struct set_wrapper {
     }
   }
 
-  template <bool inplace_done = false, class F>
-  void parallel_map(F f) const {
+  template <bool inplace_done = false, class F> void parallel_map(F f) const {
     if constexpr (inplace && !inplace_done) {
       for (int i = 0; i < inplace_count; i++) {
         if constexpr (binary) {
@@ -1449,7 +1399,7 @@ struct set_wrapper {
 
   ~set_wrapper() = default;
 
- private:
+private:
   using inplace_array_element_type =
       std::conditional<binary, gbbs::uintE,
                        std::pair<gbbs::uintE, weight_type>>::type;
@@ -1493,20 +1443,17 @@ struct symmetric_set_graph {
 
   uintE degree(size_t i) const { return nodes[i].size(); }
 
-  template <class F>
-  void map_neighbors(size_t i, F f) const {
+  template <class F> void map_neighbors(size_t i, F f) const {
     nodes[i].map(
         [&](gbbs::uintE other, weight_type w) { return f(i, other, w); });
   }
 
-  template <class F>
-  void map_neighbors_early_exit(size_t i, F f) const {
+  template <class F> void map_neighbors_early_exit(size_t i, F f) const {
     nodes[i].map_early_exit(
         [&](gbbs::uintE other, weight_type w) { return f(i, other, w); });
   }
 
-  template <class F>
-  void parallel_map_neighbors(size_t i, F f) const {
+  template <class F> void parallel_map_neighbors(size_t i, F f) const {
     nodes[i].parallel_map(
         [&](gbbs::uintE other, weight_type w) { return f(i, other, w); });
   }
@@ -1679,41 +1626,35 @@ struct asymmetric_set_graph {
 
   uintE out_degree(size_t i) const { return out_nodes[i].size(); }
 
-  template <class F>
-  void map_in_neighbors(size_t i, F f) const {
+  template <class F> void map_in_neighbors(size_t i, F f) const {
     auto f2 = [f](auto a, auto b, auto... args) { return f(b, a, args...); };
     in_nodes[i].map(
         [&](gbbs::uintE other, weight_type w) { return f2(i, other, w); });
   }
 
-  template <class F>
-  void map_out_neighbors(size_t i, F f) const {
+  template <class F> void map_out_neighbors(size_t i, F f) const {
     out_nodes[i].map(
         [&](gbbs::uintE other, weight_type w) { return f(i, other, w); });
   }
 
-  template <class F>
-  void map_in_neighbors_early_exit(size_t i, F f) const {
+  template <class F> void map_in_neighbors_early_exit(size_t i, F f) const {
     auto f2 = [f](auto a, auto b, auto... args) { return f(b, a, args...); };
     in_nodes[i].map_early_exit(
         [&](gbbs::uintE other, weight_type w) { return f2(i, other, w); });
   }
 
-  template <class F>
-  void map_out_neighbors_early_exit(size_t i, F f) const {
+  template <class F> void map_out_neighbors_early_exit(size_t i, F f) const {
     out_nodes[i].map_early_exit(
         [&](gbbs::uintE other, weight_type w) { return f(i, other, w); });
   }
 
-  template <class F>
-  void parallel_map_in_neighbors(size_t i, F f) const {
+  template <class F> void parallel_map_in_neighbors(size_t i, F f) const {
     auto f2 = [f](auto a, auto b, auto... args) { return f(b, a, args...); };
     in_nodes[i].parallel_map(
         [&](gbbs::uintE other, weight_type w) { return f2(i, other, w); });
   }
 
-  template <class F>
-  void parallel_map_out_neighbors(size_t i, F f) const {
+  template <class F> void parallel_map_out_neighbors(size_t i, F f) const {
     out_nodes[i].parallel_map(
         [&](gbbs::uintE other, weight_type w) { return f(i, other, w); });
   }
@@ -1829,9 +1770,7 @@ struct asymmetric_set_graph {
   asymmetric_set_graph(vertex_data *v_data, size_t n, size_t m,
                        std::function<void()> _deletion_fn, edge_type *_e0,
                        vertex_weight_type *_vertex_weights = nullptr)
-      : in_nodes(n),
-        out_nodes(n),
-        vertex_weights(_vertex_weights),
+      : in_nodes(n), out_nodes(n), vertex_weights(_vertex_weights),
         deletion_fn(_deletion_fn) {
     // TODO(wheatman) this is just for debugging help to check that the correct
     // api is generated for different sets)
@@ -2045,9 +1984,9 @@ std::tuple<uintE, Wgh> *get_edges(EdgeSeq &A, sequence<uintT> &starts, size_t m,
 //   auto get_w = [&] (const edge& e) { return std::get<2>(e); };
 //   auto G = asym_graph_from_edges<W>(coo1, get_u, get_v, get_w, 10, false);
 template <class Wgh, class EdgeSeq, class GetU, class GetV, class GetW>
-static inline asymmetric_graph<asymmetric_vertex, Wgh> asym_graph_from_edges(
-    EdgeSeq &A, size_t n, GetU &&get_u, GetV &&get_v, GetW &&get_w,
-    bool is_sorted = false) {
+static inline asymmetric_graph<asymmetric_vertex, Wgh>
+asym_graph_from_edges(EdgeSeq &A, size_t n, GetU &&get_u, GetV &&get_v,
+                      GetW &&get_w, bool is_sorted = false) {
   using vertex = asymmetric_vertex<Wgh>;
   using edge_type = typename vertex::edge_type;
   size_t m = A.size();
@@ -2124,9 +2063,9 @@ static inline asymmetric_graph<asymmetric_vertex, Wgh> asym_graph_from_edges(
 }
 
 template <class Wgh>
-static inline asymmetric_graph<asymmetric_vertex, Wgh> asym_graph_from_edges(
-    sequence<std::tuple<uintE, uintE, Wgh>> &A, size_t n,
-    bool is_sorted = false) {
+static inline asymmetric_graph<asymmetric_vertex, Wgh>
+asym_graph_from_edges(sequence<std::tuple<uintE, uintE, Wgh>> &A, size_t n,
+                      bool is_sorted = false) {
   using edge = std::tuple<uintE, uintE, Wgh>;
   auto get_u = [&](const edge &e) { return std::get<0>(e); };
   auto get_v = [&](const edge &e) { return std::get<1>(e); };
@@ -2134,13 +2073,13 @@ static inline asymmetric_graph<asymmetric_vertex, Wgh> asym_graph_from_edges(
   return asym_graph_from_edges<Wgh>(A, n, get_u, get_v, get_w, is_sorted);
 }
 
-}  // namespace graph_implementations
+} // namespace graph_implementations
 
 template <bool degree_, bool M_, bool parallel_map_, bool map_early_exit_,
           bool parallel_map_early_exit_, bool map_range_, bool store_M_,
           bool store_degrees_>
 class Graph_API_use {
- public:
+public:
   static constexpr bool degree = degree_;
   static constexpr bool M = M_;
   static constexpr bool parallel_map = parallel_map_;
@@ -2164,10 +2103,10 @@ using no_M = Graph_API_use<true, false, true, true, true, true, true, false>;
 
 template <class Representation, bool symmetric_, class API = full_api>
 class Graph {
- public:
+public:
   static constexpr bool symmetric = symmetric_;
 
- private:
+private:
   Representation g;
   using api = API;
 
@@ -2380,7 +2319,7 @@ class Graph {
     }
   }
 
- public:
+public:
   static constexpr bool support_insert_sorted_batch = requires(
       Representation &g, std::tuple<gbbs::uintE, gbbs::uintE> *es, size_t n) {
     g.insert_sorted_batch(es, n);
@@ -2586,8 +2525,7 @@ class Graph {
     }
   }
 
-  template <class... Args>
-  Graph(Args... args) : g(args...) {
+  template <class... Args> Graph(Args... args) : g(args...) {
     // static_assert(support_map_neighbor, "must support map\n");
     // static_assert(support_map_in_neighbor || symmetric, "must support
     // map\n"); static_assert(support_map_out_neighbor || symmetric, "must
@@ -2625,14 +2563,12 @@ class Graph {
     return num_edges;
   }
 
-  template <class F>
-  void map_neighbors(size_t id, F f) const {
+  template <class F> void map_neighbors(size_t id, F f) const {
     static_assert(symmetric);
     g.map_neighbors(id, f);
   }
 
-  template <class F>
-  void map_in_neighbors(size_t id, F f) const {
+  template <class F> void map_in_neighbors(size_t id, F f) const {
     if constexpr (support_map_in_neighbor) {
       g.map_in_neighbors(id, f);
     } else {
@@ -2641,8 +2577,7 @@ class Graph {
     }
   }
 
-  template <class F>
-  void map_out_neighbors(size_t id, F f) const {
+  template <class F> void map_out_neighbors(size_t id, F f) const {
     if constexpr (support_map_out_neighbor) {
       g.map_out_neighbors(id, f);
     } else {
@@ -2650,8 +2585,7 @@ class Graph {
     }
   }
 
-  template <class F>
-  void parallel_map_neighbors(size_t id, F f) const {
+  template <class F> void parallel_map_neighbors(size_t id, F f) const {
     static_assert(symmetric);
     if constexpr (support_parallel_map_neighbors && api::parallel_map) {
       g.parallel_map_neighbors(id, f);
@@ -2660,8 +2594,7 @@ class Graph {
     }
   }
 
-  template <class F>
-  void parallel_map_in_neighbors(size_t id, F f) const {
+  template <class F> void parallel_map_in_neighbors(size_t id, F f) const {
     if constexpr (support_parallel_map_in_neighbors && api::parallel_map) {
       g.parallel_map_in_neighbors(id, f);
     } else if constexpr (symmetric && api::parallel_map) {
@@ -2672,8 +2605,7 @@ class Graph {
     }
   }
 
-  template <class F>
-  void parallel_map_out_neighbors(size_t id, F f) const {
+  template <class F> void parallel_map_out_neighbors(size_t id, F f) const {
     if constexpr (support_parallel_map_out_neighbors && api::parallel_map) {
       g.parallel_map_out_neighbors(id, f);
     } else if constexpr (symmetric && api::parallel_map) {
@@ -2811,8 +2743,7 @@ class Graph {
     }
   }
 
-  template <class F>
-  void map_neighbors_early_exit(size_t id, F f) const {
+  template <class F> void map_neighbors_early_exit(size_t id, F f) const {
     static_assert(symmetric);
 
     if constexpr (support_map_neighbors_early_exit && api::map_early_exit) {
@@ -2822,8 +2753,7 @@ class Graph {
     }
   }
 
-  template <class F>
-  void map_in_neighbors_early_exit(size_t id, F f) const {
+  template <class F> void map_in_neighbors_early_exit(size_t id, F f) const {
     if constexpr (support_map_in_neighbors_early_exit && api::map_early_exit) {
       g.map_in_neighbors_early_exit(id, f);
     } else {
@@ -2837,8 +2767,7 @@ class Graph {
     }
   }
 
-  template <class F>
-  void map_out_neighbors_early_exit(size_t id, F f) const {
+  template <class F> void map_out_neighbors_early_exit(size_t id, F f) const {
     if constexpr (support_map_out_neighbors_early_exit && api::map_early_exit) {
       g.map_out_neighbors_early_exit(id, f);
     } else {
@@ -3186,7 +3115,7 @@ static inline graph sym_graph_from_edges(
                                                                      is_sorted);
 }
 
-}  // namespace gbbs
+} // namespace gbbs
 
 #ifdef GRAPH_API_DEGREE
 constexpr bool graph_api_use_degree = GRAPH_API_DEGREE;

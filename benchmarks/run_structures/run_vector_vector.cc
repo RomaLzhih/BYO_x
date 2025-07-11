@@ -69,8 +69,9 @@ template <class T> struct vector_set {
   vector_set(auto start, auto end) : vec(start, end) {}
 
   size_t get_memory_size() {
-    // the +8 is since the capacity is stored in the memory blob, but not counted in the space
-    return vec.capacity() * sizeof(T) + sizeof(*this)+8;
+    // the +8 is since the capacity is stored in the memory blob, but not
+    // counted in the space
+    return vec.capacity() * sizeof(T) + sizeof(*this) + 8;
   }
 
 private:
@@ -114,7 +115,8 @@ int main(int argc, char *argv[]) {
       auto bytes_used = G.get_memory_size();
       std::cout << "total bytes used = " << bytes_used << "\n";
       // run_all(G, options);
-      run_bfs(G, options);
+      // run_bfs(G, options);
+      run(G, options);
     } else {
       using graph_t =
           gbbs::Graph<asym_graph_impl, /* symmetric */ false, graph_api>;

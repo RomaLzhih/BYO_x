@@ -565,8 +565,8 @@ double MIS_runner(const Graph &G, size_t rounds, bool dump, bool spec_for,
 template <class Graph>
 double PageRank_runner(const Graph &G, size_t rounds, bool dump, size_t iters,
                        bool em, bool delta, double eps, double leps) {
-  std::cout << "### Application: PageRank" << std::endl;
-  std::cout << "### ------------------------------------" << std::endl;
+  // std::cout << "### Application: PageRank" << std::endl;
+  // std::cout << "### ------------------------------------" << std::endl;
 
   double total_time = 0.0;
   for (size_t r = 0; r <= rounds; r++) {
@@ -576,7 +576,7 @@ double PageRank_runner(const Graph &G, size_t rounds, bool dump, size_t iters,
                : (delta) ? delta::PageRankDelta(G, eps, leps, iters)
                          : PageRank(G, eps, iters);
     double tt = t.stop();
-    std::cout << "### Running Time: " << tt << std::endl;
+    // std::cout << "### Running Time: " << tt << std::endl;
     if (r == 0) {
       if (dump) {
         std::ofstream myfile;
@@ -591,7 +591,7 @@ double PageRank_runner(const Graph &G, size_t rounds, bool dump, size_t iters,
     }
   }
   auto time_per_iter = total_time / rounds;
-  std::cout << "# time per iter: " << time_per_iter << "\n";
+  // std::cout << "# time per iter: " << time_per_iter << "\n";
   return time_per_iter;
 }
 
@@ -927,9 +927,8 @@ void run_bfs(const Graph &G, const run_all_options &options) {
 }
 
 template <class Graph, class EdgeArray, typename Func>
-void run_incre_alg(const Graph &G, EdgeArray &batch_edges,
-                   const size_t batch_size, const run_all_options &options,
-                   Func &&func) {
+void run_incre_alg(Graph &G, EdgeArray &batch_edges, const size_t batch_size,
+                   const run_all_options &options, Func &&func) {
 
   // parlay::sequence<size_t> sizes = {1, 10, 100, 1000, 10000, 100000,
   // 1000000};
@@ -942,7 +941,7 @@ void run_incre_alg(const Graph &G, EdgeArray &batch_edges,
   // remove last batch_size * batch_num edges from the graph
   size_t remove_edges_num = batch_num * batch_size;
   size_t remaining_edges_num = batch_edges.size() - remove_edges_num;
-  Graph dynamic_graph(G);
+  Graph dynamic_graph = G;
   dynamic_graph.remove_batch(batch_edges.data() + remaining_edges_num,
                              remove_edges_num);
   // printf("new graph has %zu edges\n", dynamic_graph.M());
@@ -954,10 +953,10 @@ void run_incre_alg(const Graph &G, EdgeArray &batch_edges,
     t.start();
     dynamic_graph.insert_batch(
         batch_edges.data() + remaining_edges_num + j * batch_size, batch_size);
-    printf("new graph has %zu edges\n", dynamic_graph.edges().size());
+    // printf("new graph has %zu edges\n", dynamic_graph.edges().size());
     double insert_time = t.stop();
     double alg_time = func(dynamic_graph);
-    printf("insert time: %.5f, alg time: %.5f\n", insert_time, alg_time);
+    printf("%.5f %.5f\n", insert_time, alg_time);
   }
 }
 
@@ -982,16 +981,27 @@ void run(const Graph &G, const run_all_options &options) {
   });
   parlay::random_shuffle(batch_edges);
 
-  // parlay::sequence<size_t> sizes = {1, 10, 100, 1000, 10000, 100000,
-  // 1000000};
-  parlay::sequence<size_t> sizes = {10};
+  parlay::sequence<size_t> sizes = {1, 10, 100, 1000, 10000, 100000, 1000000};
+  // parlay::sequence<size_t> sizes = {10};
   for (auto batch_size : sizes) {
     puts("-----------------------------");
-    std::cout << "batch size: " << batch_size << "\n";
-    run_incre_alg(G, batch_edges, batch_size, options,
+    std::cout << "Batch size: " << batch_size << "\n";
+
+    std::cout << "Alg BFS: \n";
+    run_incre_alg(const_cast<Graph &>(G), batch_edges, batch_size, options,
                   [&](const Graph &dynamic_graph) {
                     return BFS_runner(dynamic_graph, options.src,
                                       options.rounds, options.dump);
+                  });
+
+    std::cout << "Alg PageRank: \n";
+    run_incre_alg(const_cast<Graph &>(G), batch_edges, batch_size, options,
+                  [&](const Graph &dynamic_graph) {
+                    return PageRank_runner(
+                        dynamic_graph, options.rounds, options.dump,
+                        options.pagerank_iters, options.pagerank_em,
+                        options.pagerank_delta, options.pagerank_eps,
+                        options.pagerank_leps);
                   });
   }
 }

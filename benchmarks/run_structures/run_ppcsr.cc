@@ -257,7 +257,8 @@ int main(int argc, char *argv[]) {
       auto bytes_used = G.get_memory_size();
       std::cout << "total bytes used = " << bytes_used << "\n";
       // run_all(G, options);
-      run_bfs(G, options);
+      // run_bfs(G, options);
+      run(G, options);
     } else {
       std::cerr << "does not support directed graphs yet\n";
       return -1;
