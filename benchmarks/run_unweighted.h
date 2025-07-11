@@ -24,8 +24,7 @@
 
 namespace gbbs {
 
-template <class Graph>
-double Map_runner(const Graph &G, size_t rounds) {
+template <class Graph> double Map_runner(const Graph &G, size_t rounds) {
   std::cout << "### Application: Base Map" << std::endl;
   std::cout << "### ------------------------------------" << std::endl;
   std::cout << "### ------------------------------------" << std::endl;
@@ -126,10 +125,10 @@ double Map_Remote_runner(const Graph &G, size_t rounds) {
 
 template <class Graph>
 double BFS_runner(const Graph &G, uintE src, size_t rounds, bool dump) {
-  std::cout << "### Application: BFS" << std::endl;
-  std::cout << "### Params: -src = " << src << std::endl;
-  std::cout << "### ------------------------------------" << std::endl;
-  std::cout << "### ------------------------------------" << std::endl;
+  // std::cout << "### Application: BFS" << std::endl;
+  // std::cout << "### Params: -src = " << src << std::endl;
+  // std::cout << "### ------------------------------------" << std::endl;
+  // std::cout << "### ------------------------------------" << std::endl;
 
   double total_time = 0.0;
   for (size_t r = 0; r <= rounds; r++) {
@@ -137,7 +136,7 @@ double BFS_runner(const Graph &G, uintE src, size_t rounds, bool dump) {
     t.start();
     auto parents = BFS(G, src);
     double tt = t.stop();
-    std::cout << "### Running Time: " << tt << std::endl;
+    // std::cout << "### Running Time: " << tt << std::endl;
     if (r == 0) {
       if (dump) {
         // useful for debugging
@@ -166,7 +165,7 @@ double BFS_runner(const Graph &G, uintE src, size_t rounds, bool dump) {
     }
   }
   auto time_per_iter = total_time / rounds;
-  std::cout << "# time per iter: " << time_per_iter << "\n";
+  // std::cout << "# time per iter: " << time_per_iter << "\n";
   return time_per_iter;
 }
 
@@ -703,16 +702,16 @@ inline uint64_t hash64(uint64_t u) {
 // A cheap version of an inteface that should be improved
 // Allows forking a state into multiple states
 struct random {
- public:
-  random(size_t seed) : state(seed) {};
-  random() : state(0) {};
+public:
+  random(size_t seed) : state(seed){};
+  random() : state(0){};
   random fork(uint64_t i) const { return random(hash64(hash64(i + state))); }
   random next() const { return fork(0); }
   size_t ith_rand(uint64_t i) const { return hash64(i + state); }
   size_t operator[](size_t i) const { return ith_rand(i); }
   size_t rand() { return ith_rand(0); }
 
- private:
+private:
   uint64_t state = 0;
 };
 
@@ -727,8 +726,7 @@ inline uint32_t hash32(uint32_t a) {
   return a;
 }
 
-template <class intT>
-struct rMat {
+template <class intT> struct rMat {
   double a, ab, abc;
   intT n;
   intT h;
@@ -777,7 +775,7 @@ struct rMat {
     return rMatRec(n, randStart, randStride);
   }
 };
-}  // namespace batch_insert_helpers
+} // namespace batch_insert_helpers
 
 template <class Graph>
 void Batch_insert_runner(std::map<std::string, double> &time_map, Graph &G,
@@ -858,7 +856,7 @@ void Batch_insert_runner(std::map<std::string, double> &time_map, Graph &G,
 }
 
 class run_all_options {
- public:
+public:
   uintE src = 0;
   size_t rounds = 3;
   bool dump = false;
@@ -928,8 +926,43 @@ void run_bfs(const Graph &G, const run_all_options &options) {
   }
 }
 
+template <class Graph, class EdgeArray, typename Func>
+void run_incre_alg(const Graph &G, EdgeArray &batch_edges,
+                   const size_t batch_size, const run_all_options &options,
+                   Func &&func) {
+
+  // parlay::sequence<size_t> sizes = {1, 10, 100, 1000, 10000, 100000,
+  // 1000000};
+  const int batch_num = 10;
+  if (batch_num * batch_size > batch_edges.size()) {
+    std::cout << "skipping, total batch size is larger than number of edges\n";
+    return;
+  }
+
+  // remove last batch_size * batch_num edges from the graph
+  size_t remove_edges_num = batch_num * batch_size;
+  size_t remaining_edges_num = batch_edges.size() - remove_edges_num;
+  Graph dynamic_graph(G);
+  dynamic_graph.remove_batch(batch_edges.data() + remaining_edges_num,
+                             remove_edges_num);
+  // printf("new graph has %zu edges\n", dynamic_graph.M());
+  printf("base graph has %zu edges\n", dynamic_graph.edges().size());
+
+  // begin insert batch
+  for (int j = 0; j < batch_num; j++) {
+    timer t;
+    t.start();
+    dynamic_graph.insert_batch(
+        batch_edges.data() + remaining_edges_num + j * batch_size, batch_size);
+    printf("new graph has %zu edges\n", dynamic_graph.edges().size());
+    double insert_time = t.stop();
+    double alg_time = func(dynamic_graph);
+    printf("insert time: %.5f, alg time: %.5f\n", insert_time, alg_time);
+  }
+}
+
 template <class Graph>
-void run_incre_alg(const Graph &G, const run_all_options &options) {
+void run(const Graph &G, const run_all_options &options) {
   static constexpr bool symmetric = Graph::symmetric;
   std::cout << "### Threads: " << num_workers() << std::endl;
   std::cout << "### n: " << G.N() << std::endl;
@@ -952,52 +985,15 @@ void run_incre_alg(const Graph &G, const run_all_options &options) {
   // parlay::sequence<size_t> sizes = {1, 10, 100, 1000, 10000, 100000,
   // 1000000};
   parlay::sequence<size_t> sizes = {10};
-  const int batch_num = 10;
-  for (size_t i = 0; i < sizes.size(); i++) {
-    size_t batch_size = sizes[i];
+  for (auto batch_size : sizes) {
+    puts("-----------------------------");
     std::cout << "batch size: " << batch_size << "\n";
-    if (batch_num * batch_size > edges.size()) {
-      std::cout
-          << "skipping, total batch size is larger than number of edges\n";
-      continue;
-    }
-
-    // remove last batch_size * batch_num edges from the graph
-    size_t remove_edges_num = batch_num * batch_size;
-    size_t remaining_edges_num = edges.size() - remove_edges_num;
-    auto new_graph(G);
-    new_graph.remove_batch(batch_edges.data() + remaining_edges_num,
-                           remove_edges_num);
-    printf("new graph has %zu edges\n", new_graph.M());
-
-    // begin insert batch
-    for (int j = 0; j < batch_num; j++) {
-      timer t;
-      t.start();
-      new_graph.insert_batch(
-          batch_edges.data() + remaining_edges_num + j * batch_size,
-          batch_size);
-      double tt = t.stop();
-      std::cout << "inserted " << batch_size << " edges in " << tt << "\n";
-    }
-
-    std::cout << "inserted " << batch_size << " edges\n";
+    run_incre_alg(G, batch_edges, batch_size, options,
+                  [&](const Graph &dynamic_graph) {
+                    return BFS_runner(dynamic_graph, options.src,
+                                      options.rounds, options.dump);
+                  });
   }
-
-  // std::map<std::string, double> time_map;
-  // if (!options.inserts) {
-  //   time_map["BFS"] = BFS_runner(G, options.src, options.rounds,
-  //   options.dump);
-
-  //   time_map["PageRank"] =
-  //       PageRank_runner(G, options.rounds, options.dump,
-  //       options.pagerank_iters,
-  //                       options.pagerank_em, options.pagerank_delta,
-  //                       options.pagerank_eps, options.pagerank_leps);
-  // }
-  // for (const auto &[alg, time_per_iter] : time_map) {
-  //   std::cout << "BYO: => " << alg << ", " << time_per_iter << "\n";
-  // }
 }
 
 template <class Graph>
@@ -1104,4 +1100,4 @@ void run_all(const Graph &G, const run_all_options &options) {
   }
 }
 
-}  // namespace gbbs
+} // namespace gbbs

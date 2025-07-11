@@ -44,8 +44,7 @@ struct BFS_F {
   inline bool cond(uintE d) { return (Parents[d] == UINT_E_MAX); }
 };
 
-template <class Graph>
-inline sequence<uintE> BFS(Graph &G, uintE src) {
+template <class Graph> inline sequence<uintE> BFS(Graph &G, uintE src) {
   /* Creates Parents array, initialized to all -1, except for src. */
   auto Parents = sequence<uintE>::from_function(
       G.N(), [&](size_t i) { return UINT_E_MAX; });
@@ -54,13 +53,13 @@ inline sequence<uintE> BFS(Graph &G, uintE src) {
   vertexSubset Frontier(G.N(), src);
   size_t reachable = 0;
   while (!Frontier.isEmpty()) {
-    std::cout << Frontier.size() << "\n";
+    // std::cout << Frontier.size() << "\n";
     reachable += Frontier.size();
     Frontier = edgeMap(G, Frontier, BFS_F(Parents.begin()), -1,
                        sparse_blocked | dense_parallel);
   }
-  std::cout << "Reachable: " << reachable << "\n";
+  // std::cout << "Reachable: " << reachable << "\n";
   return Parents;
 }
 
-}  // namespace gbbs
+} // namespace gbbs
