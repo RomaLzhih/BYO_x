@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cassert>
 #include <map>
 
 #include "ApproximateDensestSubgraph/ApproxPeelingBKV12/DensestSubgraph.h"
@@ -941,7 +942,7 @@ void run_incre_alg(Graph &G, EdgeArray &batch_edges, const size_t batch_size,
   // remove last batch_size * batch_num edges from the graph
   size_t remove_edges_num = batch_num * batch_size;
   size_t remaining_edges_num = batch_edges.size() - remove_edges_num;
-  Graph dynamic_graph = G;
+  Graph dynamic_graph(G);
   dynamic_graph.remove_batch(batch_edges.data() + remaining_edges_num,
                              remove_edges_num);
   // printf("new graph has %zu edges\n", dynamic_graph.M());
@@ -957,6 +958,7 @@ void run_incre_alg(Graph &G, EdgeArray &batch_edges, const size_t batch_size,
     double insert_time = t.stop();
     double alg_time = func(dynamic_graph);
     printf("%.5f %.5f\n", insert_time, alg_time);
+    std::cout << std::flush;
   }
 }
 
@@ -980,6 +982,7 @@ void run(const Graph &G, const run_all_options &options) {
     return pair_vertex(std::get<0>(edges[i]), std::get<1>(edges[i]));
   });
   parlay::random_shuffle(batch_edges);
+  std::cout << edges.size() << " edges in the graph\n";
 
   parlay::sequence<size_t> sizes = {1, 10, 100, 1000, 10000, 100000, 1000000};
   // parlay::sequence<size_t> sizes = {10};

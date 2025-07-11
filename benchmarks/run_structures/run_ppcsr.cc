@@ -31,7 +31,7 @@ template <class W> struct symmetric_ppcsr_graph {
   using vertex_weight_type = double;
   using edge_type = std::tuple<gbbs::uintE, W>;
 
-  // size_t M() const { return nodes.get_num_edges(); }
+  size_t M() { return nodes.num_edges(); }
 
   size_t N() const { return nodes.nodes.size(); }
 
