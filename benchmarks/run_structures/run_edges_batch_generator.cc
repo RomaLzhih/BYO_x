@@ -231,8 +231,8 @@ int main(int argc, char* argv[]) {
       // run_all(G, options);
       gbbs::BatchEdgesIO<decltype(G)>::GenerateBatchEdges(
           G, options, output_path, batch_size, batch_num);
-      gbbs::BatchEdgesIO<decltype(G)>::ReadBatchEdges(output_path, batch_size,
-                                                      batch_num);
+      auto batch_edges = gbbs::BatchEdgesIO<decltype(G)>::ReadBatchEdges(
+          output_path, batch_size, batch_num);
       // run(G, options);
     } else {
       std::cerr << "does not support directed graphs yet\n";

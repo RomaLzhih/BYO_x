@@ -7,6 +7,9 @@
 build/
 .cache/
 
+MODULE.bazel
+MODULE.bazel.lock
+
 *.a
 *.o
 *.dSYM

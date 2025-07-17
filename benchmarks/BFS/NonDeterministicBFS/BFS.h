@@ -28,8 +28,8 @@
 namespace gbbs {
 
 struct BFS_F {
-  uintE *Parents;
-  BFS_F(uintE *_Parents) : Parents(_Parents) {}
+  uintE* Parents;
+  BFS_F(uintE* _Parents) : Parents(_Parents) {}
   inline bool update(uintE s, uintE d, [[maybe_unused]] auto w) {
     if (Parents[d] == UINT_E_MAX) {
       Parents[d] = s;
@@ -44,7 +44,8 @@ struct BFS_F {
   inline bool cond(uintE d) { return (Parents[d] == UINT_E_MAX); }
 };
 
-template <class Graph> inline sequence<uintE> BFS(Graph &G, uintE src) {
+template <class Graph>
+inline sequence<uintE> BFS(Graph& G, uintE src) {
   /* Creates Parents array, initialized to all -1, except for src. */
   auto Parents = sequence<uintE>::from_function(
       G.N(), [&](size_t i) { return UINT_E_MAX; });
@@ -62,4 +63,4 @@ template <class Graph> inline sequence<uintE> BFS(Graph &G, uintE src) {
   return Parents;
 }
 
-} // namespace gbbs
+}  // namespace gbbs

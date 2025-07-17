@@ -33,13 +33,14 @@ using asym_graph_impl = gbbs::graph_implementations::asymmetric_set_graph<
 
 using graph_api = gbbs::full_api;
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   gbbs::commandLine P(argc, argv, " [-s] <inFile>");
-  char *iFile = P.getArgument(0);
+  char* iFile = P.getArgument(0);
   bool symmetric = P.getOptionValue("-s");
   bool compressed = P.getOptionValue("-c");
   bool binary = P.getOptionValue("-b");
   bool mmap = P.getOptionValue("-m");
+
   gbbs::run_all_options options;
   options.dump = P.getOptionValue("-d");
   options.rounds = P.getOptionLongValue("-rounds", 3);
@@ -47,6 +48,10 @@ int main(int argc, char *argv[]) {
       static_cast<size_t>(P.getOptionLongValue("-max_batch", 1000000));
   options.src = static_cast<gbbs::uintE>(P.getOptionLongValue("-src", 0));
   options.inserts = P.getOptionValue("-i");
+  options.batch_file = P.getOptionValue("-batch_file");
+  options.batch_size = P.getOptionIntValue("-batch_size", 1);
+  options.batch_num = P.getOptionIntValue("-batch_num", 10);
+  options.alg = std::string(P.getOptionValue("-alg"));
 
   std::cout << "### Graph: " << iFile << std::endl;
   if (compressed) {
@@ -60,8 +65,9 @@ int main(int argc, char *argv[]) {
           iFile, mmap, binary);
       auto bytes_used = G.get_memory_size();
       std::cout << "total bytes used = " << bytes_used << "\n";
+
       // run_incre_alg(G, options);
-      run(G, options);
+      batch_alg_wrapper(G, options);
       // run_bfs(G, options);
       // run_all(G, options);
     } else {

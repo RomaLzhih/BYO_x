@@ -893,6 +893,13 @@ class run_all_options {
   size_t spanner_k = 4;
   size_t max_batch = 1000000UL;
   bool inserts = false;
+
+  // for dzig incre alg
+  char* batch_file = nullptr;
+  size_t batch_size = 1;
+  size_t batch_num = 10;
+  bool remove_batches_edges = true;
+  std::string alg = "";
 };
 
 template <class Graph>
@@ -932,31 +939,35 @@ void run_bfs(Graph const& G, run_all_options const& options) {
 }
 
 template <class Graph, class EdgeArray, typename Func>
-void run_incre_alg(Graph& G, EdgeArray& batch_edges, size_t const batch_size,
+void run_incre_alg(Graph& G, EdgeArray& batch_edges,
                    run_all_options const& options, Func&& func) {
-  // parlay::sequence<size_t> sizes = {1, 10, 100, 1000, 10000, 100000,
-  // 1000000};
-  int const batch_num = 10;
-  if (batch_num * batch_size > batch_edges.size()) {
+  size_t remove_edges_num = options.batch_num * options.batch_size;
+  size_t remaining_edges_num = batch_edges.size() - remove_edges_num;
+
+  if (remove_edges_num > batch_edges.size()) {
     std::cout << "skipping, total batch size is larger than number of edges\n";
     return;
   }
 
-  // remove last batch_size * batch_num edges from the graph
-  size_t remove_edges_num = batch_num * batch_size;
-  size_t remaining_edges_num = batch_edges.size() - remove_edges_num;
   Graph dynamic_graph(G);
-  dynamic_graph.remove_batch(batch_edges.data() + remaining_edges_num,
-                             remove_edges_num);
+
+  if (options.remove_batches_edges) {
+    // remove last batch_size * batch_num edges from the graph
+    std::cout << "removing " << remove_edges_num << " edges from the graph\n";
+    dynamic_graph.remove_batch(batch_edges.data() + remaining_edges_num,
+                               remove_edges_num);
+  }
   // printf("new graph has %zu edges\n", dynamic_graph.M());
-  printf("base graph has %zu edges\n", dynamic_graph.edges().size());
+  // printf("base graph has %zu edges\n", dynamic_graph.edges().size());
 
   // begin insert batch
-  for (int j = 0; j < batch_num; j++) {
+  // TODO: may rerun for multiple times and take the average
+  for (int j = 0; j < options.batch_num; j++) {
     timer t;
     t.start();
     dynamic_graph.insert_batch(
-        batch_edges.data() + remaining_edges_num + j * batch_size, batch_size);
+        batch_edges.data() + remaining_edges_num + j * options.batch_size,
+        options.batch_size);
     // printf("new graph has %zu edges\n", dynamic_graph.edges().size());
     double insert_time = t.stop();
     double alg_time = func(dynamic_graph);
@@ -1022,19 +1033,15 @@ class BatchEdgesIO {
     };
 
     size_t n = Str.size();
-
     parlay::parallel_for(0, n, [&](long i) {
       if (is_space(Str[i])) Str[i] = 0;
     });
-
     // mark start of words
     auto FL = parlay::tabulate(n, [&](long i) -> bool {
       return (i == 0) ? Str[0] : Str[i] && !Str[i - 1];
     });
-
     // offset for each start of word
     auto Offsets = parlay::pack_index<long>(FL);
-
     // pointer to each start of word
     auto SA = parlay::tabulate(Offsets.size(), [&](long j) -> char* {
       return Str.begin() + Offsets[j];
@@ -1044,7 +1051,7 @@ class BatchEdgesIO {
   }
 
   static parlay::sequence<std::tuple<uintE, uintE>> ReadBatchEdges(
-      std::string const& input_path, size_t& batch_size, size_t& batch_num) {
+      std::string const input_path, size_t batch_size, size_t batch_num) {
     std::ifstream input_file(input_path);
     if (!input_file.is_open()) {
       std::cerr << "Error: could not open input file " << input_path << "\n";
@@ -1066,10 +1073,10 @@ class BatchEdgesIO {
     });
 
     // for (size_t i = 0; i < total_batch_edges; i++) {
-    for (size_t i = 0; i < 10; i++) {
-      std::cout << "Read edge: " << std::get<0>(edges[i]) << ", "
-                << std::get<1>(edges[i]) << "\n";
-    }
+    // for (size_t i = 0; i < 10; i++) {
+    //   std::cout << "Read edge: " << std::get<0>(edges[i]) << ", "
+    //             << std::get<1>(edges[i]) << "\n";
+    // }
 
     input_file.close();
     return edges;
@@ -1077,7 +1084,7 @@ class BatchEdgesIO {
 };
 
 template <class Graph>
-void run(Graph const& G, run_all_options const& options) {
+void batch_alg_wrapper(Graph const& G, run_all_options const& options) {
   static constexpr bool symmetric = Graph::symmetric;
   std::cout << "### Threads: " << num_workers() << std::endl;
   std::cout << "### n: " << G.N() << std::endl;
@@ -1090,29 +1097,24 @@ void run(Graph const& G, run_all_options const& options) {
     return;
   }
 
-  using pair_vertex = std::tuple<uintE, uintE>;
-  auto edges = G.edges();
-  auto batch_edges = parlay::tabulate(edges.size(), [&](size_t i) {
-    return pair_vertex(std::get<0>(edges[i]), std::get<1>(edges[i]));
-  });
-  parlay::random_shuffle(batch_edges);
-  std::cout << edges.size() << " edges in the graph\n";
+  puts("-----------------------------");
+  std::cout << std::string(options.batch_file) << "\n";
+  std::cout << "Batch size: " << options.batch_size << "\n";
+  std::cout << "Batch num: " << options.batch_num << "\n";
 
-  parlay::sequence<size_t> sizes = {1, 10, 100, 1000, 10000, 100000, 1000000};
-  // parlay::sequence<size_t> sizes = {10};
-  for (auto batch_size : sizes) {
-    puts("-----------------------------");
-    std::cout << "Batch size: " << batch_size << "\n";
+  auto batch_edges = gbbs::BatchEdgesIO<decltype(G)>::ReadBatchEdges(
+      options.batch_file, options.batch_size, options.batch_num);
 
+  if (options.alg == "bfs") {
     std::cout << "Alg BFS: \n";
-    run_incre_alg(const_cast<Graph&>(G), batch_edges, batch_size, options,
+    run_incre_alg(const_cast<Graph&>(G), batch_edges, options,
                   [&](Graph const& dynamic_graph) {
                     return BFS_runner(dynamic_graph, options.src,
                                       options.rounds, options.dump);
                   });
-
+  } else if (options.alg == "pagerank") {
     std::cout << "Alg PageRank: \n";
-    run_incre_alg(const_cast<Graph&>(G), batch_edges, batch_size, options,
+    run_incre_alg(const_cast<Graph&>(G), batch_edges, options,
                   [&](Graph const& dynamic_graph) {
                     return PageRank_runner(
                         dynamic_graph, options.rounds, options.dump,

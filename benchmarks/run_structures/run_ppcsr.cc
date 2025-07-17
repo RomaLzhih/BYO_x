@@ -19,25 +19,26 @@
 #define PARLAY 1
 #endif
 
+#include "../run_unweighted.h"
 #include "gbbs/bridge.h"
 #include "terrace/PMA.hpp"
 
-#include "../run_unweighted.h"
-
-template <class W> struct symmetric_ppcsr_graph {
+template <class W>
+struct symmetric_ppcsr_graph {
   using weight_type = W;
   static constexpr bool binary = true;
   static_assert(binary);
   using vertex_weight_type = double;
   using edge_type = std::tuple<gbbs::uintE, W>;
 
-  size_t M() { return nodes.num_edges(); }
+  // size_t M() { return nodes.get_edges().size(); }
 
   size_t N() const { return nodes.nodes.size(); }
 
   auto degree(size_t i) const { return nodes.nodes[i].num_neighbors; }
 
-  template <class F> void map_neighbors(size_t i, F f) const {
+  template <class F>
+  void map_neighbors(size_t i, F f) const {
     uint64_t start = nodes.nodes[i].beginning + 1;
     uint64_t end = nodes.nodes[i].end;
     W empty_weight = W();
@@ -47,7 +48,8 @@ template <class W> struct symmetric_ppcsr_graph {
       }
     }
   }
-  template <class F> void map_neighbors_early_exit(size_t i, F f) const {
+  template <class F>
+  void map_neighbors_early_exit(size_t i, F f) const {
     uint64_t start = nodes.nodes[i].beginning + 1;
     uint64_t end = nodes.nodes[i].end;
     W empty_weight = W();
@@ -59,7 +61,8 @@ template <class W> struct symmetric_ppcsr_graph {
       }
     }
   }
-  template <class F> void parallel_map_neighbors(size_t i, F f) const {
+  template <class F>
+  void parallel_map_neighbors(size_t i, F f) const {
     uint64_t start = nodes.nodes[i].beginning + 1;
     uint64_t end = nodes.nodes[i].end;
     W empty_weight = W();
@@ -106,11 +109,10 @@ template <class W> struct symmetric_ppcsr_graph {
   // probably write a more general constuctor for everyone to use later
   // TODO(wheatman) figure out what to do with _deletion_fn, probably should
   // just use unique pointer
-  symmetric_ppcsr_graph(auto *v_data, size_t n, size_t m,
-                        std::function<void()> _deletion_fn, edge_type *_e0,
-                        vertex_weight_type *_vertex_weights = nullptr)
+  symmetric_ppcsr_graph(auto* v_data, size_t n, size_t m,
+                        std::function<void()> _deletion_fn, edge_type* _e0,
+                        vertex_weight_type* _vertex_weights = nullptr)
       : nodes(n), vertex_weights(_vertex_weights), deletion_fn(_deletion_fn) {
-
     gbbs::sequence<uint32_t> srcs = gbbs::sequence<uint32_t>::uninitialized(m);
     gbbs::sequence<uint32_t> dests = gbbs::sequence<uint32_t>::uninitialized(m);
     gbbs::sequence<uint32_t> degrees(n, 0);
@@ -190,45 +192,46 @@ template <class W> struct symmetric_ppcsr_graph {
   // }
 
   // Copy constructor
-  symmetric_ppcsr_graph(const symmetric_ppcsr_graph &other) : nodes(other.N()) {
-    // printf("copy constructor\n");
-    // TODO: change to parallel add
-    for (size_t i = 0; i < N(); i++) {
-      other.map_neighbors(i, [&](auto src, auto dest, auto val) {
-        if constexpr (std::same_as<decltype(val), gbbs::empty>) {
-          nodes.add_edge(src, dest, 0);
-        } else {
-          nodes.add_edge(src, dest, val);
-        }
-      });
-    }
-    vertex_weights = nullptr;
-    if (other.vertex_weights != nullptr) {
-      vertex_weights = gbbs::new_array_no_init<vertex_weight_type>(N());
-      gbbs::parallel_for(0, N(), [&](size_t i) {
-        vertex_weights[i] = other.vertex_weights[i];
-      });
-    }
-    deletion_fn = [&]() {
-      if (vertex_weights != nullptr) {
-        gbbs::free_array(vertex_weights, N());
-      }
-    };
-  }
+  // symmetric_ppcsr_graph(const symmetric_ppcsr_graph &other) :
+  // nodes(other.N()) {
+  //   // printf("copy constructor\n");
+  //   // TODO: change to parallel add
+  //   for (size_t i = 0; i < N(); i++) {
+  //     other.map_neighbors(i, [&](auto src, auto dest, auto val) {
+  //       if constexpr (std::same_as<decltype(val), gbbs::empty>) {
+  //         nodes.add_edge(src, dest, 0);
+  //       } else {
+  //         nodes.add_edge(src, dest, val);
+  //       }
+  //     });
+  //   }
+  //   vertex_weights = nullptr;
+  //   if (other.vertex_weights != nullptr) {
+  //     vertex_weights = gbbs::new_array_no_init<vertex_weight_type>(N());
+  //     gbbs::parallel_for(0, N(), [&](size_t i) {
+  //       vertex_weights[i] = other.vertex_weights[i];
+  //     });
+  //   }
+  //   deletion_fn = [&]() {
+  //     if (vertex_weights != nullptr) {
+  //       gbbs::free_array(vertex_weights, N());
+  //     }
+  //   };
+  // }
 
   ~symmetric_ppcsr_graph() { deletion_fn(); }
 
-  void insert_batch(std::tuple<uint32_t, uint32_t> *es, size_t n) {
-    nodes.add_edge_batch_wrapper(std::bit_cast<pair_uint *>(es), n);
+  void insert_batch(std::tuple<uint32_t, uint32_t>* es, size_t n) {
+    nodes.add_edge_batch_wrapper(std::bit_cast<pair_uint*>(es), n);
   }
 
-  void remove_batch(std::tuple<uint32_t, uint32_t> *es, size_t n) {
-    nodes.remove_edge_batch_wrapper(std::bit_cast<pair_uint *>(es), n);
+  void remove_batch(std::tuple<uint32_t, uint32_t>* es, size_t n) {
+    nodes.remove_edge_batch_wrapper(std::bit_cast<pair_uint*>(es), n);
   }
 
   // Graph Data
   graphstore::PMA nodes;
-  vertex_weight_type *vertex_weights;
+  vertex_weight_type* vertex_weights;
   // called to delete the graph
   std::function<void()> deletion_fn;
 };
@@ -239,9 +242,9 @@ using graph_api = gbbs::full_api;
 
 using graph_t = gbbs::Graph<graph_impl, /* symmetric */ true, graph_api>;
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   gbbs::commandLine P(argc, argv, " [-s] <inFile>");
-  char *iFile = P.getArgument(0);
+  char* iFile = P.getArgument(0);
   bool symmetric = P.getOptionValue("-s");
   bool compressed = P.getOptionValue("-c");
   bool binary = P.getOptionValue("-b");
