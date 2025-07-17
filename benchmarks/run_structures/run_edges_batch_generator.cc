@@ -25,7 +25,8 @@ static constexpr bool csr_shuffle = true;
 static constexpr bool csr_shuffle = false;
 #endif
 
-template <class node_t, class edge_t, bool shuffle = false> struct CSR {
+template <class node_t, class edge_t, bool shuffle = false>
+struct CSR {
   using weight_type = gbbs::empty;
   using vertex_weight_type = double;
   size_t num_vertices() const { return n; }
@@ -35,14 +36,16 @@ template <class node_t, class edge_t, bool shuffle = false> struct CSR {
     return vertex_offsets[i + 1] - vertex_offsets[i];
   }
 
-  template <class F> void map_neighbors(size_t i, F f) const {
+  template <class F>
+  void map_neighbors(size_t i, F f) const {
     weight_type w{};
     for (edge_t j = vertex_offsets[i]; j < vertex_offsets[i + 1]; j++) {
       f(i, edges[j], w);
     }
   }
 
-  template <class F> void map_neighbors_early_exit(size_t i, F f) const {
+  template <class F>
+  void map_neighbors_early_exit(size_t i, F f) const {
     weight_type w{};
     for (edge_t j = vertex_offsets[i]; j < vertex_offsets[i + 1]; j++) {
       if (f(i, edges[j], w)) {
@@ -51,7 +54,8 @@ template <class node_t, class edge_t, bool shuffle = false> struct CSR {
     }
   }
 
-  template <class F> void parallel_map_neighbors(size_t i, F f) const {
+  template <class F>
+  void parallel_map_neighbors(size_t i, F f) const {
     weight_type w{};
     gbbs::parallel_for(vertex_offsets[i], vertex_offsets[i + 1],
                        [&](auto j) { f(i, edges[j], w); });
@@ -84,11 +88,11 @@ template <class node_t, class edge_t, bool shuffle = false> struct CSR {
   }
 
   CSR() = default;
-  CSR(auto *v_data, size_t n, size_t m, std::function<void()> _deletion_fn,
-      auto *_e0, vertex_weight_type *_vertex_weights = nullptr)
+  CSR(auto* v_data, size_t n, size_t m, std::function<void()> _deletion_fn,
+      auto* _e0, vertex_weight_type* _vertex_weights = nullptr)
       : n(n), m(m), vertex_weights(_vertex_weights), deletion_fn(_deletion_fn) {
-    vertex_offsets.reset((edge_t *)malloc((n + 1) * sizeof(edge_t)));
-    edges.reset((node_t *)malloc((m) * sizeof(node_t)));
+    vertex_offsets.reset((edge_t*)malloc((n + 1) * sizeof(edge_t)));
+    edges.reset((node_t*)malloc((m) * sizeof(node_t)));
     gbbs::parallel_for(0, n, [&](size_t i) {
       vertex_offsets[i] = v_data[i].offset;
       for (size_t j = 0; j < v_data[i].degree; j++) {
@@ -106,7 +110,7 @@ template <class node_t, class edge_t, bool shuffle = false> struct CSR {
   }
 
   // Move constructor
-  CSR(CSR &&other) noexcept {
+  CSR(CSR&& other) noexcept {
     n = other.n;
     m = other.m;
     other.n = 0;
@@ -119,7 +123,7 @@ template <class node_t, class edge_t, bool shuffle = false> struct CSR {
   }
 
   // Move assignment
-  CSR &operator=(CSR &&other) noexcept {
+  CSR& operator=(CSR&& other) noexcept {
     n = other.n;
     m = other.m;
     other.n = 0;
@@ -132,10 +136,10 @@ template <class node_t, class edge_t, bool shuffle = false> struct CSR {
   }
 
   // Copy constructor
-  CSR(const CSR &other) : n(other.n), m(other.m) {
+  CSR(const CSR& other) : n(other.n), m(other.m) {
     debug(std::cout << "Copying symmetric graph." << std::endl;);
-    vertex_offsets.reset((edge_t *)malloc((n + 1) * sizeof(edge_t)));
-    edges.reset((node_t *)malloc((m) * sizeof(node_t)));
+    vertex_offsets.reset((edge_t*)malloc((n + 1) * sizeof(edge_t)));
+    edges.reset((node_t*)malloc((m) * sizeof(node_t)));
     vertex_weights = nullptr;
     if (other.vertex_weights != nullptr) {
       vertex_weights = gbbs::new_array_no_init<vertex_weight_type>(n);
@@ -160,16 +164,16 @@ template <class node_t, class edge_t, bool shuffle = false> struct CSR {
   size_t N() const { return n; }
   size_t M() const { return m; }
 
-private:
+ private:
   struct free_delete {
-    void operator()(void *x) { free(x); }
+    void operator()(void* x) { free(x); }
   };
   std::unique_ptr<edge_t[], free_delete> vertex_offsets = nullptr;
   std::unique_ptr<node_t[], free_delete> edges = nullptr;
   node_t n = 0;
   edge_t m = 0;
   // called to delete the graph
-  vertex_weight_type *vertex_weights = nullptr;
+  vertex_weight_type* vertex_weights = nullptr;
   std::function<void()> deletion_fn = []() {};
   // Pointer to vertex weights
 };
@@ -190,16 +194,16 @@ using graph_api = gbbs::full_api;
 
 using graph_t = gbbs::Graph<graph_impl, /* symmetric */ true, graph_api>;
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   gbbs::commandLine P(argc, argv, " [-s] <inFile>");
-  char *iFile = P.getArgument(0);
+  char* iFile = P.getArgument(0);
   bool symmetric = P.getOptionValue("-s");
   bool compressed = P.getOptionValue("-c");
   bool binary = P.getOptionValue("-b");
   bool mmap = P.getOptionValue("-m");
-  char *output_file = P.getOptionValue("-o");
-  int batch_size = P.getOptionIntValue("-batch_size", 1);
-  int batch_num = P.getOptionIntValue("-batch_num", 10);
+  char* output_file = P.getOptionValue("-o");
+  size_t batch_size = P.getOptionIntValue("-batch_size", 1);
+  size_t batch_num = P.getOptionIntValue("-batch_num", 10);
 
   std::string output_path(output_file ? output_file : "");
 
@@ -225,7 +229,10 @@ int main(int argc, char *argv[]) {
       auto bytes_used = G.get_memory_size();
       // std::cout << "total bytes used = " << bytes_used << "\n";
       // run_all(G, options);
-      GenerateBatchEdges(G, options, output_path, batch_size, batch_num);
+      gbbs::BatchEdgesIO<decltype(G)>::GenerateBatchEdges(
+          G, options, output_path, batch_size, batch_num);
+      gbbs::BatchEdgesIO<decltype(G)>::ReadBatchEdges(output_path, batch_size,
+                                                      batch_num);
       // run(G, options);
     } else {
       std::cerr << "does not support directed graphs yet\n";

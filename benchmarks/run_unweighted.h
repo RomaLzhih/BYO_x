@@ -25,7 +25,8 @@
 
 namespace gbbs {
 
-template <class Graph> double Map_runner(const Graph &G, size_t rounds) {
+template <class Graph>
+double Map_runner(Graph const& G, size_t rounds) {
   std::cout << "### Application: Base Map" << std::endl;
   std::cout << "### ------------------------------------" << std::endl;
   std::cout << "### ------------------------------------" << std::endl;
@@ -49,7 +50,7 @@ template <class Graph> double Map_runner(const Graph &G, size_t rounds) {
 }
 
 template <class Graph, size_t read_size>
-double Map_Remote_runner(const Graph &G, size_t rounds) {
+double Map_Remote_runner(Graph const& G, size_t rounds) {
   std::cout << "### Application: Map with Remote: " << read_size << std::endl;
   std::cout << "### ------------------------------------" << std::endl;
   std::cout << "### ------------------------------------" << std::endl;
@@ -125,7 +126,7 @@ double Map_Remote_runner(const Graph &G, size_t rounds) {
 }
 
 template <class Graph>
-double BFS_runner(const Graph &G, uintE src, size_t rounds, bool dump) {
+double BFS_runner(Graph const& G, uintE src, size_t rounds, bool dump) {
   // std::cout << "### Application: BFS" << std::endl;
   // std::cout << "### Params: -src = " << src << std::endl;
   // std::cout << "### ------------------------------------" << std::endl;
@@ -171,7 +172,7 @@ double BFS_runner(const Graph &G, uintE src, size_t rounds, bool dump) {
 }
 
 template <class Graph>
-double WorkEfficientDensestSubgraph_runner(const Graph &G, double eps,
+double WorkEfficientDensestSubgraph_runner(Graph const& G, double eps,
                                            size_t rounds) {
   std::cout << "### Application: WorkEfficientDensestSubgraph" << std::endl;
   std::cout << "### Params: -eps = " << eps << std::endl;
@@ -194,7 +195,7 @@ double WorkEfficientDensestSubgraph_runner(const Graph &G, double eps,
 }
 
 template <class Graph>
-double CharikarAppxDensestSubgraph_runner(const Graph &G, size_t rounds) {
+double CharikarAppxDensestSubgraph_runner(Graph const& G, size_t rounds) {
   std::cout << "### Application: CharikarAppxDensestSubgraph" << std::endl;
   std::cout << "### ------------------------------------" << std::endl;
 
@@ -215,7 +216,7 @@ double CharikarAppxDensestSubgraph_runner(const Graph &G, size_t rounds) {
 }
 
 template <class Graph>
-double CoSimRank_runner(const Graph &G, double eps, size_t iters, double c,
+double CoSimRank_runner(Graph const& G, double eps, size_t iters, double c,
                         double u, double v, bool em, size_t rounds) {
   std::cout << "### Application: CoSimRank" << std::endl;
   std::cout << "### Params: -eps = " << eps << std::endl;
@@ -244,7 +245,7 @@ double CoSimRank_runner(const Graph &G, double eps, size_t iters, double c,
 }
 
 template <class Graph>
-double BFSCC_runner(const Graph &G, size_t rounds, bool dump) {
+double BFSCC_runner(Graph const& G, size_t rounds, bool dump) {
   std::cout << "### Application: BFSCC (Connectivity)" << std::endl;
   std::cout << "### ------------------------------------" << std::endl;
 
@@ -274,7 +275,7 @@ double BFSCC_runner(const Graph &G, size_t rounds, bool dump) {
 }
 
 template <class Graph>
-double LabelPropCC_runner(const Graph &G, size_t rounds, bool dump,
+double LabelPropCC_runner(Graph const& G, size_t rounds, bool dump,
                           bool permute) {
   std::cout << "### Application: LabelPropCC (Connectivity)" << std::endl;
   std::cout << "### ------------------------------------" << std::endl;
@@ -307,7 +308,7 @@ double LabelPropCC_runner(const Graph &G, size_t rounds, bool dump,
 }
 
 template <class Graph>
-double SimpleUnionCC_runner(const Graph &G, size_t rounds, bool dump) {
+double SimpleUnionCC_runner(Graph const& G, size_t rounds, bool dump) {
   std::cout << "### Application: SimpleUnionCC (Connectivity)" << std::endl;
   std::cout << "### ------------------------------------" << std::endl;
 
@@ -337,7 +338,7 @@ double SimpleUnionCC_runner(const Graph &G, size_t rounds, bool dump) {
 }
 
 template <class Graph>
-double WorkEfficientCC_runner(const Graph &G, size_t rounds, bool dump,
+double WorkEfficientCC_runner(Graph const& G, size_t rounds, bool dump,
                               bool permute, double beta) {
   std::cout << "### Application: WorkEfficientCC (Connectivity)" << std::endl;
   std::cout << "### ------------------------------------" << std::endl;
@@ -399,7 +400,7 @@ double WorkEfficientCC_runner(const Graph &G, size_t rounds, bool dump,
 // }
 
 template <class Graph>
-double Coloring_runner(const Graph &G, size_t rounds, bool dump, bool LF,
+double Coloring_runner(Graph const& G, size_t rounds, bool dump, bool LF,
                        bool verify) {
   std::cout << "### Application: Coloring" << std::endl;
   std::cout << "### ------------------------------------" << std::endl;
@@ -433,7 +434,7 @@ double Coloring_runner(const Graph &G, size_t rounds, bool dump, bool LF,
 }
 
 template <class Graph>
-double KCore_runner(const Graph &G, size_t rounds, bool dump, bool fa,
+double KCore_runner(Graph const& G, size_t rounds, bool dump, bool fa,
                     size_t num_buckets) {
   std::cout << "### Application: KCore" << std::endl;
   std::cout << "### ------------------------------------" << std::endl;
@@ -464,7 +465,7 @@ double KCore_runner(const Graph &G, size_t rounds, bool dump, bool fa,
 }
 
 template <class Graph>
-double LDD_runner(const Graph &G, size_t rounds, bool dump, double beta,
+double LDD_runner(Graph const& G, size_t rounds, bool dump, double beta,
                   bool permute) {
   std::cout << "### Application: LDD" << std::endl;
   std::cout << "### ------------------------------------" << std::endl;
@@ -495,7 +496,7 @@ double LDD_runner(const Graph &G, size_t rounds, bool dump, double beta,
 }
 
 template <class Graph>
-double MIS_runner(const Graph &G, size_t rounds, bool dump, bool spec_for,
+double MIS_runner(Graph const& G, size_t rounds, bool dump, bool spec_for,
                   bool verify) {
   std::cout << "### Application: MIS" << std::endl;
   std::cout << "### ------------------------------------" << std::endl;
@@ -564,7 +565,7 @@ double MIS_runner(const Graph &G, size_t rounds, bool dump, bool spec_for,
 }
 
 template <class Graph>
-double PageRank_runner(const Graph &G, size_t rounds, bool dump, size_t iters,
+double PageRank_runner(Graph const& G, size_t rounds, bool dump, size_t iters,
                        bool em, bool delta, double eps, double leps) {
   // std::cout << "### Application: PageRank" << std::endl;
   // std::cout << "### ------------------------------------" << std::endl;
@@ -597,7 +598,7 @@ double PageRank_runner(const Graph &G, size_t rounds, bool dump, size_t iters,
 }
 
 template <class Graph>
-double SSBetweennessCentrality_runner(const Graph &G, size_t rounds, bool dump,
+double SSBetweennessCentrality_runner(Graph const& G, size_t rounds, bool dump,
                                       uintE src, bool fa, bool ligra) {
   std::cout << "### Application: SSBetweennessCentrality" << std::endl;
   std::cout << "### ------------------------------------" << std::endl;
@@ -630,7 +631,7 @@ double SSBetweennessCentrality_runner(const Graph &G, size_t rounds, bool dump,
 }
 
 template <class Graph>
-double Spanner_runner(const Graph &G, size_t rounds, bool dump, size_t k) {
+double Spanner_runner(Graph const& G, size_t rounds, bool dump, size_t k) {
   std::cout << "### Application: Spanner" << std::endl;
   std::cout << "### ------------------------------------" << std::endl;
   size_t n = G.N();
@@ -663,7 +664,7 @@ double Spanner_runner(const Graph &G, size_t rounds, bool dump, size_t k) {
 }
 
 template <class Graph>
-double TriangleCount_runner(const Graph &G, size_t rounds) {
+double TriangleCount_runner(Graph const& G, size_t rounds) {
   std::cout << "### Application: Triangle_degree_ordering" << std::endl;
   std::cout << "### ------------------------------------" << std::endl;
 
@@ -703,7 +704,7 @@ inline uint64_t hash64(uint64_t u) {
 // A cheap version of an inteface that should be improved
 // Allows forking a state into multiple states
 struct random {
-public:
+ public:
   random(size_t seed) : state(seed) {};
   random() : state(0) {};
   random fork(uint64_t i) const { return random(hash64(hash64(i + state))); }
@@ -712,7 +713,7 @@ public:
   size_t operator[](size_t i) const { return ith_rand(i); }
   size_t rand() { return ith_rand(0); }
 
-private:
+ private:
   uint64_t state = 0;
 };
 
@@ -727,7 +728,8 @@ inline uint32_t hash32(uint32_t a) {
   return a;
 }
 
-template <class intT> struct rMat {
+template <class intT>
+struct rMat {
   double a, ab, abc;
   intT n;
   intT h;
@@ -776,10 +778,10 @@ template <class intT> struct rMat {
     return rMatRec(n, randStart, randStride);
   }
 };
-} // namespace batch_insert_helpers
+}  // namespace batch_insert_helpers
 
 template <class Graph>
-void Batch_insert_runner(std::map<std::string, double> &time_map, Graph &G,
+void Batch_insert_runner(std::map<std::string, double>& time_map, Graph& G,
                          size_t rounds, size_t max_batch, bool dump) {
   size_t n = G.N();
 
@@ -859,7 +861,7 @@ void Batch_insert_runner(std::map<std::string, double> &time_map, Graph &G,
 }
 
 class run_all_options {
-public:
+ public:
   uintE src = 0;
   size_t rounds = 3;
   bool dump = false;
@@ -894,7 +896,7 @@ public:
 };
 
 template <class Graph>
-void run_bfs(const Graph &G, const run_all_options &options) {
+void run_bfs(Graph const& G, run_all_options const& options) {
   static constexpr bool symmetric = Graph::symmetric;
   std::cout << "### Threads: " << num_workers() << std::endl;
   std::cout << "### n: " << G.N() << std::endl;
@@ -924,18 +926,17 @@ void run_bfs(const Graph &G, const run_all_options &options) {
       G.remove_batch(edges.data(), edges.size());
     }
   }
-  for (const auto &[alg, time_per_iter] : time_map) {
+  for (auto const& [alg, time_per_iter] : time_map) {
     std::cout << "BYO: => " << alg << ", " << time_per_iter << "\n";
   }
 }
 
 template <class Graph, class EdgeArray, typename Func>
-void run_incre_alg(Graph &G, EdgeArray &batch_edges, const size_t batch_size,
-                   const run_all_options &options, Func &&func) {
-
+void run_incre_alg(Graph& G, EdgeArray& batch_edges, size_t const batch_size,
+                   run_all_options const& options, Func&& func) {
   // parlay::sequence<size_t> sizes = {1, 10, 100, 1000, 10000, 100000,
   // 1000000};
-  const int batch_num = 10;
+  int const batch_num = 10;
   if (batch_num * batch_size > batch_edges.size()) {
     std::cout << "skipping, total batch size is larger than number of edges\n";
     return;
@@ -965,46 +966,118 @@ void run_incre_alg(Graph &G, EdgeArray &batch_edges, const size_t batch_size,
 }
 
 template <class Graph>
-void GenerateBatchEdges(Graph &G, const run_all_options &options,
-                        std::string output_path, int batch_size,
-                        int batch_num) {
-  auto edges = G.edges();
-  auto batch_edges = parlay::tabulate(edges.size(), [&](size_t i) {
-    return std::make_tuple(std::get<0>(edges[i]), std::get<1>(edges[i]));
-  });
-  batch_edges = parlay::random_shuffle(batch_edges);
-  std::cout << edges.size() << " edges in the graph\n";
+class BatchEdgesIO {
+ public:
+  static void GenerateBatchEdges(Graph& G, run_all_options const& options,
+                                 std::string output_path, size_t batch_size,
+                                 size_t batch_num) {
+    auto edges = G.edges();
+    auto batch_edges = parlay::tabulate(edges.size(), [&](size_t i) {
+      return std::make_tuple(std::get<0>(edges[i]), std::get<1>(edges[i]));
+    });
+    batch_edges = parlay::random_shuffle(batch_edges);
+    std::cout << edges.size() << " edges in the graph\n";
 
-  // Write the last batch_size * batch_num edges to output_path
-  size_t total_batch_edges =
-      static_cast<size_t>(batch_size) * static_cast<size_t>(batch_num);
-  if (total_batch_edges > batch_edges.size()) {
-    std::cout << "Warning: requested " << total_batch_edges
-              << " edges but only " << batch_edges.size()
-              << " edges available\n";
-    total_batch_edges = batch_edges.size();
+    // Write the last batch_size * batch_num edges to output_path
+    size_t total_batch_edges =
+        static_cast<size_t>(batch_size) * static_cast<size_t>(batch_num);
+    if (total_batch_edges > batch_edges.size()) {
+      std::cout << "Warning: requested " << total_batch_edges
+                << " edges but only " << batch_edges.size()
+                << " edges available\n";
+      total_batch_edges = batch_edges.size();
+    }
+
+    std::ofstream output_file(output_path);
+    if (!output_file.is_open()) {
+      std::cout << "Error: could not open output file " << output_path << "\n";
+      return;
+    }
+    output_file << total_batch_edges << "\n";
+
+    size_t start_idx = batch_edges.size() - total_batch_edges;
+    for (size_t i = start_idx; i < batch_edges.size(); i++) {
+      output_file << std::get<0>(batch_edges[i]) << " "
+                  << std::get<1>(batch_edges[i]) << "\n";
+    }
+
+    output_file.close();
+    std::cout << "Wrote " << total_batch_edges << " edges to " << output_path
+              << "\n";
   }
 
-  std::ofstream output_file(output_path);
-  if (!output_file.is_open()) {
-    std::cout << "Error: could not open output file " << output_path << "\n";
-    return;
-  }
-  output_file << total_batch_edges << "\n";
+  template <class Seq>
+  static parlay::sequence<char*> stringToWords(Seq& Str) {
+    auto is_space = [](char c) {
+      switch (c) {
+        case '\r':
+        case '\t':
+        case '\n':
+        case 0:
+        case ' ':
+          return true;
+        default:
+          return false;
+      }
+    };
 
-  size_t start_idx = batch_edges.size() - total_batch_edges;
-  for (size_t i = start_idx; i < batch_edges.size(); i++) {
-    output_file << std::get<0>(batch_edges[i]) << " "
-                << std::get<1>(batch_edges[i]) << "\n";
+    size_t n = Str.size();
+
+    parlay::parallel_for(0, n, [&](long i) {
+      if (is_space(Str[i])) Str[i] = 0;
+    });
+
+    // mark start of words
+    auto FL = parlay::tabulate(n, [&](long i) -> bool {
+      return (i == 0) ? Str[0] : Str[i] && !Str[i - 1];
+    });
+
+    // offset for each start of word
+    auto Offsets = parlay::pack_index<long>(FL);
+
+    // pointer to each start of word
+    auto SA = parlay::tabulate(Offsets.size(), [&](long j) -> char* {
+      return Str.begin() + Offsets[j];
+    });
+
+    return SA;
   }
 
-  output_file.close();
-  std::cout << "Wrote " << total_batch_edges << " edges to " << output_path
-            << "\n";
-}
+  static parlay::sequence<std::tuple<uintE, uintE>> ReadBatchEdges(
+      std::string const& input_path, size_t& batch_size, size_t& batch_num) {
+    std::ifstream input_file(input_path);
+    if (!input_file.is_open()) {
+      std::cerr << "Error: could not open input file " << input_path << "\n";
+      return {};
+    }
+
+    // input_file >> total_batch_edges;
+    parlay::sequence<char> S =
+        gbbs::gbbs_io::readStringFromFile(input_path.c_str());
+    parlay::sequence<char*> W = stringToWords(S);
+    size_t total_batch_edges = std::stoul(W[0]);
+    auto pts = W.cut(1, W.size());
+
+    parlay::sequence<std::tuple<uintE, uintE>> edges(total_batch_edges);
+    parlay::parallel_for(0, total_batch_edges, [&](size_t i) {
+      uintE u = std::stoul(pts[i * 2]);
+      uintE v = std::stoul(pts[i * 2 + 1]);
+      edges[i] = std::make_tuple(u, v);
+    });
+
+    // for (size_t i = 0; i < total_batch_edges; i++) {
+    for (size_t i = 0; i < 10; i++) {
+      std::cout << "Read edge: " << std::get<0>(edges[i]) << ", "
+                << std::get<1>(edges[i]) << "\n";
+    }
+
+    input_file.close();
+    return edges;
+  }
+};
 
 template <class Graph>
-void run(const Graph &G, const run_all_options &options) {
+void run(Graph const& G, run_all_options const& options) {
   static constexpr bool symmetric = Graph::symmetric;
   std::cout << "### Threads: " << num_workers() << std::endl;
   std::cout << "### n: " << G.N() << std::endl;
@@ -1032,15 +1105,15 @@ void run(const Graph &G, const run_all_options &options) {
     std::cout << "Batch size: " << batch_size << "\n";
 
     std::cout << "Alg BFS: \n";
-    run_incre_alg(const_cast<Graph &>(G), batch_edges, batch_size, options,
-                  [&](const Graph &dynamic_graph) {
+    run_incre_alg(const_cast<Graph&>(G), batch_edges, batch_size, options,
+                  [&](Graph const& dynamic_graph) {
                     return BFS_runner(dynamic_graph, options.src,
                                       options.rounds, options.dump);
                   });
 
     std::cout << "Alg PageRank: \n";
-    run_incre_alg(const_cast<Graph &>(G), batch_edges, batch_size, options,
-                  [&](const Graph &dynamic_graph) {
+    run_incre_alg(const_cast<Graph&>(G), batch_edges, batch_size, options,
+                  [&](Graph const& dynamic_graph) {
                     return PageRank_runner(
                         dynamic_graph, options.rounds, options.dump,
                         options.pagerank_iters, options.pagerank_em,
@@ -1051,7 +1124,7 @@ void run(const Graph &G, const run_all_options &options) {
 }
 
 template <class Graph>
-void run_all(const Graph &G, const run_all_options &options) {
+void run_all(Graph const& G, run_all_options const& options) {
   static constexpr bool symmetric = Graph::symmetric;
   std::cout << "### Threads: " << num_workers() << std::endl;
   std::cout << "### n: " << G.N() << std::endl;
@@ -1144,14 +1217,14 @@ void run_all(const Graph &G, const run_all_options &options) {
     // run last so we run everything else on the same graph
     // we modify the graph to avoid having to do a copy
     if constexpr (Graph::support_insert_batch) {
-      Batch_insert_runner(time_map, const_cast<Graph &>(G), options.rounds,
+      Batch_insert_runner(time_map, const_cast<Graph&>(G), options.rounds,
                           options.max_batch, options.dump);
     }
   }
 
-  for (const auto &[alg, time_per_iter] : time_map) {
+  for (auto const& [alg, time_per_iter] : time_map) {
     std::cout << "# # # " << alg << ", " << time_per_iter << "\n";
   }
 }
 
-} // namespace gbbs
+}  // namespace gbbs
