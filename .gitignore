@@ -5,6 +5,7 @@
 !CMakeLists.txt
 *.vscode/
 build/
+.cache/
 
 *.a
 *.o

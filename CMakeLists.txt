@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.16)
 project(BYO_x VERSION 1.0.0 LANGUAGES CXX)
 
+# cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ /path/to/your/source
+
 # Set C++ standard
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
