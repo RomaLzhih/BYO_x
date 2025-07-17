@@ -257,6 +257,12 @@ int main(int argc, char* argv[]) {
   options.src = static_cast<gbbs::uintE>(P.getOptionLongValue("-src", 0));
   options.inserts = P.getOptionValue("-i");
 
+  // NOTE: for dzig incremental algorithms
+  options.batch_file = P.getOptionValue("-batch_file");
+  options.batch_size = P.getOptionIntValue("-batch_size", 1);
+  options.batch_num = P.getOptionIntValue("-batch_num", 10);
+  options.alg = std::string(P.getOptionValue("-alg"));
+
   std::cout << "### Graph: " << iFile << std::endl;
   if (compressed) {
     std::cerr << "does not support compression\n";
@@ -269,7 +275,7 @@ int main(int argc, char* argv[]) {
       std::cout << "total bytes used = " << bytes_used << "\n";
       // run_all(G, options);
       // run_bfs(G, options);
-      run(G, options);
+      batch_alg_wrapper(G, options);
     } else {
       std::cerr << "does not support directed graphs yet\n";
       return -1;

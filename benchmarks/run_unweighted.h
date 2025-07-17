@@ -941,39 +941,35 @@ void run_bfs(Graph const& G, run_all_options const& options) {
 template <class Graph, class EdgeArray, typename Func>
 void run_incre_alg(Graph& G, EdgeArray& batch_edges,
                    run_all_options const& options, Func&& func) {
-  size_t remove_edges_num = options.batch_num * options.batch_size;
-  size_t remaining_edges_num = batch_edges.size() - remove_edges_num;
+  size_t insert_sz = options.batch_num * options.batch_size;
 
-  if (remove_edges_num > batch_edges.size()) {
-    std::cout << "skipping, total batch size is larger than number of edges\n";
+  if (insert_sz != batch_edges.size()) {
+    std::cout << "skipping, total batch size is not equal to number of edges\n";
     return;
   }
 
+  // for (int i = 0; i < options.rounds; i++) {
   Graph dynamic_graph(G);
 
   if (options.remove_batches_edges) {
-    // remove last batch_size * batch_num edges from the graph
-    std::cout << "removing " << remove_edges_num << " edges from the graph\n";
-    dynamic_graph.remove_batch(batch_edges.data() + remaining_edges_num,
-                               remove_edges_num);
+    std::cout << "removing " << insert_sz << " edges from the graph\n";
+    dynamic_graph.remove_batch(batch_edges.data(), insert_sz);
   }
-  // printf("new graph has %zu edges\n", dynamic_graph.M());
-  // printf("base graph has %zu edges\n", dynamic_graph.edges().size());
 
   // begin insert batch
   // TODO: may rerun for multiple times and take the average
   for (int j = 0; j < options.batch_num; j++) {
     timer t;
     t.start();
-    dynamic_graph.insert_batch(
-        batch_edges.data() + remaining_edges_num + j * options.batch_size,
-        options.batch_size);
+    dynamic_graph.insert_batch(batch_edges.data() + j * options.batch_size,
+                               options.batch_size);
     // printf("new graph has %zu edges\n", dynamic_graph.edges().size());
     double insert_time = t.stop();
     double alg_time = func(dynamic_graph);
     printf("%.5f %.5f\n", insert_time, alg_time);
     std::cout << std::flush;
   }
+  // }
 }
 
 template <class Graph>
@@ -1123,6 +1119,7 @@ void batch_alg_wrapper(Graph const& G, run_all_options const& options) {
                         options.pagerank_leps);
                   });
   }
+  std::cout << "Finish." << std::endl;
 }
 
 template <class Graph>
