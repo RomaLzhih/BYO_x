@@ -9,6 +9,13 @@ cc_binary(
 )
 
 cc_binary(
+    name = "run_edges_batch_generator",
+    srcs = ["run_edges_batch_generator.cc"],
+    deps = ["//benchmarks:run_unweighted",
+     ],
+)
+
+cc_binary(
     name = "run_gbbs",
     srcs = ["run_gbbs.cc"],
     deps = ["//benchmarks:run_unweighted",

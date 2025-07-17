@@ -704,8 +704,8 @@ inline uint64_t hash64(uint64_t u) {
 // Allows forking a state into multiple states
 struct random {
 public:
-  random(size_t seed) : state(seed){};
-  random() : state(0){};
+  random(size_t seed) : state(seed) {};
+  random() : state(0) {};
   random fork(uint64_t i) const { return random(hash64(hash64(i + state))); }
   random next() const { return fork(0); }
   size_t ith_rand(uint64_t i) const { return hash64(i + state); }
@@ -811,6 +811,8 @@ void Batch_insert_runner(std::map<std::string, double> &time_map, Graph &G,
         double batch_sort_time = 0;
         st.start();
         G.insert_batch(updates.data(), updates.size());
+        std::cout << G.M() << " edges after inserts\n";
+        std::cout << G.edges().size() << " another way to count edges\n";
 
         double batch_time = st.stop();
 
@@ -960,6 +962,45 @@ void run_incre_alg(Graph &G, EdgeArray &batch_edges, const size_t batch_size,
     printf("%.5f %.5f\n", insert_time, alg_time);
     std::cout << std::flush;
   }
+}
+
+template <class Graph>
+void GenerateBatchEdges(Graph &G, const run_all_options &options,
+                        std::string output_path, int batch_size,
+                        int batch_num) {
+  auto edges = G.edges();
+  auto batch_edges = parlay::tabulate(edges.size(), [&](size_t i) {
+    return std::make_tuple(std::get<0>(edges[i]), std::get<1>(edges[i]));
+  });
+  batch_edges = parlay::random_shuffle(batch_edges);
+  std::cout << edges.size() << " edges in the graph\n";
+
+  // Write the last batch_size * batch_num edges to output_path
+  size_t total_batch_edges =
+      static_cast<size_t>(batch_size) * static_cast<size_t>(batch_num);
+  if (total_batch_edges > batch_edges.size()) {
+    std::cout << "Warning: requested " << total_batch_edges
+              << " edges but only " << batch_edges.size()
+              << " edges available\n";
+    total_batch_edges = batch_edges.size();
+  }
+
+  std::ofstream output_file(output_path);
+  if (!output_file.is_open()) {
+    std::cout << "Error: could not open output file " << output_path << "\n";
+    return;
+  }
+  output_file << total_batch_edges << "\n";
+
+  size_t start_idx = batch_edges.size() - total_batch_edges;
+  for (size_t i = start_idx; i < batch_edges.size(); i++) {
+    output_file << std::get<0>(batch_edges[i]) << " "
+                << std::get<1>(batch_edges[i]) << "\n";
+  }
+
+  output_file.close();
+  std::cout << "Wrote " << total_batch_edges << " edges to " << output_path
+            << "\n";
 }
 
 template <class Graph>
