@@ -948,29 +948,35 @@ void run_incre_alg(Graph& G, EdgeArray& batch_edges,
     return;
   }
 
-  // for (int i = 0; i < options.rounds; i++) {
-  Graph dynamic_graph(G);
-  // Graph dynamic_graph = G;
+  parlay::sequence<double> insert_time_seq(options.batch_num, 0.0);
+  parlay::sequence<double> alg_time_seq(options.batch_num, 0.0);
+  for (int i = 0; i < options.rounds; i++) {
+    Graph dynamic_graph(G);
+    // Graph dynamic_graph = G;
 
-  if (options.remove_batches_edges) {
-    std::cout << "removing " << insert_sz << " edges from the graph\n";
-    dynamic_graph.remove_batch(batch_edges.data(), insert_sz);
+    if (options.remove_batches_edges) {
+      std::cout << "removing " << insert_sz << " edges from the graph\n";
+      dynamic_graph.remove_batch(batch_edges.data(), insert_sz);
+    }
+
+    // begin insert batch
+    for (int j = 0; j < options.batch_num; j++) {
+      timer t;
+      t.start();
+      dynamic_graph.insert_batch(batch_edges.data() + j * options.batch_size,
+                                 options.batch_size);
+      // printf("new graph has %zu edges\n", dynamic_graph.edges().size());
+      insert_time_seq[j] += t.stop();
+      alg_time_seq[j] += func(dynamic_graph);
+    }
   }
 
-  // begin insert batch
-  // TODO: may rerun for multiple times and take the average
   for (int j = 0; j < options.batch_num; j++) {
-    timer t;
-    t.start();
-    dynamic_graph.insert_batch(batch_edges.data() + j * options.batch_size,
-                               options.batch_size);
-    // printf("new graph has %zu edges\n", dynamic_graph.edges().size());
-    double insert_time = t.stop();
-    double alg_time = func(dynamic_graph);
-    printf("%.5f %.5f\n", insert_time, alg_time);
-    std::cout << std::flush;
+    printf("%.6f %.6f\n", insert_time_seq[j] / options.rounds,
+           alg_time_seq[j] / options.rounds);
   }
-  // }
+  std::cout << std::flush;
+  return;
 }
 
 template <class Graph>
