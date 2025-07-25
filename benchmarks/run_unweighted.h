@@ -949,8 +949,8 @@ void run_incre_alg(Graph& G, EdgeArray& batch_edges,
   }
 
   // for (int i = 0; i < options.rounds; i++) {
-  // Graph dynamic_graph(G);
-  Graph dynamic_graph = G;
+  Graph dynamic_graph(G);
+  // Graph dynamic_graph = G;
 
   if (options.remove_batches_edges) {
     std::cout << "removing " << insert_sz << " edges from the graph\n";

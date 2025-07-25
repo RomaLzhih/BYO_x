@@ -13,9 +13,13 @@
 //     -d : dump the output arrays to files, useful for debugging
 
 #include <cassert>
+#include <concepts>
 #include <cstddef>
+#include <cstdint>
 #include <functional>
+#include <type_traits>
 
+#include "parlay/monoid.h"
 #include "parlay/parallel.h"
 
 #ifdef HOMEGROWN
@@ -201,52 +205,37 @@ struct symmetric_ppcsr_graph {
   //   return *this;
   // }
 
-  symmetric_ppcsr_graph& operator=(symmetric_ppcsr_graph& other) noexcept {
-    nodes = other.nodes;
-    if (other.vertex_weights != nullptr) {
-      vertex_weights = gbbs::new_array_no_init<vertex_weight_type>(N());
-      gbbs::parallel_for(0, N(), [&](size_t i) {
-        vertex_weights[i] = other.vertex_weights[i];
-      });
-    }
-    return *this;
-    // other.vertex_weights = nullptr;
-  }
+  // symmetric_ppcsr_graph& operator=(symmetric_ppcsr_graph& other) noexcept {
+  //   nodes = other.nodes;
+  //   if (other.vertex_weights != nullptr) {
+  //     vertex_weights = gbbs::new_array_no_init<vertex_weight_type>(N());
+  //     gbbs::parallel_for(0, N(), [&](size_t i) {
+  //       vertex_weights[i] = other.vertex_weights[i];
+  //     });
+  //   }
+  //   return *this;
+  //   // other.vertex_weights = nullptr;
+  // }
 
   // Copy constructor
 
-  symmetric_ppcsr_graph(symmetric_ppcsr_graph& other)
-      : nodes(other.nodes.get_n()),
-        vertex_weights(other.vertex_weights),
-        deletion_fn(other.deletion_fn) {
-    auto edges = other.nodes.get_edges();
-    auto n = other.nodes.get_n();
-    auto m = other.nodes.num_edges();
-    gbbs::sequence<uint32_t> srcs = gbbs::sequence<uint32_t>::uninitialized(m);
-    gbbs::sequence<uint32_t> dests = gbbs::sequence<uint32_t>::uninitialized(m);
-    gbbs::sequence<uint32_t> degrees(n, 0);
-    gbbs::sequence<uint8_t> all_true(m, 1);
-    // BUG: this does not handle the weight
-    parlay::parallel_for(0, edges.size(), [&](size_t i) {
-      srcs[i] = std::get<0>(edges[i]);
-      dests[i] = std::get<1>(edges[i]);
-    });
-    nodes.build_from_edges(srcs.data(), dests.data(), all_true.data(), n, m,
-                           degrees.data());
-  }
-  // symmetric_ppcsr_graph(const symmetric_ppcsr_graph &other) :
-  // nodes(other.N()) {
-  //   // printf("copy constructor\n");
-  //   // TODO: change to parallel add
-  //   for (size_t i = 0; i < N(); i++) {
-  //     other.map_neighbors(i, [&](auto src, auto dest, auto val) {
-  //       if constexpr (std::same_as<decltype(val), gbbs::empty>) {
-  //         nodes.add_edge(src, dest, 0);
-  //       } else {
-  //         nodes.add_edge(src, dest, val);
-  //       }
-  //     });
-  //   }
+  // symmetric_ppcsr_graph(symmetric_ppcsr_graph& other)
+  //     : nodes(other.nodes.get_n()) {
+  //   auto edges = other.nodes.get_edges();
+  //   auto n = other.nodes.get_n();
+  //   auto m = other.nodes.num_edges();
+  //   gbbs::sequence<uint32_t> srcs =
+  //   gbbs::sequence<uint32_t>::uninitialized(m); gbbs::sequence<uint32_t>
+  //   dests = gbbs::sequence<uint32_t>::uninitialized(m);
+  //   gbbs::sequence<uint32_t> degrees(n, 0);
+  //   gbbs::sequence<uint8_t> all_true(m, 1);
+  //   // BUG: this does not handle the weight
+  //   parlay::parallel_for(0, edges.size(), [&](size_t i) {
+  //     srcs[i] = std::get<0>(edges[i]);
+  //     dests[i] = std::get<1>(edges[i]);
+  //   });
+  //   nodes.build_from_edges(srcs.data(), dests.data(), all_true.data(), n, m,
+  //                          degrees.data());
   //   vertex_weights = nullptr;
   //   if (other.vertex_weights != nullptr) {
   //     vertex_weights = gbbs::new_array_no_init<vertex_weight_type>(N());
@@ -259,6 +248,50 @@ struct symmetric_ppcsr_graph {
   //       gbbs::free_array(vertex_weights, N());
   //     }
   //   };
+  // }
+
+  symmetric_ppcsr_graph(symmetric_ppcsr_graph& other) : nodes(other.nodes) {
+    vertex_weights = nullptr;
+    if (other.vertex_weights != nullptr) {
+      vertex_weights = gbbs::new_array_no_init<vertex_weight_type>(N());
+      gbbs::parallel_for(0, N(), [&](size_t i) {
+        vertex_weights[i] = other.vertex_weights[i];
+      });
+    }
+    deletion_fn = [&]() {
+      if (vertex_weights != nullptr) {
+        gbbs::free_array(vertex_weights, N());
+      }
+    };
+    // std::cout << nodes.get_n() << " " << nodes.num_edges() << std::endl;
+  }
+
+  // symmetric_ppcsr_graph(symmetric_ppcsr_graph const& other) :
+  // nodes(other.N()) {
+  //   printf("copy constructor\n");
+  //   for (size_t i = 0; i < N(); i++) {
+  //     other.map_neighbors(i, [&](auto src, auto dest, auto val) {
+  //       if constexpr (std::same_as<decltype(val), gbbs::empty>) {
+  //         nodes.add_edge(src, dest, 0);
+  //       } else {
+  //         nodes.add_edge(src, dest, val);
+  //       }
+  //     });
+  //   }
+  //
+  //   vertex_weights = nullptr;
+  //   if (other.vertex_weights != nullptr) {
+  //     vertex_weights = gbbs::new_array_no_init<vertex_weight_type>(N());
+  //     gbbs::parallel_for(0, N(), [&](size_t i) {
+  //       vertex_weights[i] = other.vertex_weights[i];
+  //     });
+  //   }
+  //   deletion_fn = [&]() {
+  //     if (vertex_weights != nullptr) {
+  //       gbbs::free_array(vertex_weights, N());
+  //     }
+  //   };
+  //   std::cout << nodes.get_n() << " " << nodes.num_edges() << std::endl;
   // }
 
   ~symmetric_ppcsr_graph() { deletion_fn(); }
