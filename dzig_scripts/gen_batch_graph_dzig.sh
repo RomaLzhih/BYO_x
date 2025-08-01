@@ -1,8 +1,12 @@
 #!/bin/bash
 
-# change to graph path
-graph_path_prefix="/data/graphs/bin"
-store_prefix="/data/zmen002/graph/byo"
+# Ziyang's local path
+#graph_path_prefix="/data/graphs/bin"
+#store_prefix="/data/zmen002/graph/byo"
+
+# Perlmutter's path
+graph_path_prefix="/pscratch/sd/r/raqib/dataset-byo/bin"
+store_prefix="/pscratch/sd/r/raqib/dataset-byo"
 
 # graphs=("com-orkut_sym.bin" "soc-LiveJournal1_sym.bin" "twitter_sym.bin" "friendster_sym.bin")
 graphs=("com-orkut_sym.bin")
