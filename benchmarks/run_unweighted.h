@@ -895,6 +895,7 @@ class run_all_options {
   bool inserts = false;
 
   // for dzig incre alg
+  char* input_file = nullptr;
   char* batch_file = nullptr;
   size_t batch_size = 1;
   size_t batch_num = 10;
@@ -955,7 +956,7 @@ void run_incre_alg(Graph& G, EdgeArray& batch_edges,
     // Graph dynamic_graph = G;
 
     if (options.remove_batches_edges) {
-      std::cout << "removing " << insert_sz << " edges from the graph\n";
+      // std::cout << "removing " << insert_sz << " edges from the graph\n";
       dynamic_graph.remove_batch(batch_edges.data(), insert_sz);
     }
 
@@ -1100,23 +1101,24 @@ void batch_alg_wrapper(Graph const& G, run_all_options const& options) {
     return;
   }
 
-  puts("-----------------------------");
-  std::cout << std::string(options.batch_file) << "\n";
-  std::cout << "Batch size: " << options.batch_size << "\n";
-  std::cout << "Batch num: " << options.batch_num << "\n";
+  puts(">>> -----------------------------");
+  std::cout << ">>> Input_file " << std::string(options.input_file) << "\n";
+  std::cout << ">>> Batch_file " << std::string(options.batch_file) << "\n";
+  std::cout << ">>> Batch_num " << options.batch_num << "\n";
+  std::cout << ">>> Batch_size " << options.batch_size << "\n";
 
   auto batch_edges = gbbs::BatchEdgesIO<decltype(G)>::ReadBatchEdges(
       options.batch_file, options.batch_size, options.batch_num);
 
   if (options.alg == "bfs") {
-    std::cout << "Alg BFS: \n";
+    std::cout << ">>> Alg BFS \n";
     run_incre_alg(const_cast<Graph&>(G), batch_edges, options,
                   [&](Graph const& dynamic_graph) {
                     return BFS_runner(dynamic_graph, options.src,
                                       options.rounds, options.dump);
                   });
   } else if (options.alg == "pagerank") {
-    std::cout << "Alg PageRank: \n";
+    std::cout << ">>> Alg PageRank \n";
     run_incre_alg(const_cast<Graph&>(G), batch_edges, options,
                   [&](Graph const& dynamic_graph) {
                     return PageRank_runner(
@@ -1126,7 +1128,7 @@ void batch_alg_wrapper(Graph const& G, run_all_options const& options) {
                         options.pagerank_leps);
                   });
   }
-  std::cout << "Finish." << std::endl;
+  puts(">>> -----------------------------");
 }
 
 template <class Graph>

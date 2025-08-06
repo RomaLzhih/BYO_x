@@ -1,14 +1,7 @@
->>>Running run_std_set on soc-LiveJournal1_sym.bin with batch size 1 and algorithm bfs
-### Graph: /data/graphs/bin/soc-LiveJournal1_sym.bin
-### SET API ###
-binary = 1
-native map = 0
-iteration = 1
-native map_early_exit = 0
-native parallel_map = 0
-native native_parallel_map_early_exit = 0
-supports modification
-supports_get_memory_size = 0
+--- scripts: Running run_std_set on com-orkut_sym.bin with batch size 1 and algorithm bfs
+convert to edge list
+build from edges: edges for pma = 234370166
+starting copy into PMA
 ### GRAPH API ###
 n is suppoted as a function
 m is stored
@@ -20,39 +13,30 @@ map_neighbors_early_exit is supported
 parallel_map_neighbors_early_exit is supported
 supports insert_batch
 don't have recent enough glibc to make a good guess
-total bytes used = 0
-### Threads: 224
-### n: 4847571
-### m: 85702474
------------------------------
-/data/zmen002/graph/byo/livejournal_batches/batch_1.in
-Batch size: 1
-Batch num: 10
-Alg BFS: 
-removing 10 edges from the graph
-0.00003 0.04124
-0.00001 0.04074
-0.00002 0.03952
-0.00002 0.03889
-0.00001 0.03794
-0.00001 0.03782
-0.00002 0.03830
-0.00001 0.03711
-0.00001 0.03644
-0.00001 0.05564
-Finish.
->>>Program Finish.
->>>Running run_std_set on soc-LiveJournal1_sym.bin with batch size 1 and algorithm pagerank
-### Graph: /data/graphs/bin/soc-LiveJournal1_sym.bin
-### SET API ###
-binary = 1
-native map = 0
-iteration = 1
-native map_early_exit = 0
-native parallel_map = 0
-native native_parallel_map_early_exit = 0
-supports modification
-supports_get_memory_size = 0
+### Threads: 192
+### n: 3072627
+### m: 234370166
+>>> -----------------------------
+>>> Input_file /data/graphs/bin/com-orkut_sym.bin
+>>> Batch_file /data/zmen002/graph/byo/com-orkut_sym_batches/batch_1.in
+>>> Batch_num 10
+>>> Batch_size 1
+>>> Alg BFS 
+0.000004 0.020741
+0.000005 0.020825
+4.121844 0.029075
+0.000004 0.028742
+0.000004 0.029023
+0.000004 0.027559
+0.000005 0.027509
+0.000005 0.027278
+0.000004 0.027511
+0.000005 0.026337
+>>> -----------------------------
+--- scripts: Running run_std_set on com-orkut_sym.bin with batch size 1 and algorithm pagerank
+convert to edge list
+build from edges: edges for pma = 234370166
+starting copy into PMA
 ### GRAPH API ###
 n is suppoted as a function
 m is stored
@@ -64,7 +48,233 @@ map_neighbors_early_exit is supported
 parallel_map_neighbors_early_exit is supported
 supports insert_batch
 don't have recent enough glibc to make a good guess
-total bytes used = 0
-### Threads: 224
-### n: 4847571
-### m: 85702474
+### Threads: 192
+### n: 3072627
+### m: 234370166
+>>> -----------------------------
+>>> Input_file /data/graphs/bin/com-orkut_sym.bin
+>>> Batch_file /data/zmen002/graph/byo/com-orkut_sym_batches/batch_1.in
+>>> Batch_num 10
+>>> Batch_size 1
+>>> Alg PageRank 
+0.000005 0.518203
+0.000004 0.494082
+4.488824 0.628152
+0.000004 0.604632
+0.000005 0.535658
+0.000004 0.473123
+0.000014 0.466654
+0.000008 0.470691
+0.000010 0.464105
+0.000013 0.465063
+>>> -----------------------------
+--- scripts: Running run_std_set on com-orkut_sym.bin with batch size 10 and algorithm bfs
+convert to edge list
+build from edges: edges for pma = 234370166
+starting copy into PMA
+### GRAPH API ###
+n is suppoted as a function
+m is stored
+the graph is symmetric
+degree is supported
+supports basic map
+parallel_map_neighbors is supported
+map_neighbors_early_exit is supported
+parallel_map_neighbors_early_exit is supported
+supports insert_batch
+don't have recent enough glibc to make a good guess
+### Threads: 192
+### n: 3072627
+### m: 234370166
+>>> -----------------------------
+>>> Input_file /data/graphs/bin/com-orkut_sym.bin
+>>> Batch_file /data/zmen002/graph/byo/com-orkut_sym_batches/batch_10.in
+>>> Batch_num 10
+>>> Batch_size 10
+>>> Alg BFS 
+5.342249 0.027884
+0.000017 0.027148
+0.000015 0.026407
+0.000018 0.025983
+0.000018 0.025988
+0.000018 0.025242
+0.000015 0.025502
+0.000014 0.024919
+0.000016 0.026383
+0.000017 0.024895
+>>> -----------------------------
+--- scripts: Running run_std_set on com-orkut_sym.bin with batch size 10 and algorithm pagerank
+convert to edge list
+build from edges: edges for pma = 234370166
+starting copy into PMA
+### GRAPH API ###
+n is suppoted as a function
+m is stored
+the graph is symmetric
+degree is supported
+supports basic map
+parallel_map_neighbors is supported
+map_neighbors_early_exit is supported
+parallel_map_neighbors_early_exit is supported
+supports insert_batch
+don't have recent enough glibc to make a good guess
+### Threads: 192
+### n: 3072627
+### m: 234370166
+>>> -----------------------------
+>>> Input_file /data/graphs/bin/com-orkut_sym.bin
+>>> Batch_file /data/zmen002/graph/byo/com-orkut_sym_batches/batch_10.in
+>>> Batch_num 10
+>>> Batch_size 10
+>>> Alg PageRank 
+5.205887 0.884847
+0.000015 0.883653
+0.000199 0.838647
+0.000603 0.628449
+0.000770 0.603894
+0.000720 0.602025
+0.000661 0.568614
+0.000854 0.563732
+0.001021 0.501185
+0.001311 0.470387
+>>> -----------------------------
+--- scripts: Running run_ppcsr on com-orkut_sym.bin with batch size 1 and algorithm bfs
+convert to edge list
+build from edges: edges for pma = 234370166
+starting copy into PMA
+### GRAPH API ###
+n is suppoted as a function
+m is stored
+the graph is symmetric
+degree is supported
+supports basic map
+parallel_map_neighbors is supported
+map_neighbors_early_exit is supported
+parallel_map_neighbors_early_exit is supported
+supports insert_batch
+don't have recent enough glibc to make a good guess
+### Threads: 192
+### n: 3072627
+### m: 234370166
+>>> -----------------------------
+>>> Input_file /data/graphs/bin/com-orkut_sym.bin
+>>> Batch_file /data/zmen002/graph/byo/com-orkut_sym_batches/batch_1.in
+>>> Batch_num 10
+>>> Batch_size 1
+>>> Alg BFS 
+0.000004 0.020741
+0.000005 0.020825
+4.121844 0.029075
+0.000004 0.028742
+0.000004 0.029023
+0.000004 0.027559
+0.000005 0.027509
+0.000005 0.027278
+0.000004 0.027511
+0.000005 0.026337
+>>> -----------------------------
+--- scripts: Running run_ppcsr on com-orkut_sym.bin with batch size 1 and algorithm pagerank
+convert to edge list
+build from edges: edges for pma = 234370166
+starting copy into PMA
+### GRAPH API ###
+n is suppoted as a function
+m is stored
+the graph is symmetric
+degree is supported
+supports basic map
+parallel_map_neighbors is supported
+map_neighbors_early_exit is supported
+parallel_map_neighbors_early_exit is supported
+supports insert_batch
+don't have recent enough glibc to make a good guess
+### Threads: 192
+### n: 3072627
+### m: 234370166
+>>> -----------------------------
+>>> Input_file /data/graphs/bin/com-orkut_sym.bin
+>>> Batch_file /data/zmen002/graph/byo/com-orkut_sym_batches/batch_1.in
+>>> Batch_num 10
+>>> Batch_size 1
+>>> Alg PageRank 
+0.000005 0.518203
+0.000004 0.494082
+4.488824 0.628152
+0.000004 0.604632
+0.000005 0.535658
+0.000004 0.473123
+0.000014 0.466654
+0.000008 0.470691
+0.000010 0.464105
+0.000013 0.465063
+>>> -----------------------------
+--- scripts: Running run_ppcsr on com-orkut_sym.bin with batch size 10 and algorithm bfs
+convert to edge list
+build from edges: edges for pma = 234370166
+starting copy into PMA
+### GRAPH API ###
+n is suppoted as a function
+m is stored
+the graph is symmetric
+degree is supported
+supports basic map
+parallel_map_neighbors is supported
+map_neighbors_early_exit is supported
+parallel_map_neighbors_early_exit is supported
+supports insert_batch
+don't have recent enough glibc to make a good guess
+### Threads: 192
+### n: 3072627
+### m: 234370166
+>>> -----------------------------
+>>> Input_file /data/graphs/bin/com-orkut_sym.bin
+>>> Batch_file /data/zmen002/graph/byo/com-orkut_sym_batches/batch_10.in
+>>> Batch_num 10
+>>> Batch_size 10
+>>> Alg BFS 
+5.342249 0.027884
+0.000017 0.027148
+0.000015 0.026407
+0.000018 0.025983
+0.000018 0.025988
+0.000018 0.025242
+0.000015 0.025502
+0.000014 0.024919
+0.000016 0.026383
+0.000017 0.024895
+>>> -----------------------------
+--- scripts: Running run_ppcsr on com-orkut_sym.bin with batch size 10 and algorithm pagerank
+convert to edge list
+build from edges: edges for pma = 234370166
+starting copy into PMA
+### GRAPH API ###
+n is suppoted as a function
+m is stored
+the graph is symmetric
+degree is supported
+supports basic map
+parallel_map_neighbors is supported
+map_neighbors_early_exit is supported
+parallel_map_neighbors_early_exit is supported
+supports insert_batch
+don't have recent enough glibc to make a good guess
+### Threads: 192
+### n: 3072627
+### m: 234370166
+>>> -----------------------------
+>>> Input_file /data/graphs/bin/com-orkut_sym.bin
+>>> Batch_file /data/zmen002/graph/byo/com-orkut_sym_batches/batch_10.in
+>>> Batch_num 10
+>>> Batch_size 10
+>>> Alg PageRank 
+5.205887 0.884847
+0.000015 0.883653
+0.000199 0.838647
+0.000603 0.628449
+0.000770 0.603894
+0.000720 0.602025
+0.000661 0.568614
+0.000854 0.563732
+0.001021 0.501185
+0.001311 0.470387
+>>> -----------------------------

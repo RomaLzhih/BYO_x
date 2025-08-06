@@ -333,12 +333,13 @@ int main(int argc, char* argv[]) {
   options.inserts = P.getOptionValue("-i");
 
   // NOTE: for dzig incremental algorithms
+  options.input_file = iFile;
   options.batch_file = P.getOptionValue("-batch_file");
   options.batch_size = P.getOptionIntValue("-batch_size", 1);
   options.batch_num = P.getOptionIntValue("-batch_num", 10);
   options.alg = std::string(P.getOptionValue("-alg"));
 
-  std::cout << "### Graph: " << iFile << std::endl;
+  // std::cout << "### Graph: " << iFile << std::endl;
   if (compressed) {
     std::cerr << "does not support compression\n";
     return -1;
@@ -347,7 +348,7 @@ int main(int argc, char* argv[]) {
       auto G = gbbs::gbbs_io::read_unweighted_symmetric_graph<graph_t>(
           iFile, mmap, binary);
       auto bytes_used = G.get_memory_size();
-      std::cout << "total bytes used = " << bytes_used << "\n";
+      // std::cout << "total bytes used = " << bytes_used << "\n";
       // run_all(G, options);
       // run_bfs(G, options);
       batch_alg_wrapper(G, options);
