@@ -1,9 +1,9 @@
-To compile a single solver:
+To compile a single solver `ppcsr`:
 ```{bash}
 bazel build benchmarks/run_structures:run_ppcsr
 ```
 
-To run a single solver:
+To run a single solver `ppcsr` with batch input file `livejournal_batches/batch_1.in` and running algorithm `pagerank`:
 ```{bash}
 ./bazel-bin/benchmarks/run_structures/run_ppcsr -batch_file /data/zmen002/graph/byo/livejournal_batches/batch_1.in -batch_size 1 -batch_num 10 -alg pagerank -s -b -i 1 -src 10 /data/graphs/bin/soc-LiveJournal1_sym.bin 
 ```
