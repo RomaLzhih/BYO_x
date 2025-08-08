@@ -96,14 +96,14 @@ struct LPAlgorithm {
       });
     }
     vs = vertexSubset(n, std::move(all));
-    std::cout << "### initial vs = " << vs.size()
-              << " # frequent_comp = " << frequent_comp << std::endl;
+    // std::cout << "### initial vs = " << vs.size()
+    //           << " # frequent_comp = " << frequent_comp << std::endl;
 
     size_t rounds = 0;
     auto changed = sequence<uint8_t>(n, (uint8_t)0);
     size_t vertices_processed = 0;
     while (!vs.isEmpty()) {
-      std::cout << "### vs size = " << vs.size() << std::endl;
+      // std::cout << "### vs size = " << vs.size() << std::endl;
       vertices_processed += vs.size();
 
       auto next_vs =
@@ -115,17 +115,17 @@ struct LPAlgorithm {
       auto new_vtxs = parlay::filter(this_vs, [&](uintE v) {
         return changed[v] == need_emit; /* emit those that need emitting */
       });
-      std::cout << "### num acquired through need_emitted = " << new_vtxs.size()
-                << std::endl;
+      // std::cout << "### num acquired through need_emitted = " << new_vtxs.size()
+                // << std::endl;
       add_to_vsubset(next_vs, new_vtxs.begin(), new_vtxs.size());
 
       vs = std::move(next_vs);
       vertexMap(vs, [&](const uintE& u) { changed[u] = unemitted; });
       rounds++;
     }
-    std::cout << "# LabelProp: ran " << rounds << " many rounds." << std::endl;
-    std::cout << "# processed " << vertices_processed << " many vertices"
-              << std::endl;
+    // std::cout << "# LabelProp: ran " << rounds << " many rounds." << std::endl;
+    // std::cout << "# processed " << vertices_processed << " many vertices"
+              // << std::endl;
   }
 };
 

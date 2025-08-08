@@ -3,11 +3,10 @@ To compile a single solver `ppcsr`:
 bazel build benchmarks/run_structures:run_ppcsr
 ```
 
-To run a single solver `ppcsr` with batch input file `livejournal_batches/batch_1.in` and running algorithm `pagerank`:
+To run a single solver `ppcsr` with batch input file `soc-Livejournal1_sym_batches/batch_1.in` and running algorithm `pagerank`:
 ```{bash}
-./bazel-bin/benchmarks/run_structures/run_ppcsr -batch_file /data/zmen002/graph/byo/livejournal_batches/batch_1.in -batch_size 1 -batch_num 10 -alg pagerank -s -b -i 1 -src 10 /data/graphs/bin/soc-LiveJournal1_sym.bin 
+bazel build benchmarks/run_structures:run_ppcsr && ./bazel-bin/benchmarks/run_structures/run_ppcsr -batch_file /anvil/scratch/x-zmen/graphs/byo/soc-LiveJournal1_sym_batches/batch_1.in -batch_size 1 -batch_num 10 -alg pagerank -s -b -i 1 -src 10 /anvil/scratch/x-zmen/graphs/bin/soc-LiveJournal1_sym.bin
 ```
-
 To generate `10` batch files for `soc-LiveJournal1_sym.bin`, each with batch size `1000000`:
 ```{bash}
 bazel build benchmarks/run_structures:run_edges_batch_generator

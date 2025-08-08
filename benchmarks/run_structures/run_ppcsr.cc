@@ -339,7 +339,7 @@ int main(int argc, char* argv[]) {
   options.batch_num = P.getOptionIntValue("-batch_num", 10);
   options.alg = std::string(P.getOptionValue("-alg"));
 
-  // std::cout << "### Graph: " << iFile << std::endl;
+  std::cout << "### Graph: " << iFile << std::endl;
   if (compressed) {
     std::cerr << "does not support compression\n";
     return -1;

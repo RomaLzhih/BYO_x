@@ -133,42 +133,35 @@ double BFS_runner(Graph const& G, uintE src, size_t rounds, bool dump) {
   // std::cout << "### ------------------------------------" << std::endl;
 
   double total_time = 0.0;
-  for (size_t r = 0; r <= rounds; r++) {
-    timer t;
-    t.start();
-    auto parents = BFS(G, src);
-    double tt = t.stop();
-    // std::cout << "### Running Time: " << tt << std::endl;
-    if (r == 0) {
-      if (dump) {
-        // useful for debugging
-        std::vector<uintE> depths(G.N(), UINT_E_MAX);
-        for (size_t j = 0; j < G.N(); j++) {
-          uintE current_depth = 0;
-          uintE current_parent = j;
-          if (parents[j] == UINT_E_MAX) {
-            continue;
-          }
-          while (current_parent != parents[current_parent]) {
-            current_depth += 1;
-            current_parent = parents[current_parent];
-          }
-          depths[j] = current_depth;
-        }
-        std::ofstream myfile;
-        myfile.open("bfs.out");
-        for (unsigned int i = 0; i < G.N(); i++) {
-          myfile << depths[i] << std::endl;
-        }
-        myfile.close();
+  timer t;
+  t.start();
+  auto parents = BFS(G, src);
+  double tt = t.stop();
+  // std::cout << "### Running Time: " << tt << std::endl;
+  if (dump) {
+    // useful for debugging
+    std::vector<uintE> depths(G.N(), UINT_E_MAX);
+    for (size_t j = 0; j < G.N(); j++) {
+      uintE current_depth = 0;
+      uintE current_parent = j;
+      if (parents[j] == UINT_E_MAX) {
+        continue;
       }
-    } else {
-      total_time += tt;
+      while (current_parent != parents[current_parent]) {
+        current_depth += 1;
+        current_parent = parents[current_parent];
+      }
+      depths[j] = current_depth;
     }
+    std::ofstream myfile;
+    myfile.open("bfs.out");
+    for (unsigned int i = 0; i < G.N(); i++) {
+      myfile << depths[i] << std::endl;
+    }
+    myfile.close();
   }
-  auto time_per_iter = total_time / rounds;
   // std::cout << "# time per iter: " << time_per_iter << "\n";
-  return time_per_iter;
+  return tt;
 }
 
 template <class Graph>
@@ -277,34 +270,25 @@ double BFSCC_runner(Graph const& G, size_t rounds, bool dump) {
 template <class Graph>
 double LabelPropCC_runner(Graph const& G, size_t rounds, bool dump,
                           bool permute) {
-  std::cout << "### Application: LabelPropCC (Connectivity)" << std::endl;
-  std::cout << "### ------------------------------------" << std::endl;
+  // std::cout << "### Application: LabelPropCC (Connectivity)" << std::endl;
+  // std::cout << "### ------------------------------------" << std::endl;
 
   double total_time = 0.0;
-  for (size_t r = 0; r <= rounds; r++) {
-    timer t;
-    t.start();
-    auto components = (permute)
-                          ? labelprop_cc::CC</*use_permutation=*/true>(G)
-                          : labelprop_cc::CC</*use_permutation=*/false>(G);
-    double tt = t.stop();
-    std::cout << "### Running Time: " << tt << std::endl;
-    if (r == 0) {
-      if (dump) {
-        std::ofstream myfile;
-        myfile.open("label_propcc.out");
-        for (size_t i = 0; i < G.N(); i++) {
-          myfile << components[i] << std::endl;
-        }
-        myfile.close();
-      }
-    } else {
-      total_time += tt;
+  timer t;
+  t.start();
+  auto components = (permute) ? labelprop_cc::CC</*use_permutation=*/true>(G)
+                              : labelprop_cc::CC</*use_permutation=*/false>(G);
+  double tt = t.stop();
+  // std::cout << "### Running Time: " << tt << std::endl;
+  if (dump) {
+    std::ofstream myfile;
+    myfile.open("label_propcc.out");
+    for (size_t i = 0; i < G.N(); i++) {
+      myfile << components[i] << std::endl;
     }
+    myfile.close();
   }
-  auto time_per_iter = total_time / rounds;
-  std::cout << "# time per iter: " << time_per_iter << "\n";
-  return time_per_iter;
+  return tt;
 }
 
 template <class Graph>
@@ -571,30 +555,21 @@ double PageRank_runner(Graph const& G, size_t rounds, bool dump, size_t iters,
   // std::cout << "### ------------------------------------" << std::endl;
 
   double total_time = 0.0;
-  for (size_t r = 0; r <= rounds; r++) {
-    timer t;
-    t.start();
-    auto ret = (em)      ? PageRank_edgeMap(G, eps, iters)
-               : (delta) ? delta::PageRankDelta(G, eps, leps, iters)
-                         : PageRank(G, eps, iters);
-    double tt = t.stop();
-    // std::cout << "### Running Time: " << tt << std::endl;
-    if (r == 0) {
-      if (dump) {
-        std::ofstream myfile;
-        myfile.open("pr.out");
-        for (size_t i = 0; i < ret.size(); i++) {
-          myfile << ret[i] << std::endl;
-        }
-        myfile.close();
-      }
-    } else {
-      total_time += tt;
+  timer t;
+  t.start();
+  auto ret = (em)      ? PageRank_edgeMap(G, eps, iters)
+             : (delta) ? delta::PageRankDelta(G, eps, leps, iters)
+                       : PageRank(G, eps, iters);
+  double tt = t.stop();
+  if (dump) {
+    std::ofstream myfile;
+    myfile.open("pr.out");
+    for (size_t i = 0; i < ret.size(); i++) {
+      myfile << ret[i] << std::endl;
     }
+    myfile.close();
   }
-  auto time_per_iter = total_time / rounds;
-  // std::cout << "# time per iter: " << time_per_iter << "\n";
-  return time_per_iter;
+  return tt;
 }
 
 template <class Graph>
@@ -1126,6 +1101,14 @@ void batch_alg_wrapper(Graph const& G, run_all_options const& options) {
                         options.pagerank_iters, options.pagerank_em,
                         options.pagerank_delta, options.pagerank_eps,
                         options.pagerank_leps);
+                  });
+  } else if (options.alg == "labelpropagation") {
+    std::cout << ">>> Alg LabelPropagation \n";
+    run_incre_alg(const_cast<Graph&>(G), batch_edges, options,
+                  [&](Graph const& dynamic_graph) {
+                    return LabelPropCC_runner(dynamic_graph, options.rounds,
+                                              options.dump,
+                                              options.label_prop_permute);
                   });
   }
   puts(">>> -----------------------------");
