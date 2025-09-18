@@ -50,6 +50,7 @@ int main(int argc, char* argv[]) {
   options.inserts = P.getOptionValue("-i");
 
   // NOTE: for dzig incremental algorithms
+  options.input_file = iFile;
   options.batch_file = P.getOptionValue("-batch_file");
   options.batch_size = P.getOptionIntValue("-batch_size", 1);
   options.batch_num = P.getOptionIntValue("-batch_num", 10);

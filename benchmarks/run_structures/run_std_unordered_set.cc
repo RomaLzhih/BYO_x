@@ -32,9 +32,9 @@ using asym_graph_impl = gbbs::graph_implementations::asymmetric_set_graph<
 
 using graph_api = gbbs::full_api;
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   gbbs::commandLine P(argc, argv, " [-s] <inFile>");
-  char *iFile = P.getArgument(0);
+  char* iFile = P.getArgument(0);
   bool symmetric = P.getOptionValue("-s");
   bool compressed = P.getOptionValue("-c");
   bool binary = P.getOptionValue("-b");
@@ -48,6 +48,14 @@ int main(int argc, char *argv[]) {
   options.inserts = P.getOptionValue("-i");
 
   std::cout << "### Graph: " << iFile << std::endl;
+
+  // NOTE: for dzig incremental algorithms
+  options.input_file = iFile;
+  options.batch_file = P.getOptionValue("-batch_file");
+  options.batch_size = P.getOptionIntValue("-batch_size", 1);
+  options.batch_num = P.getOptionIntValue("-batch_num", 10);
+  options.alg = std::string(P.getOptionValue("-alg"));
+
   if (compressed) {
     std::cerr << "does not support compression\n";
     return -1;
@@ -59,13 +67,15 @@ int main(int argc, char *argv[]) {
           iFile, mmap, binary);
       auto bytes_used = G.get_memory_size();
       std::cout << "total bytes used = " << bytes_used << "\n";
-      run_all(G, options);
+      // run_all(G, options);
+      batch_alg_wrapper(G, options);
     } else {
       using graph_t =
           gbbs::Graph<asym_graph_impl, /* symmetric */ false, graph_api>;
       auto G = gbbs::gbbs_io::read_unweighted_symmetric_graph<graph_t>(
           iFile, mmap, binary);
-      run_all(G, options);
+      batch_alg_wrapper(G, options);
+      // run_all(G, options);
       return -1;
     }
   }
