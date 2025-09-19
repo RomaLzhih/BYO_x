@@ -15,9 +15,10 @@
 #include "cpam/cpam.h"
 #include "gbbs/bridge.h"
 
-template <class T> class CPAMWrapper {
+template <class T>
+class CPAMWrapper {
   struct edge_entry {
-    using key_t = T; // a vertex_id
+    using key_t = T;  // a vertex_id
     static inline bool comp(key_t a, key_t b) { return a < b; }
   };
 #ifdef CPAM_COMPRESSED
@@ -27,7 +28,7 @@ template <class T> class CPAMWrapper {
 #endif
   edge_tree tree;
 
-public:
+ public:
   size_t size() const { return tree.size(); }
 
   CPAMWrapper(auto begin, auto end) {
@@ -37,18 +38,21 @@ public:
   }
   CPAMWrapper() = default;
 
-  template <class F> void map(F f) const {
-    auto map_f = [&](const auto &et) { f(et, {}); };
+  template <class F>
+  void map(F f) const {
+    auto map_f = [&](auto const& et) { f(et, {}); };
     ((edge_tree)tree).iterate_seq(map_f);
   }
 
-  template <class F> void map_early_exit(F f) const {
-    auto map_f = [&](const auto &et) { return !f(et, {}); };
+  template <class F>
+  void map_early_exit(F f) const {
+    auto map_f = [&](auto const& et) { return !f(et, {}); };
     tree.foreach_cond(tree, map_f);
   }
 
-  template <class F> void parallel_map(F f) const {
-    auto map_f = [&](const auto &et, size_t i) { f(et, {}); };
+  template <class F>
+  void parallel_map(F f) const {
+    auto map_f = [&](auto const& et, size_t i) { f(et, {}); };
     tree.foreach_index(tree, map_f);
   }
 
@@ -63,21 +67,21 @@ public:
 
   // TODO, these both perform an extra copy since the multi_insert function
   // can't take in a arbitrary range
-  void insert_sorted_batch(const auto &start, const auto &end) {
+  void insert_sorted_batch(auto const& start, auto const& end) {
     gbbs::sequence<T> seq(start, end);
-    auto replace = [](const auto &a, const auto &b) { return b; };
+    auto replace = [](auto const& a, auto const& b) { return b; };
     tree = edge_tree::multi_insert_sorted(
         tree, std::ranges::subrange(seq.data(), seq.data() + seq.size()),
         replace);
   }
-  void remove_sorted_batch(const auto &start, const auto &end) {
+  void remove_sorted_batch(auto const& start, auto const& end) {
     gbbs::sequence<T> seq(start, end);
     tree = edge_tree::multi_delete_sorted(
         tree, std::ranges::subrange(seq.data(), seq.data() + seq.size()));
   }
 
   size_t get_memory_size() {
-    auto noop = [](const auto &q) { return 0; };
+    auto noop = [](auto const& q) { return 0; };
     return tree.size_in_bytes(noop);
   }
 };
@@ -101,9 +105,9 @@ using asym_graph_impl = gbbs::graph_implementations::asymmetric_set_graph<
 
 using graph_api = gbbs::full_api;
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   gbbs::commandLine P(argc, argv, " [-s] <inFile>");
-  char *iFile = P.getArgument(0);
+  char* iFile = P.getArgument(0);
   bool symmetric = P.getOptionValue("-s");
   bool compressed = P.getOptionValue("-c");
   bool binary = P.getOptionValue("-b");
@@ -115,6 +119,13 @@ int main(int argc, char *argv[]) {
       static_cast<size_t>(P.getOptionLongValue("-max_batch", 1000000));
   options.src = static_cast<gbbs::uintE>(P.getOptionLongValue("-src", 0));
   options.inserts = P.getOptionValue("-i");
+
+  // NOTE: for dzig incremental algorithms
+  options.input_file = iFile;
+  options.batch_file = P.getOptionValue("-batch_file");
+  options.batch_size = P.getOptionIntValue("-batch_size", 1);
+  options.batch_num = P.getOptionIntValue("-batch_num", 10);
+  options.alg = std::string(P.getOptionValue("-alg"));
 
   std::cout << "### Graph: " << iFile << std::endl;
   if (compressed) {
@@ -129,7 +140,8 @@ int main(int argc, char *argv[]) {
       auto bytes_used = G.get_memory_size();
       std::cout << "total bytes used = " << bytes_used << "\n";
       // run_all(G, options);
-      run_bfs(G, options);
+      // run_bfs(G, options);
+      batch_alg_wrapper(G, options);
     } else {
       using graph_t =
           gbbs::Graph<asym_graph_impl, /* symmetric */ false, graph_api>;

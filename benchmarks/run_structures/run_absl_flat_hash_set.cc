@@ -12,9 +12,8 @@
 //     -s : indicate that the graph is symmetric
 //     -d : dump the output arrays to files, useful for debugging
 
-#include "absl/container/flat_hash_set.h"
-
 #include "../run_unweighted.h"
+#include "absl/container/flat_hash_set.h"
 
 #ifdef USE_INPLACE
 static constexpr bool use_inplace = true;
@@ -32,9 +31,9 @@ using asym_graph_impl = gbbs::graph_implementations::asymmetric_set_graph<
 
 using graph_api = gbbs::full_api;
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   gbbs::commandLine P(argc, argv, " [-s] <inFile>");
-  char *iFile = P.getArgument(0);
+  char* iFile = P.getArgument(0);
   bool symmetric = P.getOptionValue("-s");
   bool compressed = P.getOptionValue("-c");
   bool binary = P.getOptionValue("-b");
@@ -46,6 +45,13 @@ int main(int argc, char *argv[]) {
       static_cast<size_t>(P.getOptionLongValue("-max_batch", 1000000));
   options.src = static_cast<gbbs::uintE>(P.getOptionLongValue("-src", 0));
   options.inserts = P.getOptionValue("-i");
+
+  // NOTE: for dzig incremental algorithms
+  options.input_file = iFile;
+  options.batch_file = P.getOptionValue("-batch_file");
+  options.batch_size = P.getOptionIntValue("-batch_size", 1);
+  options.batch_num = P.getOptionIntValue("-batch_num", 10);
+  options.alg = std::string(P.getOptionValue("-alg"));
 
   std::cout << "### Graph: " << iFile << std::endl;
   if (compressed) {
@@ -59,7 +65,8 @@ int main(int argc, char *argv[]) {
           iFile, mmap, binary);
       auto bytes_used = G.get_memory_size();
       std::cout << "total bytes used = " << bytes_used << "\n";
-      run_all(G, options);
+      // run_all(G, options);
+      batch_alg_wrapper(G, options);
     } else {
       using graph_t =
           gbbs::Graph<asym_graph_impl, /* symmetric */ false, graph_api>;
