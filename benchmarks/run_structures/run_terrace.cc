@@ -18,12 +18,12 @@
 #define PARLAY 1
 #endif
 
+#include "../run_unweighted.h"
 #include "gbbs/bridge.h"
 #include "terrace/terrace_graph.h"
 
-#include "../run_unweighted.h"
-
-template <class W> struct symmetric_terrace_graph {
+template <class W>
+struct symmetric_terrace_graph {
   using weight_type = W;
   static constexpr bool binary = true;
   static_assert(binary);
@@ -36,7 +36,8 @@ template <class W> struct symmetric_terrace_graph {
 
   auto degree(size_t i) const { return nodes.degree(i); }
 
-  template <class F> void map_neighbors(size_t i, F f) const {
+  template <class F>
+  void map_neighbors(size_t i, F f) const {
     if constexpr (binary) {
       W empty_weight = W();
       nodes.map_neighbors_no_early_exit(
@@ -45,7 +46,8 @@ template <class W> struct symmetric_terrace_graph {
       nodes.map_neighbors_no_early_exit(i, f);
     }
   }
-  template <class F> void map_neighbors_early_exit(size_t i, F f) const {
+  template <class F>
+  void map_neighbors_early_exit(size_t i, F f) const {
     if constexpr (binary) {
       W empty_weight = W();
       nodes.map_neighbors_early_exit(
@@ -54,7 +56,8 @@ template <class W> struct symmetric_terrace_graph {
       nodes.map_neighbors_early_exit(i, f);
     }
   }
-  template <class F> void parallel_map_neighbors(size_t i, F f) const {
+  template <class F>
+  void parallel_map_neighbors(size_t i, F f) const {
     if constexpr (binary) {
       W empty_weight = W();
       nodes.parallel_map_neighbors_no_early_exit(
@@ -80,18 +83,18 @@ template <class W> struct symmetric_terrace_graph {
   // probably write a more general constuctor for everyone to use later
   // TODO(wheatman) figure out what to do with _deletion_fn, probably should
   // just use unique pointer
-  symmetric_terrace_graph(auto *v_data, size_t n, size_t m,
-                          std::function<void()> _deletion_fn, edge_type *_e0,
-                          vertex_weight_type *_vertex_weights = nullptr)
+  symmetric_terrace_graph(auto* v_data, size_t n, size_t m,
+                          std::function<void()> _deletion_fn, edge_type* _e0,
+                          vertex_weight_type* _vertex_weights = nullptr)
       : nodes(n), vertex_weights(_vertex_weights), deletion_fn(_deletion_fn) {
-    printf("INITIALIZE TERRACE GRAPH WITH NODES %lu, EDGES %lu\n", n, m);
-    printf("nodes in graph = %u\n", nodes.get_num_vertices());
-    printf("edges in graph = %lu\n", nodes.get_num_edges());
+    // printf("INITIALIZE TERRACE GRAPH WITH NODES %lu, EDGES %lu\n", n, m);
+    // printf("nodes in graph = %u\n", nodes.get_num_vertices());
+    // printf("edges in graph = %lu\n", nodes.get_num_edges());
 
     std::vector<uint32_t> srcs(m);
     std::vector<uint32_t> dests(m);
 
-    printf("convert to edge list\n");
+    // printf("convert to edge list\n");
     gbbs::parallel_for(0, n, [&](uint32_t i) {
       for (size_t j = v_data[i].offset; j < v_data[i].offset + v_data[i].degree;
            j++) {
@@ -101,23 +104,23 @@ template <class W> struct symmetric_terrace_graph {
       }
     });
 
-    printf("starting new build from batch\n");
+    // printf("starting new build from batch\n");
     nodes.build_from_batch(srcs.data(), dests.data(), n, m);
     // nodes.add_edge_batch_no_perm(srcs.data(), dests.data(), m);
 
-    printf("** STARTING VERIFY **\n");
-    for (uint32_t i = 0; i < n; i++) {
-      nodes.verify_neighbors(i, dests.data() + v_data[i].offset);
-    }
-    printf("** FINISHED VERIFY **\n");
-
-    printf("AFTER INIT nodes in graph = %u\n", nodes.get_num_vertices());
-    printf("AFTER INIT edges in graph = %lu\n", nodes.get_num_edges());
+    // printf("** STARTING VERIFY **\n");
+    // for (uint32_t i = 0; i < n; i++) {
+    //   nodes.verify_neighbors(i, dests.data() + v_data[i].offset);
+    // }
+    // printf("** FINISHED VERIFY **\n");
+    //
+    // printf("AFTER INIT nodes in graph = %u\n", nodes.get_num_vertices());
+    // printf("AFTER INIT edges in graph = %lu\n", nodes.get_num_edges());
   }
 
   // TODO: write these
   // Move constructor
-  symmetric_terrace_graph(symmetric_terrace_graph &&other) noexcept {
+  symmetric_terrace_graph(symmetric_terrace_graph&& other) noexcept {
     printf("move constructor\n");
     /*
       nodes = other.nodes;
@@ -135,13 +138,29 @@ template <class W> struct symmetric_terrace_graph {
   }
   */
   // Copy constructor
-  symmetric_terrace_graph(const symmetric_terrace_graph &other)
+  symmetric_terrace_graph(symmetric_terrace_graph const& other)
       : nodes(other.N()) {
-    printf("copy constructor\n");
-    for (size_t i = 0; i < N(); i++) {
-      other.map_neighbors(
-          i, [&](auto src, auto dest, auto val) { nodes.add_edge(src, dest); });
-    }
+    // printf("copy constructor\n");
+    auto n = other.N();
+    auto m = other.M();
+    // std::cout << m << std::endl;
+    gbbs::sequence<uint32_t> srcs(m);
+    gbbs::sequence<uint32_t> dests(m);
+    auto edges = parlay::flatten(parlay::tabulate(other.N(), [&](size_t i) {
+      parlay::sequence<std::tuple<uint32_t, uint32_t>> result;
+      other.map_neighbors(i, [&](auto src, auto dest, auto val) {
+        result.push_back(std::make_tuple(src, dest));
+      });
+      return result;
+    }));
+    // std::cout << edges.size() << std::endl;
+    parlay::parallel_for(0, edges.size(), [&](size_t i) {
+      srcs[i] = std::get<0>(edges[i]);
+      dests[i] = std::get<1>(edges[i]);
+    });
+    nodes.build_from_batch(srcs.data(), dests.data(), n, m);
+    // printf("AFTER INIT nodes in graph = %u\n", nodes.get_num_vertices());
+    // printf("AFTER INIT edges in graph = %lu\n", nodes.get_num_edges());
 
     vertex_weights = nullptr;
     if (other.vertex_weights != nullptr) {
@@ -155,26 +174,50 @@ template <class W> struct symmetric_terrace_graph {
         gbbs::free_array(vertex_weights, N());
       }
     };
+
+    // std::cout << "finish" << std::endl;
   }
+  // symmetric_terrace_graph(symmetric_terrace_graph const& other)
+  //     : nodes(other.N()) {
+  //   printf("copy constructor\n");
+  //   for (size_t i = 0; i < N(); i++) {
+  //     other.map_neighbors(
+  //         i, [&](auto src, auto dest, auto val) { nodes.add_edge(src, dest);
+  //         });
+  //   }
+  //
+  //   vertex_weights = nullptr;
+  //   if (other.vertex_weights != nullptr) {
+  //     vertex_weights = gbbs::new_array_no_init<vertex_weight_type>(N());
+  //     gbbs::parallel_for(0, N(), [&](size_t i) {
+  //       vertex_weights[i] = other.vertex_weights[i];
+  //     });
+  //   }
+  //   deletion_fn = [&]() {
+  //     if (vertex_weights != nullptr) {
+  //       gbbs::free_array(vertex_weights, N());
+  //     }
+  //   };
+  //
+  //   std::cout << "finish" << std::endl;
+  // }
   ~symmetric_terrace_graph() { deletion_fn(); }
 
-  void insert_sorted_batch(std::tuple<uint32_t, uint32_t> *es, size_t n) {
+  void insert_sorted_batch(std::tuple<uint32_t, uint32_t>* es, size_t n) {
     nodes.add_edge_batch_no_perm(es, n);
   }
 
-  void remove_sorted_batch(std::tuple<uint32_t, uint32_t> *es, size_t n) {
+  void remove_sorted_batch(std::tuple<uint32_t, uint32_t>* es, size_t n) {
     parlay::parallel_for(0, n, [&](size_t i) {
       nodes.remove_edge(std::get<0>(es[i]), std::get<1>(es[i]));
     });
   }
 
-  size_t get_memory_size() {
-    return nodes.get_size();
-  }
+  size_t get_memory_size() { return nodes.get_size(); }
 
   // Graph Data
   graphstore::TerraceGraph nodes;
-  vertex_weight_type *vertex_weights;
+  vertex_weight_type* vertex_weights;
   // called to delete the graph
   std::function<void()> deletion_fn;
 };
@@ -185,9 +228,9 @@ using graph_api = gbbs::full_api;
 
 using graph_t = gbbs::Graph<graph_impl, /* symmetric */ true, graph_api>;
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   gbbs::commandLine P(argc, argv, " [-s] <inFile>");
-  char *iFile = P.getArgument(0);
+  char* iFile = P.getArgument(0);
   bool symmetric = P.getOptionValue("-s");
   bool compressed = P.getOptionValue("-c");
   bool binary = P.getOptionValue("-b");
@@ -200,6 +243,13 @@ int main(int argc, char *argv[]) {
   options.src = static_cast<gbbs::uintE>(P.getOptionLongValue("-src", 0));
   options.inserts = P.getOptionValue("-i");
 
+  // NOTE: for dzig incremental algorithms
+  options.input_file = iFile;
+  options.batch_file = P.getOptionValue("-batch_file");
+  options.batch_size = P.getOptionIntValue("-batch_size", 1);
+  options.batch_num = P.getOptionIntValue("-batch_num", 10);
+  options.alg = std::string(P.getOptionValue("-alg"));
+
   std::cout << "### Graph: " << iFile << std::endl;
   if (compressed) {
     std::cerr << "does not support compression\n";
@@ -210,7 +260,8 @@ int main(int argc, char *argv[]) {
           iFile, mmap, binary);
       auto bytes_used = G.get_memory_size();
       std::cout << "total bytes used = " << bytes_used << "\n";
-      run_all(G, options);
+      // run_all(G, options);
+      batch_alg_wrapper(G, options);
     } else {
       std::cerr << "does not support directed graphs yet\n";
       return -1;

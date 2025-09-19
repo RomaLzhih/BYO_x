@@ -947,6 +947,7 @@ void run_incre_alg(Graph& G, EdgeArray& batch_edges,
     }
   }
 
+  std::cout << ">>> Res: " << std::endl;
   for (int j = 0; j < options.batch_num; j++) {
     printf("%.6f %.6f\n", insert_time_seq[j] / options.rounds,
            alg_time_seq[j] / options.rounds);
@@ -1076,7 +1077,7 @@ void batch_alg_wrapper(Graph const& G, run_all_options const& options) {
     return;
   }
 
-  puts(">>> -----------------------------");
+  puts(">>> Begin -----------------------------");
   std::cout << ">>> Input_file " << std::string(options.input_file) << "\n";
   std::cout << ">>> Batch_file " << std::string(options.batch_file) << "\n";
   std::cout << ">>> Batch_num " << options.batch_num << "\n";
@@ -1111,7 +1112,7 @@ void batch_alg_wrapper(Graph const& G, run_all_options const& options) {
                                               options.label_prop_permute);
                   });
   }
-  puts(">>> -----------------------------");
+  puts(">>> End -----------------------------");
 }
 
 template <class Graph>
