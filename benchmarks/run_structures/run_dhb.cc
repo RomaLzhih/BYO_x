@@ -14,13 +14,13 @@
 
 #include <functional>
 
+#include "../run_unweighted.h"
 #include "dhb/dynamic_hashed_blocks.h"
 #include "gbbs/bridge.h"
 #include "semisort.h"
 
-#include "../run_unweighted.h"
-
-template <class W> struct symmetric_dhb_graph {
+template <class W>
+struct symmetric_dhb_graph {
   using weight_type = W;
   static constexpr bool binary = std::is_same_v<gbbs::empty, W>;
   using vertex_weight_type = double;
@@ -30,7 +30,8 @@ template <class W> struct symmetric_dhb_graph {
 
   auto degree(size_t i) const { return nodes.degree(i); }
 
-  template <class F> void map_neighbors(size_t i, F f) const {
+  template <class F>
+  void map_neighbors(size_t i, F f) const {
     auto neighbors = nodes.neighbors(i);
     for (auto neighbor : neighbors) {
       size_t other_vertex = neighbor.vertex();
@@ -39,7 +40,8 @@ template <class W> struct symmetric_dhb_graph {
     }
   }
 
-  template <class F> void map_neighbors_early_exit(size_t i, F f) const {
+  template <class F>
+  void map_neighbors_early_exit(size_t i, F f) const {
     auto neighbors = nodes.neighbors(i);
     for (auto neighbor : neighbors) {
       size_t other_vertex = neighbor.vertex();
@@ -56,11 +58,10 @@ template <class W> struct symmetric_dhb_graph {
   // probably write a more general constuctor for everyone to use later
   // TODO(wheatman) figure out what to do with _deletion_fn, probably should
   // just use unique pointer
-  symmetric_dhb_graph(auto *v_data, size_t n, size_t m,
-                      std::function<void()> _deletion_fn, edge_type *_e0,
-                      vertex_weight_type *_vertex_weights = nullptr)
+  symmetric_dhb_graph(auto* v_data, size_t n, size_t m,
+                      std::function<void()> _deletion_fn, edge_type* _e0,
+                      vertex_weight_type* _vertex_weights = nullptr)
       : nodes(n), vertex_weights(_vertex_weights), deletion_fn(_deletion_fn) {
-
     gbbs::parallel_for(0, n, [&](uint32_t i) {
       for (size_t j = v_data[i].offset; j < v_data[i].offset + v_data[i].degree;
            j++) {
@@ -74,7 +75,7 @@ template <class W> struct symmetric_dhb_graph {
   }
 
   // Move constructor
-  symmetric_dhb_graph(symmetric_dhb_graph &&other) noexcept {
+  symmetric_dhb_graph(symmetric_dhb_graph&& other) noexcept {
     nodes = other.nodes;
     vertex_weights = other.vertex_weights;
     other.vertex_weights = nullptr;
@@ -82,7 +83,7 @@ template <class W> struct symmetric_dhb_graph {
   }
 
   // Move assignment
-  symmetric_dhb_graph &operator=(symmetric_dhb_graph &&other) noexcept {
+  symmetric_dhb_graph& operator=(symmetric_dhb_graph&& other) noexcept {
     nodes = other.nodes;
     vertex_weights = other.vertex_weights;
     other.vertex_weights = nullptr;
@@ -90,17 +91,17 @@ template <class W> struct symmetric_dhb_graph {
   }
 
   // Copy constructor
-  symmetric_dhb_graph(const symmetric_dhb_graph &other) : nodes(other.nodes) {
+  symmetric_dhb_graph(symmetric_dhb_graph const& other) : nodes(other.nodes) {
     vertex_weights = nullptr;
     if (other.vertex_weights != nullptr) {
       vertex_weights = gbbs::new_array_no_init<vertex_weight_type>(N());
-      parallel_for(0, N(), [&](size_t i) {
+      gbbs::parallel_for(0, N(), [&](size_t i) {
         vertex_weights[i] = other.vertex_weights[i];
       });
     }
     deletion_fn = [&]() {
       if (vertex_weights != nullptr) {
-        gbbs::free_array(vertex_weights, nodes.size());
+        gbbs::free_array(vertex_weights, N());
       }
     };
   }
@@ -123,7 +124,7 @@ template <class W> struct symmetric_dhb_graph {
   //   });
   // }
 
-  void insert_pervertex_range(const auto *es, const auto &offsets) {
+  void insert_pervertex_range(auto const* es, auto const& offsets) {
     parlay::parallel_for(0, offsets.size() - 1, [&](size_t i) {
       for (auto it = es + offsets[i]; it < es + offsets[i + 1]; ++it) {
         nodes.insert(std::get<0>(*it), std::get<1>(*it), {}, true);
@@ -131,7 +132,7 @@ template <class W> struct symmetric_dhb_graph {
     });
   }
 
-  void remove_pervertex_range(const auto *es, const auto &offsets) {
+  void remove_pervertex_range(auto const* es, auto const& offsets) {
     parlay::parallel_for(0, offsets.size() - 1, [&](size_t i) {
       for (auto it = es + offsets[i]; it < es + offsets[i + 1]; ++it) {
         nodes.removeEdge(std::get<0>(*it), std::get<1>(*it));
@@ -143,7 +144,7 @@ template <class W> struct symmetric_dhb_graph {
 
   // Graph Data
   dhb::Matrix<weight_type> nodes;
-  vertex_weight_type *vertex_weights;
+  vertex_weight_type* vertex_weights;
   // called to delete the graph
   std::function<void()> deletion_fn;
 };
@@ -154,9 +155,9 @@ using graph_api = gbbs::full_api;
 
 using graph_t = gbbs::Graph<graph_impl, /* symmetric */ true, graph_api>;
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   gbbs::commandLine P(argc, argv, " [-s] <inFile>");
-  char *iFile = P.getArgument(0);
+  char* iFile = P.getArgument(0);
   bool symmetric = P.getOptionValue("-s");
   bool compressed = P.getOptionValue("-c");
   bool binary = P.getOptionValue("-b");
@@ -169,6 +170,13 @@ int main(int argc, char *argv[]) {
   options.src = static_cast<gbbs::uintE>(P.getOptionLongValue("-src", 0));
   options.inserts = P.getOptionValue("-i");
 
+  // NOTE: for dzig incremental algorithms
+  options.input_file = iFile;
+  options.batch_file = P.getOptionValue("-batch_file");
+  options.batch_size = P.getOptionIntValue("-batch_size", 1);
+  options.batch_num = P.getOptionIntValue("-batch_num", 10);
+  options.alg = std::string(P.getOptionValue("-alg"));
+
   std::cout << "### Graph: " << iFile << std::endl;
   if (compressed) {
     std::cerr << "does not support compression\n";
@@ -179,7 +187,10 @@ int main(int argc, char *argv[]) {
           iFile, mmap, binary);
       auto bytes_used = G.get_memory_size();
       std::cout << "total bytes used = " << bytes_used << "\n";
-      run_all(G, options);
+      // auto g = G;
+
+      // run_all(G, options);
+      batch_alg_wrapper(G, options);
     } else {
       std::cerr << "does not support directed graphs yet\n";
       return -1;
