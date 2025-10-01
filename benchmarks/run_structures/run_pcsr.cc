@@ -37,21 +37,24 @@ struct symmetric_PCSR_graph {
 
   auto degree(size_t i) const { return nodes.get_degree(i); }
 
-  template <class F> void map_neighbors(size_t i, F f) const {
+  template <class F>
+  void map_neighbors(size_t i, F f) const {
     W empty_weight = W();
     nodes.map_neighbors<-1>(
         i, [&](auto src, auto dest) { return f(src, dest, empty_weight); },
         nullptr, false);
   }
 
-  template <class F> void parallel_map_neighbors(size_t i, F f) const {
+  template <class F>
+  void parallel_map_neighbors(size_t i, F f) const {
     W empty_weight = W();
     nodes.map_neighbors<-1>(
         i, [&](auto src, auto dest) { return f(src, dest, empty_weight); },
         nullptr, true);
   }
 
-  template <class F> void map_neighbors_early_exit(size_t i, F f) const {
+  template <class F>
+  void map_neighbors_early_exit(size_t i, F f) const {
     W empty_weight = W();
     nodes.map_neighbors<1>(
         i, [&](auto src, auto dest) { return f(src, dest, empty_weight); },
@@ -73,11 +76,10 @@ struct symmetric_PCSR_graph {
   // probably write a more general constuctor for everyone to use later
   // TODO(wheatman) figure out what to do with _deletion_fn, probably should
   // just use unique pointer
-  symmetric_PCSR_graph(auto *v_data, size_t n, size_t m,
-                       std::function<void()> _deletion_fn, edge_type *_e0,
-                       vertex_weight_type *_vertex_weights = nullptr)
+  symmetric_PCSR_graph(auto* v_data, size_t n, size_t m,
+                       std::function<void()> _deletion_fn, edge_type* _e0,
+                       vertex_weight_type* _vertex_weights = nullptr)
       : nodes(n), vertex_weights(_vertex_weights), deletion_fn(_deletion_fn) {
-
     Reducer_Vector<std::tuple<uint32_t, uint32_t>> vec;
     gbbs::parallel_for(0, n, [&](uint64_t i) {
       for (size_t j = v_data[i].offset; j < v_data[i].offset + v_data[i].degree;
@@ -87,20 +89,23 @@ struct symmetric_PCSR_graph {
     });
     auto seq = vec.get_sequence();
     nodes.insert_batch(seq);
+
+    // printf("AFTER INIT nodes in graph = %u\n", nodes.num_nodes());
+    // printf("AFTER INIT edges in graph = %lu\n", nodes.num_edges());
   }
 
-  void insert_sorted_batch(auto *es, size_t n) {
+  void insert_sorted_batch(auto* es, size_t n) {
     auto slice = parlay::slice(es, es + n);
     nodes.insert_batch(slice, true);
   }
 
-  void remove_sorted_batch(auto *es, size_t n) {
+  void remove_sorted_batch(auto* es, size_t n) {
     auto slice = parlay::slice(es, es + n);
     nodes.remove_batch(slice, true);
   }
 
   // Move constructor
-  symmetric_PCSR_graph(symmetric_PCSR_graph &&other) noexcept {
+  symmetric_PCSR_graph(symmetric_PCSR_graph&& other) noexcept {
     nodes = other.nodes;
     vertex_weights = other.vertex_weights;
     other.vertex_weights = nullptr;
@@ -108,7 +113,7 @@ struct symmetric_PCSR_graph {
   }
 
   // Move assignment
-  symmetric_PCSR_graph &operator=(symmetric_PCSR_graph &&other) noexcept {
+  symmetric_PCSR_graph& operator=(symmetric_PCSR_graph&& other) noexcept {
     nodes = other.nodes;
     vertex_weights = other.vertex_weights;
     other.vertex_weights = nullptr;
@@ -116,7 +121,10 @@ struct symmetric_PCSR_graph {
   }
 
   // Copy constructor
-  symmetric_PCSR_graph(const symmetric_PCSR_graph &other) : nodes(other.nodes) {
+  symmetric_PCSR_graph(symmetric_PCSR_graph const& other) : nodes(N()) {
+    nodes = other.nodes;
+    // printf("AFTER Copy nodes in graph = %u\n", nodes.num_nodes());
+    // printf("AFTER COpy edges in graph = %lu\n", nodes.num_edges());
     vertex_weights = nullptr;
     if (other.vertex_weights != nullptr) {
       vertex_weights = gbbs::new_array_no_init<vertex_weight_type>(N());
@@ -139,7 +147,7 @@ struct symmetric_PCSR_graph {
   using traits = PMA_traits<uncompressed_leaf<uint32_t>, Eytzinger, 0, false,
                             false, false, 0, true, true>;
   PCSR<traits> nodes;
-  vertex_weight_type *vertex_weights;
+  vertex_weight_type* vertex_weights;
   // called to delete the graph
   std::function<void()> deletion_fn;
 };
@@ -152,9 +160,9 @@ using graph_api = gbbs::full_api;
 
 using graph_t = gbbs::Graph<graph_impl, /* symmetric */ true, graph_api>;
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   gbbs::commandLine P(argc, argv, " [-s] <inFile>");
-  char *iFile = P.getArgument(0);
+  char* iFile = P.getArgument(0);
   bool symmetric = P.getOptionValue("-s");
   bool compressed = P.getOptionValue("-c");
   bool binary = P.getOptionValue("-b");
@@ -167,6 +175,13 @@ int main(int argc, char *argv[]) {
   options.src = static_cast<gbbs::uintE>(P.getOptionLongValue("-src", 0));
   options.inserts = P.getOptionValue("-i");
 
+  // NOTE: for dzig incremental algorithms
+  options.input_file = iFile;
+  options.batch_file = P.getOptionValue("-batch_file");
+  options.batch_size = P.getOptionIntValue("-batch_size", 1);
+  options.batch_num = P.getOptionIntValue("-batch_num", 10);
+  options.alg = std::string(P.getOptionValue("-alg"));
+
   std::cout << "### Graph: " << iFile << std::endl;
   if (compressed) {
     std::cerr << "is not compressed, and reads in uncompressed files\n";
@@ -177,7 +192,9 @@ int main(int argc, char *argv[]) {
           iFile, mmap, binary);
       auto bytes_used = G.get_memory_size();
       std::cout << "total bytes used = " << bytes_used << "\n";
-      run_all(G, options);
+      // auto g(G);
+      // run_all(G, options);
+      batch_alg_wrapper(G, options);
     } else {
       std::cerr << "does not support directed graphs yet\n";
       return -1;
