@@ -9,6 +9,15 @@ cc_library(
     ],
 )
 
+cc_library(
+    name = "wBFS_unweighted",
+    hdrs = ["wBFS_unweighted.h"],
+    deps = [
+        "//gbbs",
+        "//gbbs:bucket",
+    ],
+)
+
 cc_binary(
     name = "wBFS_main",
     srcs = ["wBFS.cc"],

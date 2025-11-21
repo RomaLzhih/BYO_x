@@ -11,6 +11,7 @@
 #include "Connectivity/LabelPropagation/Connectivity.h"
 #include "Connectivity/SimpleUnionAsync/Connectivity.h"
 #include "Connectivity/WorkEfficientSDB14/Connectivity.h"
+#include "IntegralWeightSSSP/JulienneDBS17/wBFS_unweighted.h"
 // #include "DegeneracyOrder/GoodrichPszona11/DegeneracyOrder.h"
 #include "GraphColoring/Hasenplaugh14/GraphColoring.h"
 #include "KCore/JulienneDBS17/KCore.h"
@@ -162,6 +163,51 @@ double BFS_runner(Graph const& G, uintE src, size_t rounds, bool dump) {
   }
   // std::cout << "# time per iter: " << time_per_iter << "\n";
   return tt;
+}
+
+template <class Graph>
+double WBFS_unweighted_runner(Graph const& G, uintE src, size_t rounds,
+                              size_t num_buckets, bool no_blocked,
+                              bool largemem, bool dump) {
+  // std::cout << "### Application: wBFS (Weighted Breadth-First Search)"
+  //           << std::endl;
+  // std::cout << "### Threads: " << num_workers() << std::endl;
+  // std::cout << "### n: " << G.N() << std::endl;
+  // std::cout << "### m: " << G.M() << std::endl;
+  // std::cout << "### Params: -src = " << src
+  //           << " -nb (num_buckets) = " << num_buckets << std::endl;
+  // std::cout << "### ------------------------------------" << std::endl;
+
+  if (num_buckets != (((uintE)1) << parlay::log2_up(num_buckets))) {
+    std::cout << "Please specify a number of buckets that is a power of two"
+              << "\n";
+    exit(-1);
+  }
+
+  double total_time = 0.0;
+  for (size_t r = 0; r <= rounds; r++) {
+    timer t;
+    t.start();
+    auto dists = wBFS_unweighted(G, src, num_buckets, largemem, no_blocked);
+    double tt = t.stop();
+    // std::cout << "### Running Time: " << tt << std::endl;
+    if (r == 0) {
+      if (dump) {
+        // useful for debugging
+        std::ofstream myfile;
+        myfile.open("wBFS_unweighted.out");
+        for (unsigned int i = 0; i < G.N(); i++) {
+          myfile << dists[i] << std::endl;
+        }
+        myfile.close();
+      }
+    } else {
+      total_time += tt;
+    }
+  }
+  auto time_per_iter = total_time / rounds;
+  // std::cout << "# time per iter: " << time_per_iter << "\n";
+  return time_per_iter;
 }
 
 template <class Graph>
@@ -876,6 +922,9 @@ class run_all_options {
   size_t batch_num = 10;
   bool remove_batches_edges = true;
   std::string alg = "";
+  size_t wbfs_num_buckets = 32;
+  bool wbfs_no_blocked = false;
+  bool wbfs_largemem = false;
 };
 
 template <class Graph>
@@ -1110,6 +1159,15 @@ void batch_alg_wrapper(Graph const& G, run_all_options const& options) {
                     return LabelPropCC_runner(dynamic_graph, options.rounds,
                                               options.dump,
                                               options.label_prop_permute);
+                  });
+  } else if (options.alg == "wbfs") {
+    std::cout << ">>> Alg wBFS_unweighted \n";
+    run_incre_alg(const_cast<Graph&>(G), batch_edges, options,
+                  [&](Graph const& dynamic_graph) {
+                    return WBFS_unweighted_runner(
+                        dynamic_graph, options.src, options.rounds,
+                        options.wbfs_num_buckets, options.wbfs_no_blocked,
+                        options.wbfs_largemem, options.dump);
                   });
   }
   puts(">>> End -----------------------------");

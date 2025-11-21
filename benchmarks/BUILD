@@ -21,7 +21,8 @@ cc_library(
      "//benchmarks/Spanner/MPXV15:Spanner",
      "//benchmarks/Map/Base:Map",
      "//benchmarks/Map/RemoteRead:Map",
-     "//benchmarks/TriangleCounting/ShunTangwongsan15:Triangle"
+     "//benchmarks/TriangleCounting/ShunTangwongsan15:Triangle",
+     "//benchmarks/IntegralWeightSSSP/JulienneDBS17:wBFS_unweighted"
      ],
 )
 
