@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cassert>
+#include <cstdlib>
 #include <map>
 
 #include "ApproximateDensestSubgraph/ApproxPeelingBKV12/DensestSubgraph.h"
@@ -1033,7 +1034,7 @@ class BatchEdgesIO {
       std::cout << "Error: could not open output file " << output_path << "\n";
       return;
     }
-    output_file << total_batch_edges << "\n";
+    // output_file << total_batch_edges << "\n";
 
     size_t start_idx = batch_edges.size() - total_batch_edges;
     for (size_t i = start_idx; i < batch_edges.size(); i++) {
@@ -1091,8 +1092,14 @@ class BatchEdgesIO {
     parlay::sequence<char> S =
         gbbs::gbbs_io::readStringFromFile(input_path.c_str());
     parlay::sequence<char*> W = stringToWords(S);
-    size_t total_batch_edges = std::stoul(W[0]);
-    auto pts = W.cut(1, W.size());
+    size_t total_batch_edges = batch_size * batch_num;
+    if (total_batch_edges != W.size() / 2) {
+      std::cout << total_batch_edges << " " << W.size() << std::endl;
+      throw std::runtime_error(
+          "The number of edges in a file does not match the given size");
+      exit(1);
+    }
+    auto pts = W.cut(0, W.size());
 
     parlay::sequence<std::tuple<uintE, uintE>> edges(total_batch_edges);
     parlay::parallel_for(0, total_batch_edges, [&](size_t i) {
