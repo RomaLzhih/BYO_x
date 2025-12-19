@@ -186,29 +186,22 @@ double WBFS_unweighted_runner(Graph const& G, uintE src, size_t rounds,
   }
 
   double total_time = 0.0;
-  for (size_t r = 0; r <= rounds; r++) {
-    timer t;
-    t.start();
-    auto dists = wBFS_unweighted(G, src, num_buckets, largemem, no_blocked);
-    double tt = t.stop();
-    // std::cout << "### Running Time: " << tt << std::endl;
-    if (r == 0) {
-      if (dump) {
-        // useful for debugging
-        std::ofstream myfile;
-        myfile.open("wBFS_unweighted.out");
-        for (unsigned int i = 0; i < G.N(); i++) {
-          myfile << dists[i] << std::endl;
-        }
-        myfile.close();
-      }
-    } else {
-      total_time += tt;
+  timer t;
+  t.start();
+  auto dists = wBFS_unweighted(G, src, num_buckets, largemem, no_blocked);
+  double tt = t.stop();
+  // std::cout << "### Running Time: " << tt << std::endl;
+  if (dump) {
+    // useful for debugging
+    std::ofstream myfile;
+    myfile.open("wBFS_unweighted.out");
+    for (unsigned int i = 0; i < G.N(); i++) {
+      myfile << dists[i] << std::endl;
     }
+    myfile.close();
   }
-  auto time_per_iter = total_time / rounds;
   // std::cout << "# time per iter: " << time_per_iter << "\n";
-  return time_per_iter;
+  return tt;
 }
 
 template <class Graph>
