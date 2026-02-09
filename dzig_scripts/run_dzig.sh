@@ -23,6 +23,8 @@ declare -A graph_prefix_map
 graph_prefix_map["soc-LiveJournal1"]="live-journal"
 # Add more mappings as needed:
 # graph_prefix_map["another-graph"]="another-dir"
+scripts_path=$pwd
+project_path=$(dirname "$scripts_path")
 
 threads=128
 : >${log}
@@ -45,7 +47,7 @@ for s in "${solvers[@]}"; do
                 # Record the start time
                 start_time=$(date +%s)
 
-                ./bazel-bin/benchmarks/run_structures/${s} -alg ${a} -batch_num ${batch_num} -batch_size ${batch_size} -batch_file ${batch_file} -s -i 1 -rounds ${rounds} -src 10 ${path} 2>&1 | tee -a ${log}
+                ${project_path}/bazel-bin/benchmarks/run_structures/${s} -alg ${a} -batch_num ${batch_num} -batch_size ${batch_size} -batch_file ${batch_file} -s -i 1 -rounds ${rounds} -src 10 ${path} 2>&1 | tee -a ${log}
 
                 # Record the end time
                 end_time=$(date +%s)
