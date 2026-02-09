@@ -23,7 +23,7 @@ declare -A graph_prefix_map
 graph_prefix_map["soc-LiveJournal1"]="live-journal"
 # Add more mappings as needed:
 # graph_prefix_map["another-graph"]="another-dir"
-scripts_path=$pwd
+scripts_path="$PWD"
 project_path=$(dirname "$scripts_path")
 
 threads=128
