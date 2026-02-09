@@ -1,5 +1,14 @@
 #!/bin/bash
 
+#SBATCH --nodes=1               # Total # of nodes (must be 1 for OpenMP job)
+#SBATCH --ntasks-per-node=1     # Total # of MPI tasks per node
+#SBATCH --cpus-per-task=128      # cpu-cores per task (default value is 1, >1 for multi-threaded tasks)
+#SBATCH --time=8:00:00          # Total run time limit (hh:mm:ss)
+#SBATCH -J dzig            # Job name
+#SBATCH -o dzig.o%j            # Name of stdout output file
+#SBATCH -e dzig.e%j            # Name of stderr error file
+#SBATCH -p wholenode            # Queue (partition) name
+
 solvers=("run_ppcsr" "run_std_set")
 graphs=("soc-LiveJournal1")
 batch_size_seq=(1 10 100 1000 10000 100000 1000000)
@@ -7,7 +16,7 @@ batch_num=10
 rounds=4
 algorithm=("bfs" "pagerank" "labelpropagation" "wbfs")
 log="run_dzig_local.log"
-graph_path_prefix="/anvil/projects/x-cis250123/"
+graph_path_prefix="/anvil/projects/x-cis250123/dataset-dzig/"
 
 # Map from graph names to their prefixes (directory names)
 declare -A graph_prefix_map
@@ -19,10 +28,6 @@ threads=128
 : >${log}
 for s in "${solvers[@]}"; do
     bazel build //benchmarks/run_structures:"${s}"
-    if [ $? -ne 0 ]; then
-        echo "Error: bazel build failed.  Exiting script."
-        exit 1
-    fi
 
     for batch_size in "${batch_size_seq[@]}"; do
         for g in "${graphs[@]}"; do
@@ -40,7 +45,7 @@ for s in "${solvers[@]}"; do
                 # Record the start time
                 start_time=$(date +%s)
 
-                ./../bazel-bin/benchmarks/run_structures/${s} -alg ${a} -batch_num ${batch_num} -batch_size ${batch_size} -batch_file ${batch_file} -s -i 1 -rounds ${rounds} -src 10 ${path} 2>&1 | tee -a ${log}
+                ./bazel-bin/benchmarks/run_structures/${s} -alg ${a} -batch_num ${batch_num} -batch_size ${batch_size} -batch_file ${batch_file} -s -i 1 -rounds ${rounds} -src 10 ${path} 2>&1 | tee -a ${log}
 
                 # Record the end time
                 end_time=$(date +%s)
