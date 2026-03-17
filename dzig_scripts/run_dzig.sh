@@ -9,7 +9,7 @@
 #SBATCH -e dzig.e%j            # Name of stderr error file
 #SBATCH -p wholenode            # Queue (partition) name
 
-solvers=("run_ppcsr" "run_std_set" "run_pcsr" "run_absl_btree")
+solvers=("run_ppcsr" "run_std_set" "run_pcsr" "run_absl_btree_set" "run_absl_flat_hash_set" "cpam" "run_sstgraph" "run_dhb" "run_terrace")
 graphs=("soc-LiveJournal1")
 # batch_size_seq=(1 10 100 1000 10000 100000 1000000)
 batch_size_seq=(1)
