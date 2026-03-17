@@ -9,10 +9,11 @@
 #SBATCH -e dzig.e%j            # Name of stderr error file
 #SBATCH -p wholenode            # Queue (partition) name
 
-solvers=("run_ppcsr" "run_std_set" "run_pcsr" "run_absl_btree_set" "run_absl_flat_hash_set" "cpam" "run_sstgraph" "run_dhb" "run_terrace")
-graphs=("soc-LiveJournal1")
-# batch_size_seq=(1 10 100 1000 10000 100000 1000000)
-batch_size_seq=(1)
+# solvers=("run_ppcsr" "run_std_set" "run_pcsr" "run_absl_btree_set" "run_absl_flat_hash_set" "cpam" "run_sstgraph" "run_dhb" "run_terrace")
+solvers=("run_absl_btree_set" "run_absl_flat_hash_set" "run_dhb")
+graphs=("soc-LiveJournal1" "com-orkut.ungraph" "cit-Patents" "twitter-unique-undir" "com-friendster")
+batch_size_seq=(1 10 100 1000 10000 100000 1000000)
+# batch_size_seq=(1 10)
 batch_num=10
 rounds=4
 algorithm=("bfs" "pagerank" "labelpropagation" "wbfs")
@@ -21,11 +22,17 @@ graph_path_prefix="/data/datasets/graphs/"
 
 # Map from graph names to their prefixes (directory names)
 declare -A graph_prefix_map
+# graph name maps to its paretn folder
 graph_prefix_map["soc-LiveJournal1"]="live-journal"
+graph_prefix_map["com-orkut.ungraph"]="orkut"
+graph_prefix_map["cit-Patents"]="cit-Patents"
+graph_prefix_map["twitter-unique-undir"]="twitter"
+graph_prefix_map["com-friendster"]="friend"
 # Add more mappings as needed:
 # graph_prefix_map["another-graph"]="another-dir"
 scripts_path="$PWD"
 project_path=$(dirname "$scripts_path")
+threads=128
 
 : >${log}
 for s in "${solvers[@]}"; do
@@ -33,6 +40,20 @@ for s in "${solvers[@]}"; do
 
     for batch_size in "${batch_size_seq[@]}"; do
         for g in "${graphs[@]}"; do
+            if [[ ${g} -eq "soc-LiveJournal1" ]] ; then
+                bfs_src=0
+            elif [[ ${g} -eq "com-orkut.ungraph" ]] ; then
+                bfs_src=1
+            elif [[ ${g} -eq "cit-Patents" ]] ; then
+                bfs_src=1
+            elif [[ ${g} -eq "twitter-unique-undir" ]] ; then
+                bfs_src=12
+            elif [[ ${g} -eq "com-friendster" ]] ; then
+                bfs_src=101
+            else 
+                bfs_src=0
+            fi
+
             # Get the directory prefix for the current graph
             prefix=${graph_prefix_map[$g]}
 
@@ -47,7 +68,7 @@ for s in "${solvers[@]}"; do
                 # Record the start time
                 start_time=$(date +%s)
 
-                ${project_path}/bazel-bin/benchmarks/run_structures/${s} -alg ${a} -batch_num ${batch_num} -batch_size ${batch_size} -batch_file ${batch_file} -s -i 1 -rounds ${rounds} -src 10 ${path} 2>&1 | tee -a ${log}
+                ${project_path}/bazel-bin/benchmarks/run_structures/${s} -alg ${a} -batch_num ${batch_num} -batch_size ${batch_size} -batch_file ${batch_file} -s -i 1 -rounds ${rounds} -src ${bfs_src} ${path} 2>&1 | tee -a ${log}
 
                 # Record the end time
                 end_time=$(date +%s)
@@ -59,5 +80,5 @@ for s in "${solvers[@]}"; do
             done
         done
     done
-    echo "-----------------------------------" | tee -a ${log}
+    # echo "-----------------------------------" | tee -a ${log}
 done
