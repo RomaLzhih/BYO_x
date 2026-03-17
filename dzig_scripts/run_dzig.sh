@@ -9,14 +9,15 @@
 #SBATCH -e dzig.e%j            # Name of stderr error file
 #SBATCH -p wholenode            # Queue (partition) name
 
-solvers=("run_ppcsr" "run_std_set")
+solvers=("run_ppcsr" "run_std_set" "run_pcsr" "run_absl_btree")
 graphs=("soc-LiveJournal1")
-batch_size_seq=(1 10 100 1000 10000 100000 1000000)
+# batch_size_seq=(1 10 100 1000 10000 100000 1000000)
+batch_size_seq=(1)
 batch_num=10
 rounds=4
 algorithm=("bfs" "pagerank" "labelpropagation" "wbfs")
 log="run_dzig_local.log"
-graph_path_prefix="/anvil/projects/x-cis250123/dataset-dzig/"
+graph_path_prefix="/data/datasets/graphs/"
 
 # Map from graph names to their prefixes (directory names)
 declare -A graph_prefix_map
@@ -26,7 +27,6 @@ graph_prefix_map["soc-LiveJournal1"]="live-journal"
 scripts_path="$PWD"
 project_path=$(dirname "$scripts_path")
 
-threads=128
 : >${log}
 for s in "${solvers[@]}"; do
     bazel build //benchmarks/run_structures:"${s}"
@@ -59,5 +59,5 @@ for s in "${solvers[@]}"; do
             done
         done
     done
-    # echo "-----------------------------------" | tee -a ${log}
+    echo "-----------------------------------" | tee -a ${log}
 done
