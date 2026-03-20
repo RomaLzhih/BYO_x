@@ -10,6 +10,7 @@
 #SBATCH -p wholenode            # Queue (partition) name
 
 # solvers=("run_ppcsr" "run_std_set" "run_pcsr" "run_absl_btree_set" "run_absl_flat_hash_set" "cpam" "run_sstgraph" "run_dhb" "run_terrace")
+set -o xtrace
 solvers=("run_absl_btree_set" "run_absl_flat_hash_set" "run_dhb")
 graphs=("soc-LiveJournal1" "com-orkut.ungraph" "cit-Patents" "twitter-unique-undir" "com-friendster")
 batch_size_seq=(1 10 100 1000 10000 100000 1000000)
@@ -40,15 +41,15 @@ for s in "${solvers[@]}"; do
 
     for batch_size in "${batch_size_seq[@]}"; do
         for g in "${graphs[@]}"; do
-            if [[ ${g} -eq "soc-LiveJournal1" ]] ; then
+            if [[ ${g} == "soc-LiveJournal1" ]] ; then
                 bfs_src=0
-            elif [[ ${g} -eq "com-orkut.ungraph" ]] ; then
+            elif [[ ${g} == "com-orkut.ungraph" ]] ; then
                 bfs_src=1
-            elif [[ ${g} -eq "cit-Patents" ]] ; then
+            elif [[ ${g} == "cit-Patents" ]] ; then
                 bfs_src=1
-            elif [[ ${g} -eq "twitter-unique-undir" ]] ; then
+            elif [[ ${g} == "twitter-unique-undir" ]] ; then
                 bfs_src=12
-            elif [[ ${g} -eq "com-friendster" ]] ; then
+            elif [[ ${g} == "com-friendster" ]] ; then
                 bfs_src=101
             else 
                 bfs_src=0
