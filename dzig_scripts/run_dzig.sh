@@ -17,7 +17,8 @@ batch_size_seq=(1 10 100 1000 10000 100000 1000000)
 # batch_size_seq=(1 10)
 batch_num=10
 rounds=4
-algorithm=("bfs" "pagerank" "labelpropagation" "wbfs")
+# algorithm=("bfs" "pagerank" "labelpropagation" "wbfs")
+algorithm=("all")
 log="run_dzig_local.log"
 graph_path_prefix="/data/datasets/graphs/"
 

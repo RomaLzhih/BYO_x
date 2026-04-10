@@ -1169,6 +1169,42 @@ void batch_alg_wrapper(Graph const& G, run_all_options const& options) {
                         options.wbfs_num_buckets, options.wbfs_no_blocked,
                         options.wbfs_largemem, options.dump);
                   });
+  } else if (options.alg == "all") {  // NOTE: run all algorithms
+    std::cout << ">>> Alg BFS \n";
+    run_incre_alg(const_cast<Graph&>(G), batch_edges, options,
+                  [&](Graph const& dynamic_graph) {
+                    return BFS_runner(dynamic_graph, options.src,
+                                      options.rounds, options.dump);
+                  });
+
+    std::cout << ">>> Alg PageRank \n";
+    run_incre_alg(const_cast<Graph&>(G), batch_edges, options,
+                  [&](Graph const& dynamic_graph) {
+                    return PageRank_runner(
+                        dynamic_graph, options.rounds, options.dump,
+                        options.pagerank_iters, options.pagerank_em,
+                        options.pagerank_delta, options.pagerank_eps,
+                        options.pagerank_leps);
+                  });
+
+    std::cout << ">>> Alg LabelPropagation \n";
+    run_incre_alg(const_cast<Graph&>(G), batch_edges, options,
+                  [&](Graph const& dynamic_graph) {
+                    return LabelPropCC_runner(dynamic_graph, options.rounds,
+                                              options.dump,
+                                              options.label_prop_permute);
+                  });
+
+    std::cout << ">>> Alg wBFS_unweighted \n";
+    run_incre_alg(const_cast<Graph&>(G), batch_edges, options,
+                  [&](Graph const& dynamic_graph) {
+                    return WBFS_unweighted_runner(
+                        dynamic_graph, options.src, options.rounds,
+                        options.wbfs_num_buckets, options.wbfs_no_blocked,
+                        options.wbfs_largemem, options.dump);
+                  });
+  } else {
+    std::cout << ">>> Unknown alg: " << options.alg << "\n";
   }
   puts(">>> End -----------------------------");
 }
