@@ -1,0 +1,2835 @@
+--- scripts:  Running run_vector_cpam on soc-LiveJournal1 (prefix: live-journal) with batch size 1 and algorithm all
+### Graph: /data/datasets/graphs/live-journal/soc-LiveJournal1.base.1.adj
+### SET API ###
+binary = 1
+native map = 1
+iteration = 0
+native map_early_exit = 1
+native parallel_map = 1
+native native_parallel_map_early_exit = 0
+supports modification
+supports insert_batch
+supports_get_memory_size = 1
+### GRAPH API ###
+n is suppoted as a function
+m is stored
+the graph is symmetric
+degree is supported
+supports basic map
+parallel_map_neighbors is supported
+map_neighbors_early_exit is supported
+parallel_map_neighbors_early_exit is supported
+supports insert_batch
+total bytes used = 411893504
+### Threads: 128
+### n: 4847571
+### m: 86220846
+>>> Begin -----------------------------
+>>> Input_file /data/datasets/graphs/live-journal/soc-LiveJournal1.base.1.adj
+>>> Batch_file /data/datasets/graphs/live-journal/soc-LiveJournal1.dynamic.1.el
+>>> Batch_num 10
+>>> Batch_size 1
+>>> Alg BFS 
+>>> Res: 
+0.000006 0.007914
+0.000008 0.006429
+0.000011 0.006446
+0.000009 0.006476
+0.000007 0.006436
+0.000011 0.007535
+0.000008 0.006229
+0.000012 0.006380
+0.000008 0.006475
+0.000009 0.006429
+>>> Alg PageRank 
+>>> Res: 
+0.000005 0.180459
+0.000013 0.174970
+0.000016 0.180231
+0.000012 0.180841
+0.000009 0.181473
+0.000016 0.181576
+0.000013 0.179665
+0.000017 0.177145
+0.000012 0.186470
+0.000015 0.180707
+>>> Alg LabelPropagation 
+>>> Res: 
+0.000006 0.024515
+0.000012 0.024333
+0.000015 0.023345
+0.000010 0.023997
+0.000008 0.024112
+0.000016 0.024213
+0.000010 0.024092
+0.000015 0.024735
+0.000011 0.024508
+0.000012 0.024977
+>>> Alg wBFS_unweighted 
+>>> Res: 
+0.000006 4.868703
+0.000012 4.783345
+0.000017 4.884658
+0.000013 4.814592
+0.000009 4.834854
+0.000019 4.772082
+0.000010 4.784878
+0.000018 4.812059
+0.000013 4.811576
+0.000011 4.792457
+>>> End -----------------------------
+--- scripts:  program finish, took 206
+--- scripts:  Running run_vector_cpam on com-orkut.ungraph (prefix: orkut) with batch size 1 and algorithm all
+### Graph: /data/datasets/graphs/orkut/com-orkut.ungraph.base.1.adj
+### SET API ###
+binary = 1
+native map = 1
+iteration = 0
+native map_early_exit = 1
+native parallel_map = 1
+native native_parallel_map_early_exit = 0
+supports modification
+supports insert_batch
+supports_get_memory_size = 1
+### GRAPH API ###
+n is suppoted as a function
+m is stored
+the graph is symmetric
+degree is supported
+supports basic map
+parallel_map_neighbors is supported
+map_neighbors_early_exit is supported
+parallel_map_neighbors_early_exit is supported
+supports insert_batch
+total bytes used = 1021994716
+### Threads: 128
+### n: 3072627
+### m: 234370156
+>>> Begin -----------------------------
+>>> Input_file /data/datasets/graphs/orkut/com-orkut.ungraph.base.1.adj
+>>> Batch_file /data/datasets/graphs/orkut/com-orkut.ungraph.dynamic.1.el
+>>> Batch_num 10
+>>> Batch_size 1
+>>> Alg BFS 
+>>> Res: 
+0.000006 0.005101
+0.000007 0.004706
+0.000009 0.004629
+0.000008 0.004906
+0.000010 0.004658
+0.000009 0.004660
+0.000007 0.004665
+0.000010 0.004615
+0.000009 0.006377
+0.000022 0.006110
+>>> Alg PageRank 
+>>> Res: 
+0.000005 0.224760
+0.000011 0.224651
+0.000013 0.227757
+0.000012 0.217441
+0.000015 0.222163
+0.000013 0.228464
+0.000010 0.221057
+0.000016 0.219430
+0.000013 0.225430
+0.000022 0.223124
+>>> Alg LabelPropagation 
+>>> Res: 
+0.000005 0.037829
+0.000010 0.037418
+0.000012 0.037701
+0.000012 0.037517
+0.000013 0.037634
+0.000013 0.037379
+0.000010 0.037772
+0.000014 0.037998
+0.000012 0.038422
+0.000024 0.037992
+>>> Alg wBFS_unweighted 
+>>> Res: 
+0.000006 3.131007
+0.000010 3.113130
+0.000013 3.196999
+0.000014 3.140842
+0.000015 3.161521
+0.000012 3.121446
+0.000014 3.211593
+0.000015 3.135770
+0.000016 3.121589
+0.000030 3.108956
+>>> End -----------------------------
+--- scripts:  program finish, took 143
+--- scripts:  Running run_vector_cpam on cit-Patents (prefix: cit-Patents) with batch size 1 and algorithm all
+### Graph: /data/datasets/graphs/cit-Patents/cit-Patents.base.1.adj
+### SET API ###
+binary = 1
+native map = 1
+iteration = 0
+native map_early_exit = 1
+native parallel_map = 1
+native native_parallel_map_early_exit = 0
+supports modification
+supports insert_batch
+supports_get_memory_size = 1
+### GRAPH API ###
+n is suppoted as a function
+m is stored
+the graph is symmetric
+degree is supported
+supports basic map
+parallel_map_neighbors is supported
+map_neighbors_early_exit is supported
+parallel_map_neighbors_early_exit is supported
+supports insert_batch
+total bytes used = 177548944
+### Threads: 128
+### n: 6009555
+### m: 33037885
+>>> Begin -----------------------------
+>>> Input_file /data/datasets/graphs/cit-Patents/cit-Patents.base.1.adj
+>>> Batch_file /data/datasets/graphs/cit-Patents/cit-Patents.dynamic.1.el
+>>> Batch_num 10
+>>> Batch_size 1
+>>> Alg BFS 
+>>> Res: 
+0.000008 0.008268
+0.000011 0.008124
+0.000009 0.008006
+0.000012 0.007825
+0.000008 0.007890
+0.000010 0.010887
+0.000011 0.007887
+0.000013 0.010545
+0.000012 0.008039
+0.000012 0.008111
+>>> Alg PageRank 
+>>> Res: 
+0.000008 0.153941
+0.000015 0.151909
+0.000011 0.131418
+0.000015 0.129681
+0.000011 0.137185
+0.000012 0.149635
+0.000021 0.137773
+0.000014 0.146511
+0.000012 0.152643
+0.000012 0.139974
+>>> Alg LabelPropagation 
+>>> Res: 
+0.000008 0.021700
+0.000012 0.023126
+0.000010 0.021691
+0.000012 0.021915
+0.000010 0.021307
+0.000011 0.021373
+0.000011 0.021349
+0.000012 0.021390
+0.000011 0.021165
+0.000011 0.021021
+>>> Alg wBFS_unweighted 
+>>> Res: 
+0.000008 4.713581
+0.000014 4.683243
+0.000010 4.683779
+0.000013 4.671899
+0.000010 4.668312
+0.000014 4.670461
+0.000012 4.675113
+0.000013 4.665147
+0.000014 4.677731
+0.000013 4.691574
+>>> End -----------------------------
+--- scripts:  program finish, took 197
+--- scripts:  Running run_vector_cpam on twitter-unique-undir (prefix: twitter) with batch size 1 and algorithm all
+### Graph: /data/datasets/graphs/twitter/twitter-unique-undir.base.1.adj
+### SET API ###
+binary = 1
+native map = 1
+iteration = 0
+native map_early_exit = 1
+native parallel_map = 1
+native native_parallel_map_early_exit = 0
+supports modification
+supports insert_batch
+supports_get_memory_size = 1
+### GRAPH API ###
+n is suppoted as a function
+m is stored
+the graph is symmetric
+degree is supported
+supports basic map
+parallel_map_neighbors is supported
+map_neighbors_early_exit is supported
+parallel_map_neighbors_early_exit is supported
+supports insert_batch
+total bytes used = 11109331464
+### Threads: 128
+### n: 41652231
+### m: 2430498273
+>>> Begin -----------------------------
+>>> Input_file /data/datasets/graphs/twitter/twitter-unique-undir.base.1.adj
+>>> Batch_file /data/datasets/graphs/twitter/twitter-unique-undir.dynamic.1.el
+>>> Batch_num 10
+>>> Batch_size 1
+>>> Alg BFS 
+>>> Res: 
+0.000055 0.036026
+0.000024 0.035215
+0.000010 0.035980
+0.000019 0.035610
+0.000017 0.035896
+0.000014 0.035626
+0.000017 0.036072
+0.000012 0.035525
+0.000015 0.035591
+0.000012 0.035617
+>>> Alg PageRank 
+>>> Res: 
+0.000037 9.071381
+0.000027 9.494540
+0.000014 9.652610
+0.000027 9.461365
+0.000033 10.227370
+0.000029 11.209578
+0.000019 11.166861
+0.000019 11.204416
+0.000025 11.097944
+0.000015 11.296401
+>>> Alg LabelPropagation 
+>>> Res: 
+0.000043 1.629794
+0.000025 1.638922
+0.000012 1.616985
+0.000021 1.629032
+0.000020 1.617409
+0.000018 1.610423
+0.000021 1.611332
+0.000017 1.612727
+0.000016 1.598203
+0.000013 1.607209
+>>> Alg wBFS_unweighted 
+>>> Res: 
+0.000039 31.073393
+0.000029 30.297187
+0.000012 28.701527
+0.000021 28.828416
+0.000019 34.684332
+0.000016 36.694846
+0.000017 36.437456
+0.000015 30.197930
+0.000016 32.404030
+0.000013 34.835533
+>>> End -----------------------------
+--- scripts:  program finish, took 1844
+--- scripts:  Running run_vector_cpam on com-friendster (prefix: friend) with batch size 1 and algorithm all
+### Graph: /data/datasets/graphs/friend/com-friendster.base.1.adj
+### SET API ###
+binary = 1
+native map = 1
+iteration = 0
+native map_early_exit = 1
+native parallel_map = 1
+native native_parallel_map_early_exit = 0
+supports modification
+supports insert_batch
+supports_get_memory_size = 1
+### GRAPH API ###
+n is suppoted as a function
+m is stored
+the graph is symmetric
+degree is supported
+supports basic map
+parallel_map_neighbors is supported
+map_neighbors_early_exit is supported
+parallel_map_neighbors_early_exit is supported
+supports insert_batch
+total bytes used = 16681892048
+### Threads: 128
+### n: 2586147870
+### m: 3698831638
+>>> Begin -----------------------------
+>>> Input_file /data/datasets/graphs/friend/com-friendster.base.1.adj
+>>> Batch_file /data/datasets/graphs/friend/com-friendster.dynamic.1.el
+>>> Batch_num 10
+>>> Batch_size 1
+>>> Alg BFS 
+>>> Res: 
+0.000034 2.293322
+0.000026 1.509156
+0.000023 1.552054
+0.000017 1.521462
+0.000013 1.509597
+0.000018 1.499645
+0.000011 1.481995
+0.000015 1.464933
+0.000013 1.458272
+0.000011 1.446300
+>>> Alg PageRank 
+>>> Res: 
+0.000014 21.970179
+0.000029 19.840786
+0.000030 19.921703
+0.000021 19.999445
+0.000017 29.467365
+0.000021 27.970592
+0.000018 24.200210
+0.000020 28.780849
+0.000017 33.013724
+0.000016 36.779938
+>>> Alg LabelPropagation 
+>>> Res: 
+0.000017 4.642529
+0.000024 4.417045
+0.000024 4.564649
+0.000018 4.419333
+0.000015 4.568263
+0.000016 4.666918
+0.000013 5.118828
+0.000017 5.070691
+0.000013 5.019983
+0.000013 5.390417
+>>> Alg wBFS_unweighted 
+>>> Res: 
+0.000011 54.752530
+0.000024 59.840191
+0.000023 82.925135
+0.000016 76.845282
+0.000013 75.462615
+0.000017 72.851878
+0.000012 74.410231
+0.000015 73.904967
+0.000014 77.344801
+0.000011 71.709936
+>>> End -----------------------------
+--- scripts:  program finish, took 4843
+--- scripts:  Running run_vector_cpam on soc-LiveJournal1 (prefix: live-journal) with batch size 10 and algorithm all
+### Graph: /data/datasets/graphs/live-journal/soc-LiveJournal1.base.10.adj
+### SET API ###
+binary = 1
+native map = 1
+iteration = 0
+native map_early_exit = 1
+native parallel_map = 1
+native native_parallel_map_early_exit = 0
+supports modification
+supports insert_batch
+supports_get_memory_size = 1
+### GRAPH API ###
+n is suppoted as a function
+m is stored
+the graph is symmetric
+degree is supported
+supports basic map
+parallel_map_neighbors is supported
+map_neighbors_early_exit is supported
+parallel_map_neighbors_early_exit is supported
+supports insert_batch
+total bytes used = 411893080
+### Threads: 128
+### n: 4847571
+### m: 86220756
+>>> Begin -----------------------------
+>>> Input_file /data/datasets/graphs/live-journal/soc-LiveJournal1.base.10.adj
+>>> Batch_file /data/datasets/graphs/live-journal/soc-LiveJournal1.dynamic.10.el
+>>> Batch_num 10
+>>> Batch_size 10
+>>> Alg BFS 
+>>> Res: 
+0.000022 0.008572
+0.000022 0.006280
+0.000036 0.006038
+0.000022 0.007034
+0.000024 0.006067
+0.000030 0.006207
+0.000023 0.006110
+0.000023 0.006146
+0.000027 0.006021
+0.000023 0.006201
+>>> Alg PageRank 
+>>> Res: 
+0.000021 0.182951
+0.000046 0.181262
+0.000038 0.186536
+0.000034 0.185263
+0.000037 0.182781
+0.000041 0.179078
+0.000038 0.178309
+0.000034 0.179781
+0.000036 0.181106
+0.000033 0.175887
+>>> Alg LabelPropagation 
+>>> Res: 
+0.000019 0.023925
+0.000031 0.024207
+0.000045 0.023824
+0.000034 0.023835
+0.000034 0.023980
+0.000030 0.024328
+0.000033 0.023988
+0.000031 0.024025
+0.000035 0.023878
+0.000030 0.024207
+>>> Alg wBFS_unweighted 
+>>> Res: 
+0.000021 4.781722
+0.000055 4.762458
+0.000053 4.810832
+0.000039 4.715209
+0.000043 4.715728
+0.000068 4.709136
+0.000048 4.740085
+0.000087 4.745363
+0.000039 4.704505
+0.000032 4.741912
+>>> End -----------------------------
+--- scripts:  program finish, took 203
+--- scripts:  Running run_vector_cpam on com-orkut.ungraph (prefix: orkut) with batch size 10 and algorithm all
+### Graph: /data/datasets/graphs/orkut/com-orkut.ungraph.base.10.adj
+### SET API ###
+binary = 1
+native map = 1
+iteration = 0
+native map_early_exit = 1
+native parallel_map = 1
+native native_parallel_map_early_exit = 0
+supports modification
+supports insert_batch
+supports_get_memory_size = 1
+### GRAPH API ###
+n is suppoted as a function
+m is stored
+the graph is symmetric
+degree is supported
+supports basic map
+parallel_map_neighbors is supported
+map_neighbors_early_exit is supported
+parallel_map_neighbors_early_exit is supported
+supports insert_batch
+total bytes used = 1021994356
+### Threads: 128
+### n: 3072627
+### m: 234370066
+>>> Begin -----------------------------
+>>> Input_file /data/datasets/graphs/orkut/com-orkut.ungraph.base.10.adj
+>>> Batch_file /data/datasets/graphs/orkut/com-orkut.ungraph.dynamic.10.el
+>>> Batch_num 10
+>>> Batch_size 10
+>>> Alg BFS 
+>>> Res: 
+0.000024 0.008934
+0.000025 0.004303
+0.000025 0.004299
+0.000020 0.004164
+0.000020 0.004163
+0.000030 0.004110
+0.000037 0.004150
+0.000044 0.004163
+0.000025 0.004152
+0.000028 0.004185
+>>> Alg PageRank 
+>>> Res: 
+0.000020 0.235028
+0.000031 0.225976
+0.000038 0.233033
+0.000038 0.222158
+0.000030 0.233757
+0.000046 0.218290
+0.000042 0.232517
+0.000053 0.229735
+0.000034 0.214998
+0.000041 0.230670
+>>> Alg LabelPropagation 
+>>> Res: 
+0.000020 0.038832
+0.000043 0.038356
+0.000051 0.037956
+0.000032 0.037993
+0.000038 0.038025
+0.000046 0.038523
+0.000053 0.037295
+0.000050 0.040183
+0.000037 0.037834
+0.000049 0.039006
+>>> Alg wBFS_unweighted 
+>>> Res: 
+0.000031 3.147540
+0.000053 3.273072
+0.000059 3.140097
+0.000039 3.101305
+0.000035 3.137132
+0.000048 3.104252
+0.000049 3.090547
+0.000072 3.095841
+0.000044 3.122486
+0.000053 3.115431
+>>> End -----------------------------
+--- scripts:  program finish, took 142
+--- scripts:  Running run_vector_cpam on cit-Patents (prefix: cit-Patents) with batch size 10 and algorithm all
+### Graph: /data/datasets/graphs/cit-Patents/cit-Patents.base.10.adj
+### SET API ###
+binary = 1
+native map = 1
+iteration = 0
+native map_early_exit = 1
+native parallel_map = 1
+native native_parallel_map_early_exit = 0
+supports modification
+supports insert_batch
+supports_get_memory_size = 1
+### GRAPH API ###
+n is suppoted as a function
+m is stored
+the graph is symmetric
+degree is supported
+supports basic map
+parallel_map_neighbors is supported
+map_neighbors_early_exit is supported
+parallel_map_neighbors_early_exit is supported
+supports insert_batch
+total bytes used = 177548560
+### Threads: 128
+### n: 6009555
+### m: 33037795
+>>> Begin -----------------------------
+>>> Input_file /data/datasets/graphs/cit-Patents/cit-Patents.base.10.adj
+>>> Batch_file /data/datasets/graphs/cit-Patents/cit-Patents.dynamic.10.el
+>>> Batch_num 10
+>>> Batch_size 10
+>>> Alg BFS 
+>>> Res: 
+0.000021 0.008304
+0.000027 0.007779
+0.000025 0.007788
+0.000029 0.007870
+0.000027 0.010537
+0.000027 0.007691
+0.000028 0.010987
+0.000033 0.007959
+0.000030 0.007762
+0.000030 0.007774
+>>> Alg PageRank 
+>>> Res: 
+0.000019 0.164404
+0.000040 0.160492
+0.000039 0.157797
+0.000046 0.161751
+0.000039 0.165327
+0.000046 0.165154
+0.000204 0.166479
+0.000078 0.156975
+0.000075 0.156143
+0.000040 0.156195
+>>> Alg LabelPropagation 
+>>> Res: 
+0.000024 0.022430
+0.000029 0.021712
+0.000024 0.021655
+0.000031 0.021374
+0.000027 0.021105
+0.000027 0.021178
+0.000028 0.022083
+0.000027 0.021677
+0.000028 0.021213
+0.000027 0.021124
+>>> Alg wBFS_unweighted 
+>>> Res: 
+0.000025 4.683973
+0.000063 4.637086
+0.000036 4.636820
+0.000055 4.646736
+0.000063 4.658135
+0.000040 4.639829
+0.000053 4.639597
+0.000066 4.628744
+0.000054 4.634659
+0.000037 4.659004
+>>> End -----------------------------
+--- scripts:  program finish, took 197
+--- scripts:  Running run_vector_cpam on twitter-unique-undir (prefix: twitter) with batch size 10 and algorithm all
+### Graph: /data/datasets/graphs/twitter/twitter-unique-undir.base.10.adj
+### SET API ###
+binary = 1
+native map = 1
+iteration = 0
+native map_early_exit = 1
+native parallel_map = 1
+native native_parallel_map_early_exit = 0
+supports modification
+supports insert_batch
+supports_get_memory_size = 1
+### GRAPH API ###
+n is suppoted as a function
+m is stored
+the graph is symmetric
+degree is supported
+supports basic map
+parallel_map_neighbors is supported
+map_neighbors_early_exit is supported
+parallel_map_neighbors_early_exit is supported
+supports insert_batch
+total bytes used = 11109331024
+### Threads: 128
+### n: 41652231
+### m: 2430498183
+>>> Begin -----------------------------
+>>> Input_file /data/datasets/graphs/twitter/twitter-unique-undir.base.10.adj
+>>> Batch_file /data/datasets/graphs/twitter/twitter-unique-undir.dynamic.10.el
+>>> Batch_num 10
+>>> Batch_size 10
+>>> Alg BFS 
+>>> Res: 
+0.000061 0.038599
+0.000060 0.037087
+0.000054 0.037235
+0.000054 0.038326
+0.000068 0.037010
+0.000058 0.037635
+0.000056 0.037031
+0.000071 0.037055
+0.000085 0.037669
+0.000065 0.037225
+>>> Alg PageRank 
+>>> Res: 
+0.000063 11.811344
+0.000084 11.052079
+0.000068 10.882589
+0.000078 11.285499
+0.000102 12.308640
+0.000077 12.107083
+0.000077 12.466509
+0.000092 13.301879
+0.000100 13.311451
+0.000102 13.461058
+>>> Alg LabelPropagation 
+>>> Res: 
+0.000061 1.225486
+0.000071 1.210694
+0.000058 1.209790
+0.000063 1.216848
+0.000078 1.213540
+0.000074 1.214708
+0.000062 1.232773
+0.000064 1.197881
+0.000086 1.210637
+0.000081 1.190764
+>>> Alg wBFS_unweighted 
+>>> Res: 
+0.000054 26.321945
+0.000064 30.783930
+0.000063 33.499664
+0.000062 33.473651
+0.000083 33.476913
+0.000065 35.672089
+0.000058 37.048143
+0.000073 36.501602
+0.000082 33.351292
+0.000092 26.171494
+>>> End -----------------------------
+--- scripts:  program finish, took 1908
+--- scripts:  Running run_vector_cpam on com-friendster (prefix: friend) with batch size 10 and algorithm all
+### Graph: /data/datasets/graphs/friend/com-friendster.base.10.adj
+### SET API ###
+binary = 1
+native map = 1
+iteration = 0
+native map_early_exit = 1
+native parallel_map = 1
+native native_parallel_map_early_exit = 0
+supports modification
+supports insert_batch
+supports_get_memory_size = 1
+### GRAPH API ###
+n is suppoted as a function
+m is stored
+the graph is symmetric
+degree is supported
+supports basic map
+parallel_map_neighbors is supported
+map_neighbors_early_exit is supported
+parallel_map_neighbors_early_exit is supported
+supports insert_batch
+total bytes used = 16681891648
+### Threads: 128
+### n: 2586147870
+### m: 3698831548
+>>> Begin -----------------------------
+>>> Input_file /data/datasets/graphs/friend/com-friendster.base.10.adj
+>>> Batch_file /data/datasets/graphs/friend/com-friendster.dynamic.10.el
+>>> Batch_num 10
+>>> Batch_size 10
+>>> Alg BFS 
+>>> Res: 
+0.000046 2.054343
+0.000043 1.396158
+0.000045 1.386208
+0.000046 1.377024
+0.000093 1.342953
+0.000045 1.352630
+0.000045 1.398816
+0.000045 1.421519
+0.000042 1.429014
+0.000048 1.435548
+>>> Alg PageRank 
+>>> Res: 
+0.000030 27.443790
+0.000058 28.959724
+0.000310 32.346059
+0.000053 33.418884
+0.000083 33.574501
+0.000051 23.801891
+0.000060 29.453288
+0.000057 34.238501
+0.000046 38.078206
+0.000056 36.521493
+>>> Alg LabelPropagation 
+>>> Res: 
+0.000029 6.464863
+0.000049 8.167240
+0.000049 9.628305
+0.000040 9.504688
+0.000040 8.727590
+0.000042 8.639260
+0.000048 8.845462
+0.000049 9.855329
+0.000039 9.927994
+0.000041 10.993640
+>>> Alg wBFS_unweighted 
+>>> Res: 
+0.000032 62.091498
+0.000040 80.569296
+0.000046 75.285882
+0.000087 70.273513
+0.000038 76.926167
+0.000041 86.611301
+0.000045 79.768358
+0.000043 79.585022
+0.000038 95.530707
+0.000045 86.894920
+>>> End -----------------------------
+--- scripts:  program finish, took 5525
+--- scripts:  Running run_vector_cpam on soc-LiveJournal1 (prefix: live-journal) with batch size 100 and algorithm all
+### Graph: /data/datasets/graphs/live-journal/soc-LiveJournal1.base.100.adj
+### SET API ###
+binary = 1
+native map = 1
+iteration = 0
+native map_early_exit = 1
+native parallel_map = 1
+native native_parallel_map_early_exit = 0
+supports modification
+supports insert_batch
+supports_get_memory_size = 1
+### GRAPH API ###
+n is suppoted as a function
+m is stored
+the graph is symmetric
+degree is supported
+supports basic map
+parallel_map_neighbors is supported
+map_neighbors_early_exit is supported
+parallel_map_neighbors_early_exit is supported
+supports insert_batch
+total bytes used = 411889324
+### Threads: 128
+### n: 4847571
+### m: 86219856
+>>> Begin -----------------------------
+>>> Input_file /data/datasets/graphs/live-journal/soc-LiveJournal1.base.100.adj
+>>> Batch_file /data/datasets/graphs/live-journal/soc-LiveJournal1.dynamic.100.el
+>>> Batch_num 10
+>>> Batch_size 100
+>>> Alg BFS 
+>>> Res: 
+0.000030 0.008731
+0.000038 0.006124
+0.000037 0.006113
+0.000048 0.006176
+0.000038 0.006924
+0.000052 0.006177
+0.000036 0.006292
+0.000053 0.006200
+0.000032 0.006135
+0.000032 0.006171
+>>> Alg PageRank 
+>>> Res: 
+0.000030 0.176188
+0.000041 0.173491
+0.000051 0.173688
+0.000043 0.173819
+0.000044 0.174543
+0.000055 0.174987
+0.000059 0.172802
+0.000062 0.172659
+0.000047 0.170235
+0.000047 0.175427
+>>> Alg LabelPropagation 
+>>> Res: 
+0.000031 0.023815
+0.000040 0.023732
+0.000046 0.023594
+0.000049 0.024192
+0.000053 0.023568
+0.000055 0.023367
+0.000047 0.023889
+0.000061 0.024204
+0.000039 0.023514
+0.000095 0.024096
+>>> Alg wBFS_unweighted 
+>>> Res: 
+0.000030 4.796239
+0.000112 4.875763
+0.000173 4.805162
+0.000066 4.783424
+0.000048 4.761551
+0.000054 4.775041
+0.000055 4.782653
+0.000152 4.828052
+0.000169 4.835763
+0.000058 4.811783
+>>> End -----------------------------
+--- scripts:  program finish, took 205
+--- scripts:  Running run_vector_cpam on com-orkut.ungraph (prefix: orkut) with batch size 100 and algorithm all
+### Graph: /data/datasets/graphs/orkut/com-orkut.ungraph.base.100.adj
+### SET API ###
+binary = 1
+native map = 1
+iteration = 0
+native map_early_exit = 1
+native parallel_map = 1
+native native_parallel_map_early_exit = 0
+supports modification
+supports insert_batch
+supports_get_memory_size = 1
+### GRAPH API ###
+n is suppoted as a function
+m is stored
+the graph is symmetric
+degree is supported
+supports basic map
+parallel_map_neighbors is supported
+map_neighbors_early_exit is supported
+parallel_map_neighbors_early_exit is supported
+supports insert_batch
+total bytes used = 1021990276
+### Threads: 128
+### n: 3072627
+### m: 234369166
+>>> Begin -----------------------------
+>>> Input_file /data/datasets/graphs/orkut/com-orkut.ungraph.base.100.adj
+>>> Batch_file /data/datasets/graphs/orkut/com-orkut.ungraph.dynamic.100.el
+>>> Batch_num 10
+>>> Batch_size 100
+>>> Alg BFS 
+>>> Res: 
+0.000041 0.006317
+0.000047 0.004845
+0.000041 0.004766
+0.000038 0.006265
+0.000033 0.005445
+0.000039 0.004757
+0.000039 0.004778
+0.000036 0.004595
+0.000038 0.004639
+0.000036 0.004688
+>>> Alg PageRank 
+>>> Res: 
+0.000038 0.229917
+0.000064 0.234540
+0.000096 0.229281
+0.000054 0.238206
+0.000048 0.236702
+0.000051 0.225710
+0.000092 0.233273
+0.000053 0.231444
+0.000056 0.236224
+0.000048 0.231146
+>>> Alg LabelPropagation 
+>>> Res: 
+0.000036 0.038326
+0.000045 0.037950
+0.000054 0.038385
+0.000049 0.039144
+0.000042 0.038023
+0.000049 0.038634
+0.000054 0.039553
+0.000051 0.038431
+0.000050 0.038585
+0.000046 0.037990
+>>> Alg wBFS_unweighted 
+>>> Res: 
+0.000039 3.028913
+0.000070 3.063403
+0.000076 3.023647
+0.000069 3.127757
+0.000083 3.084398
+0.000097 3.054171
+0.000090 3.019719
+0.000055 3.030538
+0.000142 3.064157
+0.000172 3.051234
+>>> End -----------------------------
+--- scripts:  program finish, took 139
+--- scripts:  Running run_vector_cpam on cit-Patents (prefix: cit-Patents) with batch size 100 and algorithm all
+### Graph: /data/datasets/graphs/cit-Patents/cit-Patents.base.100.adj
+### SET API ###
+binary = 1
+native map = 1
+iteration = 0
+native map_early_exit = 1
+native parallel_map = 1
+native native_parallel_map_early_exit = 0
+supports modification
+supports insert_batch
+supports_get_memory_size = 1
+### GRAPH API ###
+n is suppoted as a function
+m is stored
+the graph is symmetric
+degree is supported
+supports basic map
+parallel_map_neighbors is supported
+map_neighbors_early_exit is supported
+parallel_map_neighbors_early_exit is supported
+supports insert_batch
+total bytes used = 177544756
+### Threads: 128
+### n: 6009555
+### m: 33036895
+>>> Begin -----------------------------
+>>> Input_file /data/datasets/graphs/cit-Patents/cit-Patents.base.100.adj
+>>> Batch_file /data/datasets/graphs/cit-Patents/cit-Patents.dynamic.100.el
+>>> Batch_num 10
+>>> Batch_size 100
+>>> Alg BFS 
+>>> Res: 
+0.000026 0.008288
+0.000034 0.007838
+0.000030 0.008567
+0.000031 0.007734
+0.000034 0.011685
+0.000034 0.007706
+0.000035 0.007694
+0.000033 0.010787
+0.000041 0.007689
+0.000040 0.007664
+>>> Alg PageRank 
+>>> Res: 
+0.000024 0.159105
+0.000043 0.162213
+0.000040 0.163386
+0.000053 0.158285
+0.000042 0.158357
+0.000078 0.158636
+0.000043 0.155653
+0.000040 0.154097
+0.000050 0.153937
+0.000056 0.154221
+>>> Alg LabelPropagation 
+>>> Res: 
+0.000025 0.022832
+0.000039 0.022201
+0.000031 0.022617
+0.000032 0.021695
+0.000035 0.021614
+0.000034 0.021784
+0.000034 0.022132
+0.000032 0.021391
+0.000046 0.021437
+0.000045 0.021033
+>>> Alg wBFS_unweighted 
+>>> Res: 
+0.000025 4.684816
+0.000181 4.657855
+0.000094 4.630291
+0.000102 4.630189
+0.000146 4.651837
+0.000127 4.625858
+0.000063 4.638654
+0.000093 4.627428
+0.000082 4.623817
+0.000127 4.650335
+>>> End -----------------------------
+--- scripts:  program finish, took 197
+--- scripts:  Running run_vector_cpam on twitter-unique-undir (prefix: twitter) with batch size 100 and algorithm all
+### Graph: /data/datasets/graphs/twitter/twitter-unique-undir.base.100.adj
+### SET API ###
+binary = 1
+native map = 1
+iteration = 0
+native map_early_exit = 1
+native parallel_map = 1
+native native_parallel_map_early_exit = 0
+supports modification
+supports insert_batch
+supports_get_memory_size = 1
+### GRAPH API ###
+n is suppoted as a function
+m is stored
+the graph is symmetric
+degree is supported
+supports basic map
+parallel_map_neighbors is supported
+map_neighbors_early_exit is supported
+parallel_map_neighbors_early_exit is supported
+supports insert_batch
+total bytes used = 11109327024
+### Threads: 128
+### n: 41652231
+### m: 2430497283
+>>> Begin -----------------------------
+>>> Input_file /data/datasets/graphs/twitter/twitter-unique-undir.base.100.adj
+>>> Batch_file /data/datasets/graphs/twitter/twitter-unique-undir.dynamic.100.el
+>>> Batch_num 10
+>>> Batch_size 100
+>>> Alg BFS 
+>>> Res: 
+0.000062 0.039857
+0.000079 0.038681
+0.000072 0.039746
+0.000074 0.038242
+0.000070 0.038621
+0.000094 0.039294
+0.000066 0.038499
+0.000085 0.038048
+0.000063 0.038234
+0.000070 0.038010
+>>> Alg PageRank 
+>>> Res: 
+0.000070 10.313225
+0.000086 10.374119
+0.000106 10.400184
+0.000183 10.330875
+0.000087 10.345875
+0.000126 10.177232
+0.000102 10.132520
+0.000133 10.997042
+0.000092 11.428500
+0.000095 11.439168
+>>> Alg LabelPropagation 
+>>> Res: 
+0.000062 1.094820
+0.000101 1.087179
+0.000102 1.079904
+0.000103 1.089297
+0.000080 1.115497
+0.000114 1.082839
+0.000139 1.100684
+0.000092 1.097371
+0.000072 1.092499
+0.000084 1.088617
+>>> Alg wBFS_unweighted 
+>>> Res: 
+0.000073 27.117901
+0.000126 30.669264
+0.000148 30.858038
+0.000078 28.494788
+0.000081 26.133783
+0.000115 26.106046
+0.000077 26.041812
+0.000090 25.926271
+0.000064 26.062932
+0.000079 26.011756
+>>> End -----------------------------
+--- scripts:  program finish, took 1628
+--- scripts:  Running run_vector_cpam on com-friendster (prefix: friend) with batch size 100 and algorithm all
+### Graph: /data/datasets/graphs/friend/com-friendster.base.100.adj
+### SET API ###
+binary = 1
+native map = 1
+iteration = 0
+native map_early_exit = 1
+native parallel_map = 1
+native native_parallel_map_early_exit = 0
+supports modification
+supports insert_batch
+supports_get_memory_size = 1
+### GRAPH API ###
+n is suppoted as a function
+m is stored
+the graph is symmetric
+degree is supported
+supports basic map
+parallel_map_neighbors is supported
+map_neighbors_early_exit is supported
+parallel_map_neighbors_early_exit is supported
+supports insert_batch
+total bytes used = 16681887772
+### Threads: 128
+### n: 2586147870
+### m: 3698830648
+>>> Begin -----------------------------
+>>> Input_file /data/datasets/graphs/friend/com-friendster.base.100.adj
+>>> Batch_file /data/datasets/graphs/friend/com-friendster.dynamic.100.el
+>>> Batch_num 10
+>>> Batch_size 100
+>>> Alg BFS 
+>>> Res: 
+0.000043 1.832831
+0.000054 1.519883
+0.000055 1.527266
+0.000055 1.519332
+0.000059 1.515438
+0.000071 1.526066
+0.000047 1.524440
+0.000048 1.508976
+0.000056 1.493913
+0.000053 1.474835
+>>> Alg PageRank 
+>>> Res: 
+0.000040 63.734417
+0.000068 92.442464
+0.000077 95.824815
+0.000082 98.962786
+0.000087 108.577459
+0.000067 109.041443
+0.000073 108.822016
+0.000098 107.288885
+0.000071 98.891122
+0.000130 49.279806
+>>> Alg LabelPropagation 
+>>> Res: 
+0.000037 4.846236
+0.000056 4.904969
+0.000056 5.021085
+0.000051 4.876272
+0.000060 4.971336
+0.000052 4.936730
+0.000049 5.410188
+0.000050 5.667634
+0.000048 5.672812
+0.000057 5.784601
+>>> Alg wBFS_unweighted 
+>>> Res: 
+0.000040 47.966846
+0.000051 51.649437
+0.000053 56.079479
+0.000052 64.377763
+0.000065 55.265587
+0.000049 62.109384
+0.000053 68.662996
+0.000049 65.308366
+0.000052 58.937836
+0.000055 58.485870
+>>> End -----------------------------
+--- scripts:  program finish, took 6993
+--- scripts:  Running run_vector_cpam on soc-LiveJournal1 (prefix: live-journal) with batch size 1000 and algorithm all
+### Graph: /data/datasets/graphs/live-journal/soc-LiveJournal1.base.1000.adj
+### SET API ###
+binary = 1
+native map = 1
+iteration = 0
+native map_early_exit = 1
+native parallel_map = 1
+native native_parallel_map_early_exit = 0
+supports modification
+supports insert_batch
+supports_get_memory_size = 1
+### GRAPH API ###
+n is suppoted as a function
+m is stored
+the graph is symmetric
+degree is supported
+supports basic map
+parallel_map_neighbors is supported
+map_neighbors_early_exit is supported
+parallel_map_neighbors_early_exit is supported
+supports insert_batch
+total bytes used = 411850456
+### Threads: 128
+### n: 4847571
+### m: 86210856
+>>> Begin -----------------------------
+>>> Input_file /data/datasets/graphs/live-journal/soc-LiveJournal1.base.1000.adj
+>>> Batch_file /data/datasets/graphs/live-journal/soc-LiveJournal1.dynamic.1000.el
+>>> Batch_num 10
+>>> Batch_size 1000
+>>> Alg BFS 
+>>> Res: 
+0.000116 0.009552
+0.000103 0.006346
+0.000101 0.006197
+0.000112 0.006235
+0.000111 0.006199
+0.000105 0.006202
+0.000101 0.005973
+0.000099 0.006107
+0.000098 0.006202
+0.000101 0.006214
+>>> Alg PageRank 
+>>> Res: 
+0.000159 0.180318
+0.000297 0.180874
+0.000142 0.179799
+0.000187 0.179593
+0.000113 0.177491
+0.000110 0.178866
+0.000121 0.178655
+0.000108 0.176721
+0.000117 0.174148
+0.000130 0.179647
+>>> Alg LabelPropagation 
+>>> Res: 
+0.000089 0.025137
+0.000113 0.023734
+0.000123 0.023498
+0.000123 0.023328
+0.000115 0.023971
+0.000109 0.023465
+0.000111 0.023864
+0.000110 0.023550
+0.000106 0.023069
+0.000113 0.026339
+>>> Alg wBFS_unweighted 
+>>> Res: 
+0.000090 4.813055
+0.000139 4.799137
+0.000208 4.787008
+0.000132 4.761676
+0.000252 4.775291
+0.000215 4.775015
+0.000114 4.713947
+0.000174 4.765455
+0.000363 4.809118
+0.000127 4.760257
+>>> End -----------------------------
+--- scripts:  program finish, took 205
+--- scripts:  Running run_vector_cpam on com-orkut.ungraph (prefix: orkut) with batch size 1000 and algorithm all
+### Graph: /data/datasets/graphs/orkut/com-orkut.ungraph.base.1000.adj
+### SET API ###
+binary = 1
+native map = 1
+iteration = 0
+native map_early_exit = 1
+native parallel_map = 1
+native native_parallel_map_early_exit = 0
+supports modification
+supports insert_batch
+supports_get_memory_size = 1
+### GRAPH API ###
+n is suppoted as a function
+m is stored
+the graph is symmetric
+degree is supported
+supports basic map
+parallel_map_neighbors is supported
+map_neighbors_early_exit is supported
+parallel_map_neighbors_early_exit is supported
+supports insert_batch
+total bytes used = 1021950828
+### Threads: 128
+### n: 3072627
+### m: 234360166
+>>> Begin -----------------------------
+>>> Input_file /data/datasets/graphs/orkut/com-orkut.ungraph.base.1000.adj
+>>> Batch_file /data/datasets/graphs/orkut/com-orkut.ungraph.dynamic.1000.el
+>>> Batch_num 10
+>>> Batch_size 1000
+>>> Alg BFS 
+>>> Res: 
+0.000132 0.004913
+0.000111 0.004538
+0.000097 0.006654
+0.000157 0.005831
+0.000121 0.004319
+0.000104 0.004321
+0.000104 0.004320
+0.000107 0.004323
+0.000111 0.005921
+0.000108 0.004301
+>>> Alg PageRank 
+>>> Res: 
+0.000093 0.231484
+0.000119 0.230879
+0.000111 0.228575
+0.000121 0.231777
+0.000131 0.229078
+0.000110 0.231214
+0.000111 0.231972
+0.000122 0.229889
+0.000119 0.229315
+0.000118 0.228423
+>>> Alg LabelPropagation 
+>>> Res: 
+0.000082 0.038222
+0.000115 0.037563
+0.000122 0.038296
+0.000118 0.038416
+0.000118 0.037996
+0.000107 0.038108
+0.000104 0.038377
+0.000114 0.037877
+0.000118 0.037923
+0.000113 0.037194
+>>> Alg wBFS_unweighted 
+>>> Res: 
+0.000096 3.097165
+0.000129 3.098169
+0.000290 3.215638
+0.000210 3.134368
+0.000310 3.152552
+0.000214 3.114900
+0.000137 3.098124
+0.000128 3.103552
+0.000131 3.071483
+0.000129 3.098070
+>>> End -----------------------------
+--- scripts:  program finish, took 142
+--- scripts:  Running run_vector_cpam on cit-Patents (prefix: cit-Patents) with batch size 1000 and algorithm all
+### Graph: /data/datasets/graphs/cit-Patents/cit-Patents.base.1000.adj
+### SET API ###
+binary = 1
+native map = 1
+iteration = 0
+native map_early_exit = 1
+native parallel_map = 1
+native native_parallel_map_early_exit = 0
+supports modification
+supports insert_batch
+supports_get_memory_size = 1
+### GRAPH API ###
+n is suppoted as a function
+m is stored
+the graph is symmetric
+degree is supported
+supports basic map
+parallel_map_neighbors is supported
+map_neighbors_early_exit is supported
+parallel_map_neighbors_early_exit is supported
+supports insert_batch
+total bytes used = 177506068
+### Threads: 128
+### n: 6009555
+### m: 33027895
+>>> Begin -----------------------------
+>>> Input_file /data/datasets/graphs/cit-Patents/cit-Patents.base.1000.adj
+>>> Batch_file /data/datasets/graphs/cit-Patents/cit-Patents.dynamic.1000.el
+>>> Batch_num 10
+>>> Batch_size 1000
+>>> Alg BFS 
+>>> Res: 
+0.000083 0.009749
+0.000168 0.009885
+0.000098 0.007631
+0.000115 0.007667
+0.000102 0.007626
+0.000099 0.010272
+0.000100 0.007690
+0.000117 0.007727
+0.000109 0.007694
+0.000105 0.007756
+>>> Alg PageRank 
+>>> Res: 
+0.000079 0.154671
+0.000106 0.152774
+0.000168 0.158039
+0.000111 0.156908
+0.000167 0.157574
+0.000138 0.156243
+0.000116 0.156067
+0.000164 0.156083
+0.000162 0.157440
+0.000157 0.134755
+>>> Alg LabelPropagation 
+>>> Res: 
+0.000079 0.022614
+0.000095 0.021723
+0.000099 0.022413
+0.000103 0.022175
+0.000104 0.022260
+0.000097 0.022487
+0.000094 0.022133
+0.000105 0.022469
+0.000103 0.022867
+0.000109 0.021979
+>>> Alg wBFS_unweighted 
+>>> Res: 
+0.000091 4.609742
+0.000124 4.615576
+0.000103 4.667905
+0.000235 4.628569
+0.000156 4.628041
+0.000125 4.645907
+0.000280 4.617961
+0.000112 4.605556
+0.000107 4.635501
+0.000396 4.606645
+>>> End -----------------------------
+--- scripts:  program finish, took 196
+--- scripts:  Running run_vector_cpam on twitter-unique-undir (prefix: twitter) with batch size 1000 and algorithm all
+### Graph: /data/datasets/graphs/twitter/twitter-unique-undir.base.1000.adj
+### SET API ###
+binary = 1
+native map = 1
+iteration = 0
+native map_early_exit = 1
+native parallel_map = 1
+native native_parallel_map_early_exit = 0
+supports modification
+supports insert_batch
+supports_get_memory_size = 1
+### GRAPH API ###
+n is suppoted as a function
+m is stored
+the graph is symmetric
+degree is supported
+supports basic map
+parallel_map_neighbors is supported
+map_neighbors_early_exit is supported
+parallel_map_neighbors_early_exit is supported
+supports insert_batch
+total bytes used = 11109286720
+### Threads: 128
+### n: 41652231
+### m: 2430488283
+>>> Begin -----------------------------
+>>> Input_file /data/datasets/graphs/twitter/twitter-unique-undir.base.1000.adj
+>>> Batch_file /data/datasets/graphs/twitter/twitter-unique-undir.dynamic.1000.el
+>>> Batch_num 10
+>>> Batch_size 1000
+>>> Alg BFS 
+>>> Res: 
+0.000200 0.039091
+0.000136 0.035396
+0.000162 0.035472
+0.000159 0.036847
+0.000178 0.035568
+0.000196 0.035719
+0.000194 0.036149
+0.000831 0.036067
+0.000178 0.035655
+0.000172 0.035532
+>>> Alg PageRank 
+>>> Res: 
+0.000150 9.429089
+0.000173 9.389906
+0.000186 9.540395
+0.000258 9.504030
+0.000224 9.192621
+0.000306 9.229087
+0.000261 9.222754
+0.000216 9.864066
+0.000244 9.989165
+0.000243 10.452595
+>>> Alg LabelPropagation 
+>>> Res: 
+0.000145 1.071184
+0.000185 1.084242
+0.000200 1.088848
+0.000199 1.063175
+0.000204 1.061853
+0.000233 1.064796
+0.000225 1.074870
+0.000188 1.069706
+0.000218 1.063873
+0.000203 1.063918
+>>> Alg wBFS_unweighted 
+>>> Res: 
+0.000149 29.161516
+0.000161 29.234744
+0.000181 29.090399
+0.000181 29.196841
+0.000200 29.383610
+0.000232 29.659710
+0.000222 31.586042
+0.000172 30.721387
+0.000273 29.391941
+0.000187 29.135608
+>>> End -----------------------------
+--- scripts:  program finish, took 1679
+--- scripts:  Running run_vector_cpam on com-friendster (prefix: friend) with batch size 1000 and algorithm all
+### Graph: /data/datasets/graphs/friend/com-friendster.base.1000.adj
+### SET API ###
+binary = 1
+native map = 1
+iteration = 0
+native map_early_exit = 1
+native parallel_map = 1
+native native_parallel_map_early_exit = 0
+supports modification
+supports insert_batch
+supports_get_memory_size = 1
+### GRAPH API ###
+n is suppoted as a function
+m is stored
+the graph is symmetric
+degree is supported
+supports basic map
+parallel_map_neighbors is supported
+map_neighbors_early_exit is supported
+parallel_map_neighbors_early_exit is supported
+supports insert_batch
+total bytes used = 16681847756
+### Threads: 128
+### n: 2586147870
+### m: 3698821648
+>>> Begin -----------------------------
+>>> Input_file /data/datasets/graphs/friend/com-friendster.base.1000.adj
+>>> Batch_file /data/datasets/graphs/friend/com-friendster.dynamic.1000.el
+>>> Batch_num 10
+>>> Batch_size 1000
+>>> Alg BFS 
+>>> Res: 
+0.000214 1.645838
+0.000123 1.356113
+0.000178 1.355216
+0.000115 1.355559
+0.000117 1.364558
+0.000123 1.328032
+0.000114 1.331968
+0.000121 1.334547
+0.000124 1.351214
+0.000120 1.328537
+>>> Alg PageRank 
+>>> Res: 
+0.000090 59.719011
+0.000131 72.789039
+0.000194 77.642447
+0.000269 81.986947
+0.000187 69.459668
+0.000164 61.625132
+0.000133 62.290974
+0.000146 68.221183
+0.000158 36.861867
+0.000212 38.548227
+>>> Alg LabelPropagation 
+>>> Res: 
+0.000088 4.410791
+0.000120 4.183822
+0.000131 4.292164
+0.000117 4.170862
+0.000124 4.246007
+0.000121 4.141245
+0.000122 4.288820
+0.000116 4.412912
+0.000139 4.158131
+0.000121 4.056814
+>>> Alg wBFS_unweighted 
+>>> Res: 
+0.000091 47.517153
+0.000111 51.741624
+0.000174 60.683304
+0.000148 68.259175
+0.000119 68.377082
+0.000114 65.956331
+0.000122 62.233978
+0.000120 61.195247
+0.000124 44.406421
+0.000119 59.815570
+>>> End -----------------------------
+--- scripts:  program finish, took 5749
+--- scripts:  Running run_vector_cpam on soc-LiveJournal1 (prefix: live-journal) with batch size 10000 and algorithm all
+### Graph: /data/datasets/graphs/live-journal/soc-LiveJournal1.base.10000.adj
+### SET API ###
+binary = 1
+native map = 1
+iteration = 0
+native map_early_exit = 1
+native parallel_map = 1
+native native_parallel_map_early_exit = 0
+supports modification
+supports insert_batch
+supports_get_memory_size = 1
+### GRAPH API ###
+n is suppoted as a function
+m is stored
+the graph is symmetric
+degree is supported
+supports basic map
+parallel_map_neighbors is supported
+map_neighbors_early_exit is supported
+parallel_map_neighbors_early_exit is supported
+supports insert_batch
+total bytes used = 411460056
+### Threads: 128
+### n: 4847571
+### m: 86120856
+>>> Begin -----------------------------
+>>> Input_file /data/datasets/graphs/live-journal/soc-LiveJournal1.base.10000.adj
+>>> Batch_file /data/datasets/graphs/live-journal/soc-LiveJournal1.dynamic.10000.el
+>>> Batch_num 10
+>>> Batch_size 10000
+>>> Alg BFS 
+>>> Res: 
+0.002611 0.008106
+0.002265 0.006848
+0.002306 0.006849
+0.002289 0.006942
+0.002309 0.006915
+0.002271 0.006876
+0.002274 0.006828
+0.002292 0.006980
+0.002312 0.007263
+0.002327 0.006961
+>>> Alg PageRank 
+>>> Res: 
+0.002369 0.193170
+0.002216 0.189695
+0.002242 0.187011
+0.002237 0.199468
+0.003521 0.211373
+0.002397 0.210938
+0.002416 0.196365
+0.002305 0.192625
+0.002287 0.190173
+0.002247 0.190787
+>>> Alg LabelPropagation 
+>>> Res: 
+0.002333 0.025307
+0.002321 0.025077
+0.002349 0.025231
+0.002333 0.024965
+0.002278 0.025060
+0.002286 0.027508
+0.002272 0.025793
+0.002313 0.026932
+0.002306 0.025229
+0.002325 0.025431
+>>> Alg wBFS_unweighted 
+>>> Res: 
+0.002420 4.763072
+0.002623 4.754125
+0.002244 4.692436
+0.002233 4.746119
+0.002423 4.735620
+0.002203 4.721487
+0.002191 4.721797
+0.002200 4.733117
+0.002228 4.755081
+0.002572 4.747195
+>>> End -----------------------------
+--- scripts:  program finish, took 205
+--- scripts:  Running run_vector_cpam on com-orkut.ungraph (prefix: orkut) with batch size 10000 and algorithm all
+### Graph: /data/datasets/graphs/orkut/com-orkut.ungraph.base.10000.adj
+### SET API ###
+binary = 1
+native map = 1
+iteration = 0
+native map_early_exit = 1
+native parallel_map = 1
+native native_parallel_map_early_exit = 0
+supports modification
+supports insert_batch
+supports_get_memory_size = 1
+### GRAPH API ###
+n is suppoted as a function
+m is stored
+the graph is symmetric
+degree is supported
+supports basic map
+parallel_map_neighbors is supported
+map_neighbors_early_exit is supported
+parallel_map_neighbors_early_exit is supported
+supports insert_batch
+total bytes used = 1021552680
+### Threads: 128
+### n: 3072627
+### m: 234270166
+>>> Begin -----------------------------
+>>> Input_file /data/datasets/graphs/orkut/com-orkut.ungraph.base.10000.adj
+>>> Batch_file /data/datasets/graphs/orkut/com-orkut.ungraph.dynamic.10000.el
+>>> Batch_num 10
+>>> Batch_size 10000
+>>> Alg BFS 
+>>> Res: 
+0.002652 0.005407
+0.002278 0.004396
+0.002265 0.005666
+0.002267 0.004320
+0.002277 0.004259
+0.002250 0.004415
+0.002265 0.004982
+0.002282 0.004334
+0.002284 0.004244
+0.002273 0.005039
+>>> Alg PageRank 
+>>> Res: 
+0.002379 0.243715
+0.002353 0.243402
+0.002345 0.246206
+0.002390 0.246373
+0.002363 0.247626
+0.002386 0.243333
+0.002431 0.244336
+0.002456 0.247904
+0.002433 0.248817
+0.002373 0.243406
+>>> Alg LabelPropagation 
+>>> Res: 
+0.002520 0.039537
+0.002557 0.040569
+0.002272 0.039850
+0.002446 0.039233
+0.002387 0.042146
+0.002666 0.040605
+0.002410 0.040355
+0.002526 0.041597
+0.002536 0.042592
+0.002429 0.040331
+>>> Alg wBFS_unweighted 
+>>> Res: 
+0.002395 3.123114
+0.002674 3.145987
+0.002367 3.081982
+0.002242 3.093884
+0.002230 3.077114
+0.002341 3.149227
+0.002280 3.095458
+0.002430 3.102093
+0.002263 3.072915
+0.002255 3.078226
+>>> End -----------------------------
+--- scripts:  program finish, took 143
+--- scripts:  Running run_vector_cpam on cit-Patents (prefix: cit-Patents) with batch size 10000 and algorithm all
+### Graph: /data/datasets/graphs/cit-Patents/cit-Patents.base.10000.adj
+### SET API ###
+binary = 1
+native map = 1
+iteration = 0
+native map_early_exit = 1
+native parallel_map = 1
+native native_parallel_map_early_exit = 0
+supports modification
+supports insert_batch
+supports_get_memory_size = 1
+### GRAPH API ###
+n is suppoted as a function
+m is stored
+the graph is symmetric
+degree is supported
+supports basic map
+parallel_map_neighbors is supported
+map_neighbors_early_exit is supported
+parallel_map_neighbors_early_exit is supported
+supports insert_batch
+total bytes used = 177123288
+### Threads: 128
+### n: 6009555
+### m: 32937895
+>>> Begin -----------------------------
+>>> Input_file /data/datasets/graphs/cit-Patents/cit-Patents.base.10000.adj
+>>> Batch_file /data/datasets/graphs/cit-Patents/cit-Patents.dynamic.10000.el
+>>> Batch_num 10
+>>> Batch_size 10000
+>>> Alg BFS 
+>>> Res: 
+0.002377 0.010806
+0.002336 0.008633
+0.002363 0.008896
+0.002380 0.008504
+0.002398 0.008836
+0.002385 0.008400
+0.002362 0.008438
+0.002385 0.008297
+0.002420 0.008283
+0.002380 0.008771
+>>> Alg PageRank 
+>>> Res: 
+0.002375 0.157923
+0.002314 0.158222
+0.002382 0.156742
+0.002424 0.162451
+0.002651 0.174964
+0.002845 0.170018
+0.002550 0.165494
+0.002495 0.159321
+0.002395 0.156638
+0.002334 0.135815
+>>> Alg LabelPropagation 
+>>> Res: 
+0.002424 0.023867
+0.002320 0.021253
+0.002319 0.021916
+0.002322 0.022806
+0.002361 0.021741
+0.002363 0.022335
+0.002302 0.021800
+0.002305 0.021942
+0.002360 0.021268
+0.002311 0.021519
+>>> Alg wBFS_unweighted 
+>>> Res: 
+0.002413 4.636657
+0.002447 4.599230
+0.002265 4.596569
+0.002481 4.621506
+0.002341 4.611287
+0.002271 4.628256
+0.002376 4.618536
+0.002354 4.599672
+0.002447 4.577123
+0.002413 4.575331
+>>> End -----------------------------
+--- scripts:  program finish, took 196
+--- scripts:  Running run_vector_cpam on twitter-unique-undir (prefix: twitter) with batch size 10000 and algorithm all
+### Graph: /data/datasets/graphs/twitter/twitter-unique-undir.base.10000.adj
+### SET API ###
+binary = 1
+native map = 1
+iteration = 0
+native map_early_exit = 1
+native parallel_map = 1
+native native_parallel_map_early_exit = 0
+supports modification
+supports insert_batch
+supports_get_memory_size = 1
+### GRAPH API ###
+n is suppoted as a function
+m is stored
+the graph is symmetric
+degree is supported
+supports basic map
+parallel_map_neighbors is supported
+map_neighbors_early_exit is supported
+parallel_map_neighbors_early_exit is supported
+supports insert_batch
+total bytes used = 11108884312
+### Threads: 128
+### n: 41652231
+### m: 2430398283
+>>> Begin -----------------------------
+>>> Input_file /data/datasets/graphs/twitter/twitter-unique-undir.base.10000.adj
+>>> Batch_file /data/datasets/graphs/twitter/twitter-unique-undir.dynamic.10000.el
+>>> Batch_num 10
+>>> Batch_size 10000
+>>> Alg BFS 
+>>> Res: 
+0.003196 0.039796
+0.003149 0.038676
+0.003109 0.038718
+0.002833 0.038733
+0.003386 0.039429
+0.003078 0.038835
+0.003525 0.038791
+0.002907 0.039435
+0.003225 0.038517
+0.003112 0.038598
+>>> Alg PageRank 
+>>> Res: 
+0.003003 9.344484
+0.003299 9.349301
+0.002993 9.121405
+0.002891 9.903250
+0.003421 10.086735
+0.003620 9.934070
+0.003645 9.925071
+0.003292 9.957502
+0.003464 9.840678
+0.003315 9.863523
+>>> Alg LabelPropagation 
+>>> Res: 
+0.002899 1.195744
+0.003883 1.209469
+0.003454 1.228019
+0.003249 1.212550
+0.003605 1.147376
+0.003482 1.153560
+0.004313 1.140423
+0.003092 1.133717
+0.003625 1.160868
+0.003718 1.135410
+>>> Alg wBFS_unweighted 
+>>> Res: 
+0.003117 29.204858
+0.003276 28.268988
+0.003013 28.200122
+0.003099 31.297961
+0.003484 31.961460
+0.003116 31.496162
+0.003656 33.589357
+0.003146 30.626172
+0.003115 29.272639
+0.003111 31.837909
+>>> End -----------------------------
+--- scripts:  program finish, took 1731
+--- scripts:  Running run_vector_cpam on com-friendster (prefix: friend) with batch size 10000 and algorithm all
+### Graph: /data/datasets/graphs/friend/com-friendster.base.10000.adj
+### SET API ###
+binary = 1
+native map = 1
+iteration = 0
+native map_early_exit = 1
+native parallel_map = 1
+native native_parallel_map_early_exit = 0
+supports modification
+supports insert_batch
+supports_get_memory_size = 1
+### GRAPH API ###
+n is suppoted as a function
+m is stored
+the graph is symmetric
+degree is supported
+supports basic map
+parallel_map_neighbors is supported
+map_neighbors_early_exit is supported
+parallel_map_neighbors_early_exit is supported
+supports insert_batch
+total bytes used = 16681446604
+### Threads: 128
+### n: 2586147870
+### m: 3698731648
+>>> Begin -----------------------------
+>>> Input_file /data/datasets/graphs/friend/com-friendster.base.10000.adj
+>>> Batch_file /data/datasets/graphs/friend/com-friendster.dynamic.10000.el
+>>> Batch_num 10
+>>> Batch_size 10000
+>>> Alg BFS 
+>>> Res: 
+0.002853 1.338720
+0.002334 0.982241
+0.002330 0.973947
+0.002346 0.971716
+0.002347 0.966533
+0.002355 0.970235
+0.002343 0.974435
+0.002574 0.981810
+0.002514 0.978680
+0.002472 0.991468
+>>> Alg PageRank 
+>>> Res: 
+0.002556 61.849939
+0.002445 70.732289
+0.002669 63.637275
+0.002596 65.697101
+0.002485 66.660620
+0.002471 67.529765
+0.002543 75.543472
+0.002549 70.032902
+0.002534 68.675255
+0.002625 33.097113
+>>> Alg LabelPropagation 
+>>> Res: 
+0.002457 6.832406
+0.002568 6.522454
+0.002520 6.412800
+0.002655 5.841577
+0.002579 5.258654
+0.002567 5.426379
+0.002553 5.302413
+0.002535 5.137599
+0.002617 5.337756
+0.002536 5.264346
+>>> Alg wBFS_unweighted 
+>>> Res: 
+0.002470 45.294186
+0.002322 45.054856
+0.002330 45.420390
+0.002314 44.514826
+0.002337 44.014091
+0.002337 44.091441
+0.002359 48.245896
+0.002328 43.938596
+0.002341 43.943845
+0.002352 43.859410
+>>> End -----------------------------
+--- scripts:  program finish, took 5265
+--- scripts:  Running run_vector_cpam on soc-LiveJournal1 (prefix: live-journal) with batch size 100000 and algorithm all
+### Graph: /data/datasets/graphs/live-journal/soc-LiveJournal1.base.100000.adj
+### SET API ###
+binary = 1
+native map = 1
+iteration = 0
+native map_early_exit = 1
+native parallel_map = 1
+native native_parallel_map_early_exit = 0
+supports modification
+supports insert_batch
+supports_get_memory_size = 1
+### GRAPH API ###
+n is suppoted as a function
+m is stored
+the graph is symmetric
+degree is supported
+supports basic map
+parallel_map_neighbors is supported
+map_neighbors_early_exit is supported
+parallel_map_neighbors_early_exit is supported
+supports insert_batch
+total bytes used = 407557920
+### Threads: 128
+### n: 4847571
+### m: 85220856
+>>> Begin -----------------------------
+>>> Input_file /data/datasets/graphs/live-journal/soc-LiveJournal1.base.100000.adj
+>>> Batch_file /data/datasets/graphs/live-journal/soc-LiveJournal1.dynamic.100000.el
+>>> Batch_num 10
+>>> Batch_size 100000
+>>> Alg BFS 
+>>> Res: 
+0.004025 0.008670
+0.003926 0.007770
+0.003918 0.007816
+0.003875 0.007702
+0.005187 0.007902
+0.003807 0.007953
+0.003760 0.008082
+0.003737 0.008049
+0.003939 0.007890
+0.003912 0.008025
+>>> Alg PageRank 
+>>> Res: 
+0.003891 0.240260
+0.004493 0.240370
+0.004759 0.238552
+0.004254 0.241677
+0.003982 0.234891
+0.003959 0.238847
+0.004026 0.235832
+0.003985 0.235852
+0.004100 0.239459
+0.003871 0.235335
+>>> Alg LabelPropagation 
+>>> Res: 
+0.003939 0.034691
+0.003822 0.031334
+0.003824 0.031086
+0.003810 0.031380
+0.003861 0.031288
+0.003928 0.031653
+0.003821 0.032343
+0.003939 0.032397
+0.004047 0.033247
+0.004019 0.031681
+>>> Alg wBFS_unweighted 
+>>> Res: 
+0.003645 4.767725
+0.003940 4.807385
+0.004210 4.797343
+0.004430 4.820789
+0.004527 4.792377
+0.003906 4.752544
+0.003822 4.750185
+0.003826 4.747304
+0.003953 4.788813
+0.004045 4.745345
+>>> End -----------------------------
+--- scripts:  program finish, took 211
+--- scripts:  Running run_vector_cpam on com-orkut.ungraph (prefix: orkut) with batch size 100000 and algorithm all
+### Graph: /data/datasets/graphs/orkut/com-orkut.ungraph.base.100000.adj
+### SET API ###
+binary = 1
+native map = 1
+iteration = 0
+native map_early_exit = 1
+native parallel_map = 1
+native native_parallel_map_early_exit = 0
+supports modification
+supports insert_batch
+supports_get_memory_size = 1
+### GRAPH API ###
+n is suppoted as a function
+m is stored
+the graph is symmetric
+degree is supported
+supports basic map
+parallel_map_neighbors is supported
+map_neighbors_early_exit is supported
+parallel_map_neighbors_early_exit is supported
+supports insert_batch
+total bytes used = 1017605312
+### Threads: 128
+### n: 3072627
+### m: 233370166
+>>> Begin -----------------------------
+>>> Input_file /data/datasets/graphs/orkut/com-orkut.ungraph.base.100000.adj
+>>> Batch_file /data/datasets/graphs/orkut/com-orkut.ungraph.dynamic.100000.el
+>>> Batch_num 10
+>>> Batch_size 100000
+>>> Alg BFS 
+>>> Res: 
+0.005081 0.006507
+0.004139 0.005346
+0.004141 0.006859
+0.004525 0.005294
+0.004439 0.005334
+0.004067 0.005242
+0.004337 0.005141
+0.004162 0.005106
+0.004202 0.005098
+0.004269 0.005390
+>>> Alg PageRank 
+>>> Res: 
+0.004031 0.285825
+0.004056 0.285712
+0.004203 0.283340
+0.004133 0.287556
+0.004336 0.286852
+0.004165 0.291095
+0.004147 0.290454
+0.004470 0.291015
+0.004345 0.294340
+0.004193 0.311630
+>>> Alg LabelPropagation 
+>>> Res: 
+0.004202 0.049494
+0.004340 0.047517
+0.004373 0.048158
+0.004637 0.047219
+0.004779 0.046418
+0.004397 0.046408
+0.004798 0.047878
+0.004691 0.048004
+0.004473 0.047989
+0.004281 0.047978
+>>> Alg wBFS_unweighted 
+>>> Res: 
+0.004117 3.101913
+0.004159 3.156199
+0.005076 3.131458
+0.004086 3.092463
+0.004615 3.021327
+0.004190 3.038519
+0.004414 3.069780
+0.004496 3.107362
+0.004480 3.109096
+0.004875 3.143598
+>>> End -----------------------------
+--- scripts:  program finish, took 152
+--- scripts:  Running run_vector_cpam on cit-Patents (prefix: cit-Patents) with batch size 100000 and algorithm all
+### Graph: /data/datasets/graphs/cit-Patents/cit-Patents.base.100000.adj
+### SET API ###
+binary = 1
+native map = 1
+iteration = 0
+native map_early_exit = 1
+native parallel_map = 1
+native native_parallel_map_early_exit = 0
+supports modification
+supports insert_batch
+supports_get_memory_size = 1
+### GRAPH API ###
+n is suppoted as a function
+m is stored
+the graph is symmetric
+degree is supported
+supports basic map
+parallel_map_neighbors is supported
+map_neighbors_early_exit is supported
+parallel_map_neighbors_early_exit is supported
+supports insert_batch
+total bytes used = 173295044
+### Threads: 128
+### n: 6009555
+### m: 32037895
+>>> Begin -----------------------------
+>>> Input_file /data/datasets/graphs/cit-Patents/cit-Patents.base.100000.adj
+>>> Batch_file /data/datasets/graphs/cit-Patents/cit-Patents.dynamic.100000.el
+>>> Batch_num 10
+>>> Batch_size 100000
+>>> Alg BFS 
+>>> Res: 
+0.004002 0.011618
+0.004013 0.009251
+0.003951 0.008446
+0.003984 0.008323
+0.004013 0.008384
+0.003981 0.008825
+0.003994 0.008900
+0.004125 0.009028
+0.004102 0.008887
+0.004022 0.008875
+>>> Alg PageRank 
+>>> Res: 
+0.003982 0.183926
+0.004011 0.181125
+0.003901 0.180198
+0.004046 0.184210
+0.003978 0.177533
+0.003916 0.176017
+0.003808 0.176740
+0.004062 0.178134
+0.003917 0.181301
+0.004121 0.175745
+>>> Alg LabelPropagation 
+>>> Res: 
+0.003808 0.027190
+0.003900 0.025956
+0.003880 0.025333
+0.004036 0.025566
+0.003957 0.026131
+0.004139 0.026285
+0.004219 0.025889
+0.003976 0.026488
+0.004229 0.026619
+0.004041 0.026661
+>>> Alg wBFS_unweighted 
+>>> Res: 
+0.003742 4.684289
+0.003825 4.644814
+0.003726 4.629414
+0.003676 4.637268
+0.004035 4.659124
+0.004008 4.627604
+0.003887 4.655298
+0.004220 4.657574
+0.004291 4.611184
+0.003860 4.620004
+>>> End -----------------------------
+--- scripts:  program finish, took 200
+--- scripts:  Running run_vector_cpam on twitter-unique-undir (prefix: twitter) with batch size 100000 and algorithm all
+### Graph: /data/datasets/graphs/twitter/twitter-unique-undir.base.100000.adj
+### SET API ###
+binary = 1
+native map = 1
+iteration = 0
+native map_early_exit = 1
+native parallel_map = 1
+native native_parallel_map_early_exit = 0
+supports modification
+supports insert_batch
+supports_get_memory_size = 1
+### GRAPH API ###
+n is suppoted as a function
+m is stored
+the graph is symmetric
+degree is supported
+supports basic map
+parallel_map_neighbors is supported
+map_neighbors_early_exit is supported
+parallel_map_neighbors_early_exit is supported
+supports insert_batch
+total bytes used = 11104883180
+### Threads: 128
+### n: 41652231
+### m: 2429498283
+>>> Begin -----------------------------
+>>> Input_file /data/datasets/graphs/twitter/twitter-unique-undir.base.100000.adj
+>>> Batch_file /data/datasets/graphs/twitter/twitter-unique-undir.dynamic.100000.el
+>>> Batch_num 10
+>>> Batch_size 100000
+>>> Alg BFS 
+>>> Res: 
+0.021061 0.039010
+0.018360 0.037614
+0.020833 0.037069
+0.019994 0.037364
+0.021980 0.037089
+0.025797 0.037446
+0.025997 0.038041
+0.017459 0.037526
+0.020909 0.038615
+0.020904 0.037113
+>>> Alg PageRank 
+>>> Res: 
+0.018853 9.073794
+0.020269 9.046064
+0.019847 9.051471
+0.022897 9.059734
+0.022629 9.060643
+0.023085 9.286711
+0.026449 10.347654
+0.017231 10.323349
+0.023737 10.351006
+0.020418 10.312459
+>>> Alg LabelPropagation 
+>>> Res: 
+0.018113 1.458833
+0.019898 1.450274
+0.019458 1.462598
+0.020624 1.457235
+0.022979 1.460408
+0.020567 1.451999
+0.027980 1.450947
+0.015043 1.455786
+0.018568 1.446877
+0.019047 1.451752
+>>> Alg wBFS_unweighted 
+>>> Res: 
+0.018505 23.150869
+0.022218 21.175062
+0.018187 21.241468
+0.018505 21.251857
+0.023324 21.311191
+0.023871 21.351621
+0.025526 21.582861
+0.015130 21.457628
+0.019836 21.491318
+0.018915 21.271203
+>>> End -----------------------------
+--- scripts:  program finish, took 1402
+--- scripts:  Running run_vector_cpam on com-friendster (prefix: friend) with batch size 100000 and algorithm all
+### Graph: /data/datasets/graphs/friend/com-friendster.base.100000.adj
+### SET API ###
+binary = 1
+native map = 1
+iteration = 0
+native map_early_exit = 1
+native parallel_map = 1
+native native_parallel_map_early_exit = 0
+supports modification
+supports insert_batch
+supports_get_memory_size = 1
+### GRAPH API ###
+n is suppoted as a function
+m is stored
+the graph is symmetric
+degree is supported
+supports basic map
+parallel_map_neighbors is supported
+map_neighbors_early_exit is supported
+parallel_map_neighbors_early_exit is supported
+supports insert_batch
+total bytes used = 16677424780
+### Threads: 128
+### n: 2586147870
+### m: 3697831648
+>>> Begin -----------------------------
+>>> Input_file /data/datasets/graphs/friend/com-friendster.base.100000.adj
+>>> Batch_file /data/datasets/graphs/friend/com-friendster.dynamic.100000.el
+>>> Batch_num 10
+>>> Batch_size 100000
+>>> Alg BFS 
+>>> Res: 
+0.005946 1.235032
+0.004455 1.039045
+0.004172 1.034841
+0.004438 1.041600
+0.004208 1.034764
+0.004670 1.036534
+0.004224 1.035756
+0.004267 1.034457
+0.004306 1.038922
+0.004215 1.042597
+>>> Alg PageRank 
+>>> Res: 
+0.004605 54.501956
+0.004738 63.769057
+0.004726 72.239270
+0.004849 84.088459
+0.004885 86.171324
+0.004829 68.651201
+0.004850 54.279954
+0.004706 65.750127
+0.004728 76.554226
+0.004964 41.844748
+>>> Alg LabelPropagation 
+>>> Res: 
+0.004316 4.688384
+0.004526 4.573569
+0.004459 4.625754
+0.004444 4.528473
+0.004381 4.853635
+0.004584 4.637606
+0.004504 4.686382
+0.004419 4.648008
+0.004444 4.638661
+0.004540 4.478611
+>>> Alg wBFS_unweighted 
+>>> Res: 
+0.004597 44.787966
+0.004498 44.879252
+0.004601 44.507248
+0.004406 45.226417
+0.004412 49.016437
+0.004410 45.447519
+0.004706 44.744737
+0.004517 45.309886
+0.004362 49.321780
+0.004488 47.380375
+>>> End -----------------------------
+--- scripts:  program finish, took 5390
+--- scripts:  Running run_vector_cpam on soc-LiveJournal1 (prefix: live-journal) with batch size 1000000 and algorithm all
+### Graph: /data/datasets/graphs/live-journal/soc-LiveJournal1.base.1000000.adj
+### SET API ###
+binary = 1
+native map = 1
+iteration = 0
+native map_early_exit = 1
+native parallel_map = 1
+native native_parallel_map_early_exit = 0
+supports modification
+supports insert_batch
+supports_get_memory_size = 1
+### GRAPH API ###
+n is suppoted as a function
+m is stored
+the graph is symmetric
+degree is supported
+supports basic map
+parallel_map_neighbors is supported
+map_neighbors_early_exit is supported
+parallel_map_neighbors_early_exit is supported
+supports insert_batch
+total bytes used = 368489144
+### Threads: 128
+### n: 4847571
+### m: 76220856
+>>> Begin -----------------------------
+>>> Input_file /data/datasets/graphs/live-journal/soc-LiveJournal1.base.1000000.adj
+>>> Batch_file /data/datasets/graphs/live-journal/soc-LiveJournal1.dynamic.1000000.el
+>>> Batch_num 10
+>>> Batch_size 1000000
+>>> Alg BFS 
+>>> Res: 
+0.009935 0.009797
+0.010541 0.008735
+0.010518 0.008479
+0.010429 0.008640
+0.011461 0.008534
+0.010651 0.008671
+0.010551 0.008431
+0.010460 0.008474
+0.010513 0.008681
+0.010353 0.008632
+>>> Alg PageRank 
+>>> Res: 
+0.009706 0.239904
+0.010210 0.240220
+0.010505 0.243755
+0.012022 0.254842
+0.011547 0.251359
+0.011302 0.248664
+0.011643 0.253145
+0.011929 0.265066
+0.012258 0.258592
+0.012086 0.248267
+>>> Alg LabelPropagation 
+>>> Res: 
+0.009621 0.033337
+0.010239 0.033307
+0.010148 0.033532
+0.010088 0.033732
+0.010387 0.035364
+0.010316 0.034707
+0.010407 0.034662
+0.011584 0.035585
+0.010382 0.035390
+0.010537 0.038024
+>>> Alg wBFS_unweighted 
+>>> Res: 
+0.009851 4.780178
+0.011718 4.869182
+0.012048 4.861230
+0.011561 4.824023
+0.011549 4.797413
+0.011571 4.813753
+0.011732 4.839429
+0.011384 4.816797
+0.011451 4.821625
+0.011351 4.750158
+>>> End -----------------------------
+--- scripts:  program finish, took 218
+--- scripts:  Running run_vector_cpam on com-orkut.ungraph (prefix: orkut) with batch size 1000000 and algorithm all
+### Graph: /data/datasets/graphs/orkut/com-orkut.ungraph.base.1000000.adj
+### SET API ###
+binary = 1
+native map = 1
+iteration = 0
+native map_early_exit = 1
+native parallel_map = 1
+native native_parallel_map_early_exit = 0
+supports modification
+supports insert_batch
+supports_get_memory_size = 1
+### GRAPH API ###
+n is suppoted as a function
+m is stored
+the graph is symmetric
+degree is supported
+supports basic map
+parallel_map_neighbors is supported
+map_neighbors_early_exit is supported
+parallel_map_neighbors_early_exit is supported
+supports insert_batch
+total bytes used = 978214688
+### Threads: 128
+### n: 3072627
+### m: 224370166
+>>> Begin -----------------------------
+>>> Input_file /data/datasets/graphs/orkut/com-orkut.ungraph.base.1000000.adj
+>>> Batch_file /data/datasets/graphs/orkut/com-orkut.ungraph.dynamic.1000000.el
+>>> Batch_num 10
+>>> Batch_size 1000000
+>>> Alg BFS 
+>>> Res: 
+0.013216 0.005414
+0.011769 0.005217
+0.011978 0.005097
+0.011760 0.005151
+0.012155 0.005184
+0.012949 0.005196
+0.012194 0.005654
+0.012041 0.005340
+0.012127 0.005238
+0.012238 0.005201
+>>> Alg PageRank 
+>>> Res: 
+0.011666 0.400871
+0.013977 0.387957
+0.012852 0.355036
+0.013300 0.348173
+0.013666 0.342907
+0.013475 0.362547
+0.014391 0.354127
+0.014526 0.348983
+0.015205 0.351737
+0.015910 0.358122
+>>> Alg LabelPropagation 
+>>> Res: 
+0.011389 0.050542
+0.011952 0.049186
+0.012588 0.051866
+0.012611 0.052846
+0.012198 0.055967
+0.012358 0.054764
+0.012895 0.055980
+0.013016 0.055903
+0.014205 0.057665
+0.012898 0.057546
+>>> Alg wBFS_unweighted 
+>>> Res: 
+0.010823 3.126773
+0.012338 3.121619
+0.012629 3.133089
+0.012535 3.128372
+0.011867 3.099287
+0.012726 3.108664
+0.012502 3.104859
+0.012710 3.118408
+0.013120 3.139462
+0.013232 3.158689
+>>> End -----------------------------
+--- scripts:  program finish, took 167
+--- scripts:  Running run_vector_cpam on cit-Patents (prefix: cit-Patents) with batch size 1000000 and algorithm all
+### Graph: /data/datasets/graphs/cit-Patents/cit-Patents.base.1000000.adj
+### SET API ###
+binary = 1
+native map = 1
+iteration = 0
+native map_early_exit = 1
+native parallel_map = 1
+native native_parallel_map_early_exit = 0
+supports modification
+supports insert_batch
+supports_get_memory_size = 1
+### GRAPH API ###
+n is suppoted as a function
+m is stored
+the graph is symmetric
+degree is supported
+supports basic map
+parallel_map_neighbors is supported
+map_neighbors_early_exit is supported
+parallel_map_neighbors_early_exit is supported
+supports insert_batch
+total bytes used = 134495232
+### Threads: 128
+### n: 6009555
+### m: 23037895
+>>> Begin -----------------------------
+>>> Input_file /data/datasets/graphs/cit-Patents/cit-Patents.base.1000000.adj
+>>> Batch_file /data/datasets/graphs/cit-Patents/cit-Patents.dynamic.1000000.el
+>>> Batch_num 10
+>>> Batch_size 1000000
+>>> Alg BFS 
+>>> Res: 
+0.011885 0.015943
+0.011480 0.014004
+0.011271 0.013495
+0.011538 0.013204
+0.010966 0.012231
+0.011399 0.012009
+0.011060 0.011782
+0.011597 0.011957
+0.011515 0.011363
+0.011527 0.011350
+>>> Alg PageRank 
+>>> Res: 
+0.009791 0.216775
+0.010322 0.219909
+0.011306 0.225990
+0.011673 0.252660
+0.015359 0.248102
+0.011095 0.231329
+0.010906 0.227635
+0.010942 0.231552
+0.010936 0.231807
+0.011039 0.196865
+>>> Alg LabelPropagation 
+>>> Res: 
+0.009677 0.026807
+0.010412 0.026608
+0.010560 0.026527
+0.010581 0.026557
+0.010655 0.026917
+0.010580 0.027373
+0.010438 0.027752
+0.010586 0.027835
+0.010599 0.028258
+0.010657 0.028141
+>>> Alg wBFS_unweighted 
+>>> Res: 
+0.010122 5.002295
+0.010210 4.987319
+0.010698 4.951387
+0.011988 4.920703
+0.011207 4.808159
+0.011906 4.771330
+0.012576 4.715211
+0.012034 4.682478
+0.011945 4.647458
+0.012464 4.640988
+>>> End -----------------------------
+--- scripts:  program finish, took 214
+--- scripts:  Running run_vector_cpam on twitter-unique-undir (prefix: twitter) with batch size 1000000 and algorithm all
+### Graph: /data/datasets/graphs/twitter/twitter-unique-undir.base.1000000.adj
+### SET API ###
+binary = 1
+native map = 1
+iteration = 0
+native map_early_exit = 1
+native parallel_map = 1
+native native_parallel_map_early_exit = 0
+supports modification
+supports insert_batch
+supports_get_memory_size = 1
+### GRAPH API ###
+n is suppoted as a function
+m is stored
+the graph is symmetric
+degree is supported
+supports basic map
+parallel_map_neighbors is supported
+map_neighbors_early_exit is supported
+parallel_map_neighbors_early_exit is supported
+supports insert_batch
+total bytes used = 11064886492
+### Threads: 128
+### n: 41652231
+### m: 2420498283
+>>> Begin -----------------------------
+>>> Input_file /data/datasets/graphs/twitter/twitter-unique-undir.base.1000000.adj
+>>> Batch_file /data/datasets/graphs/twitter/twitter-unique-undir.dynamic.1000000.el
+>>> Batch_num 10
+>>> Batch_size 1000000
+>>> Alg BFS 
+>>> Res: 
+0.231298 0.041048
+0.179686 0.039951
+0.178049 0.040507
+0.165790 0.040904
+0.196489 0.041117
+0.206828 0.040573
+0.218750 0.041752
+0.126659 0.040912
+0.174074 0.040511
+0.173399 0.040421
+>>> Alg PageRank 
+>>> Res: 
+0.156521 8.277542
+0.186544 9.081755
+0.169246 9.117413
+0.159246 9.138256
+0.188593 9.161979
+0.206422 9.155323
+0.232757 8.713434
+0.130641 8.997926
+0.177048 9.257968
+0.172269 9.292005
+>>> Alg LabelPropagation 
+>>> Res: 
+0.180956 1.007341
+0.193058 0.993113
+0.176421 1.005673
+0.163078 1.008744
+0.182668 1.006964
+0.215967 1.018633
+0.235462 1.022935
+0.127723 1.030597
+0.182688 1.027555
+0.178328 1.018314
+>>> Alg wBFS_unweighted 
+>>> Res: 
+0.185578 24.510130
+0.194463 26.650503
+0.170895 27.154924
+0.172849 26.894269
+0.195435 26.895160
+0.216347 26.596193
+0.231631 24.209140
+0.130330 23.468746
+0.186832 22.570648
+0.186604 23.985824
+>>> End -----------------------------
+--- scripts:  program finish, took 1660
+--- scripts:  Running run_vector_cpam on com-friendster (prefix: friend) with batch size 1000000 and algorithm all
+### Graph: /data/datasets/graphs/friend/com-friendster.base.1000000.adj
+### SET API ###
+binary = 1
+native map = 1
+iteration = 0
+native map_early_exit = 1
+native parallel_map = 1
+native native_parallel_map_early_exit = 0
+supports modification
+supports insert_batch
+supports_get_memory_size = 1
+### GRAPH API ###
+n is suppoted as a function
+m is stored
+the graph is symmetric
+degree is supported
+supports basic map
+parallel_map_neighbors is supported
+map_neighbors_early_exit is supported
+parallel_map_neighbors_early_exit is supported
+supports insert_batch
+total bytes used = 16637185916
+### Threads: 128
+### n: 2586147870
+### m: 3688831648
+>>> Begin -----------------------------
+>>> Input_file /data/datasets/graphs/friend/com-friendster.base.1000000.adj
+>>> Batch_file /data/datasets/graphs/friend/com-friendster.dynamic.1000000.el
+>>> Batch_num 10
+>>> Batch_size 1000000
+>>> Alg BFS 
+>>> Res: 
+0.029796 1.307434
+0.024458 1.094182
+0.028430 1.111441
+0.026780 1.099926
+0.023683 1.097119
+0.024833 1.092039
+0.024092 1.093355
+0.022644 1.086275
+0.022770 1.097433
+0.023021 1.092446
+>>> Alg PageRank 
+>>> Res: 
+0.023369 48.993001
+0.026899 52.595012
+0.027180 72.032294
+0.027626 76.853306
+0.027447 68.263107
+0.028109 67.757755
+0.028212 79.234366
+0.029879 72.959912
+0.027188 69.431978
+0.027609 27.252514
+>>> Alg LabelPropagation 
+>>> Res: 
+0.024683 4.349312
+0.024764 4.387521
+0.024825 4.358952
+0.024079 4.310303
+0.024497 4.121568
+0.024091 4.412704
+0.025034 4.316075
+0.025413 4.192735
+0.024478 4.426571
+0.025268 4.422467
+>>> Alg wBFS_unweighted 
+>>> Res: 
+0.022798 46.271201
+0.024254 51.115896
+0.024146 52.238672
+0.024385 59.414134
+0.023533 64.059016
+0.024351 62.851584
+0.024480 60.946953
+0.026154 64.152270
+0.025510 72.123497
+0.024716 68.827136
+>>> End -----------------------------
+--- scripts:  program finish, took 5882
