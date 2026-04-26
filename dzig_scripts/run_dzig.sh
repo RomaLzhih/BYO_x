@@ -11,8 +11,9 @@
 
 # solvers=("run_ppcsr" "run_std_set" "run_pcsr" "run_absl_btree_set" "run_absl_flat_hash_set" "cpam" "run_sstgraph" "run_dhb" "run_terrace")
 set -o xtrace
-solvers=("run_absl_btree_set" "run_absl_flat_hash_set" "run_dhb")
-graphs=("soc-LiveJournal1" "com-orkut.ungraph" "cit-Patents" "twitter-unique-undir" "com-friendster")
+solvers=("run_ppcsr")
+# graphs=("soc-LiveJournal1" "com-orkut.ungraph" "cit-Patents" "twitter-unique-undir" "com-friendster")
+graphs=("soc-LiveJournal1" "com-orkut.ungraph" "cit-Patents" "twitter-unique-undir")
 batch_size_seq=(1 10 100 1000 10000 100000 1000000)
 # batch_size_seq=(1 10)
 batch_num=10

@@ -125,7 +125,7 @@ struct symmetric_ppcsr_graph {
     gbbs::sequence<uint32_t> degrees(n, 0);
     gbbs::sequence<uint8_t> all_true(m, 1);
 
-    printf("convert to edge list\n");
+    std::cout << "convert to edge list" << std::endl;
     gbbs::parallel_for(0, n, [&](uint32_t i) {
       for (size_t j = v_data[i].offset; j < v_data[i].offset + v_data[i].degree;
            j++) {

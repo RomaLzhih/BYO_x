@@ -6,6 +6,8 @@
 *.vscode/
 build/
 .cache/
+.tasks
+Session.vim
 
 MODULE.bazel
 MODULE.bazel.lock
