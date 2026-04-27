@@ -155,7 +155,7 @@ def save_results_csv(results, output_file):
     """Save results to a CSV file."""
     with open(output_file, 'w') as f:
         # Write header
-        f.write("baseline,batch_size,graph,algorithm,measurement_idx,value1,value2\n")
+        f.write("baseline,batch_size,graph,algorithm,measurement_idx,insert_time,algorithm_time\n")
         
         # Write data
         for baseline in sorted(results.keys()):
