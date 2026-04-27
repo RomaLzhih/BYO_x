@@ -1,4 +1,4 @@
-baseline,batch_size,graph,algorithm,measurement_idx,value1,value2
+baseline,batch_size,graph,algorithm,measurement_idx,insert_time,algorithm_time
 run_ppcsr,1,cit-Patents,BFS,0,1e-06,0.019156
 run_ppcsr,1,cit-Patents,BFS,1,2e-06,0.018052
 run_ppcsr,1,cit-Patents,BFS,2,2e-06,0.017863

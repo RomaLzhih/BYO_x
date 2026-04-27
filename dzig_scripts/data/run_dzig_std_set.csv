@@ -1,4 +1,4 @@
-baseline,batch_size,graph,algorithm,measurement_idx,value1,value2
+baseline,batch_size,graph,algorithm,measurement_idx,insert_time,algorithm_time
 run_std_set,1,cit-Patents,BFS,0,7e-06,0.051173
 run_std_set,1,cit-Patents,BFS,1,9e-06,0.042747
 run_std_set,1,cit-Patents,BFS,2,8e-06,0.042743

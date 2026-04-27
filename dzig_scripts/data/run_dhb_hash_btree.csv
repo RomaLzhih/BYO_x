@@ -1,4 +1,4 @@
-baseline,batch_size,graph,algorithm,measurement_idx,value1,value2
+baseline,batch_size,graph,algorithm,measurement_idx,insert_time,algorithm_time
 run_absl_btree_set,1,cit-Patents,BFS,0,6e-06,0.015076
 run_absl_btree_set,1,cit-Patents,BFS,1,9e-06,0.010925
 run_absl_btree_set,1,cit-Patents,BFS,2,1e-05,0.010296

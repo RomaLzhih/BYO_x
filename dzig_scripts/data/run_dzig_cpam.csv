@@ -1,4 +1,4 @@
-baseline,batch_size,graph,algorithm,measurement_idx,value1,value2
+baseline,batch_size,graph,algorithm,measurement_idx,insert_time,algorithm_time
 run_vector_cpam,1,cit-Patents,BFS,0,8e-06,0.008268
 run_vector_cpam,1,cit-Patents,BFS,1,1.1e-05,0.008124
 run_vector_cpam,1,cit-Patents,BFS,2,9e-06,0.008006
