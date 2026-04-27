@@ -43,59 +43,71 @@ def parse_log_file(log_file):
         
         # Look for ">>> Begin" marker
         if line.startswith(">>> Begin"):
+            # Extract metadata from the following lines
             input_file = None
+            batch_file = None
+            batch_num = None
             batch_size = None
-
-            # Collect metadata until the first >>> Alg or >>> End
+            algorithm = None
+            
+            # Parse metadata lines
             j = i + 1
-            while j < len(lines):
+            while j < len(lines) and not lines[j].strip().startswith(">>> Res:"):
                 metadata_line = lines[j].strip()
-                if metadata_line.startswith(">>> Alg") or metadata_line.startswith(">>> End"):
-                    break
+                
                 if metadata_line.startswith(">>> Input_file"):
                     input_file = metadata_line.split()[-1]
+                elif metadata_line.startswith(">>> Batch_file"):
+                    batch_file = metadata_line.split()[-1]
+                elif metadata_line.startswith(">>> Batch_num"):
+                    batch_num = metadata_line.split()[-1]
                 elif metadata_line.startswith(">>> Batch_size"):
                     batch_size = metadata_line.split()[-1]
+                elif metadata_line.startswith(">>> Alg"):
+                    # Algorithm name is everything after ">>> Alg"
+                    algorithm = metadata_line.split(">>> Alg")[1].strip()
+                
                 j += 1
-
-            # Extract graph name from input_file
-            graph_name = None
-            if input_file:
-                graph_file = input_file.split('/')[-1]
-                graph_name_match = re.match(r'(.+?)\.base\.\d+\.adj', graph_file)
-                graph_name = graph_name_match.group(1) if graph_name_match else graph_file
-
-            # Now iterate through all >>> Alg / >>> Res: pairs until >>> End
-            while j < len(lines) and not lines[j].strip().startswith(">>> End"):
-                alg_line = lines[j].strip()
-                if alg_line.startswith(">>> Alg"):
-                    algorithm = alg_line.split(">>> Alg")[1].strip()
+            
+            # Now parse results
+            if j < len(lines) and lines[j].strip().startswith(">>> Res:"):
+                j += 1  # Move past ">>> Res:" line
+                result_pairs = []
+                
+                while j < len(lines) and not lines[j].strip().startswith(">>> End"):
+                    result_line = lines[j].strip()
+                    if result_line:
+                        # Parse the two numbers
+                        parts = result_line.split()
+                        if len(parts) == 2:
+                            try:
+                                num1 = float(parts[0])
+                                num2 = float(parts[1])
+                                result_pairs.append([num1, num2])
+                            except ValueError:
+                                pass
                     j += 1
-
-                    # Expect >>> Res: next
-                    if j < len(lines) and lines[j].strip().startswith(">>> Res:"):
-                        j += 1
-                        result_pairs = []
-
-                        while j < len(lines):
-                            result_line = lines[j].strip()
-                            if result_line.startswith(">>> Alg") or result_line.startswith(">>> End"):
-                                break
-                            if result_line:
-                                parts = result_line.split()
-                                if len(parts) == 2:
-                                    try:
-                                        result_pairs.append([float(parts[0]), float(parts[1])])
-                                    except ValueError:
-                                        pass
-                            j += 1
-
-                        if current_baseline and graph_name and batch_size and algorithm:
-                            results[current_baseline][batch_size][graph_name][algorithm] = result_pairs
-                else:
-                    j += 1
-
-            i = j
+                
+                # Extract graph name from input_file
+                if input_file and current_baseline:
+                    # Example: /data/datasets/graphs/live-journal/soc-LiveJournal1.base.1.adj
+                    # Graph is the file name prefix (soc-LiveJournal1)
+                    path_parts = input_file.split('/')
+                    graph_file = path_parts[-1]
+                    # Extract graph name (before .base)
+                    graph_name_match = re.match(r'(.+?)\.base\.\d+\.adj', graph_file)
+                    if graph_name_match:
+                        graph_name = graph_name_match.group(1)
+                    else:
+                        graph_name = graph_file
+                    
+                    # Store results
+                    if batch_size and algorithm:
+                        results[current_baseline][batch_size][graph_name][algorithm] = result_pairs
+                
+                i = j
+            else:
+                i += 1
         else:
             i += 1
     
@@ -170,31 +182,19 @@ def save_results_csv(results, output_file):
 
 
 if __name__ == "__main__":
-    import sys
-    import os
-
-    if len(sys.argv) < 2:
-        print("Usage: parse_log.py <log_file>")
-        sys.exit(1)
-
-    log_file = sys.argv[1]
-
-    if not os.path.exists(log_file):
-        print(f"Error: file not found: {log_file}")
-        sys.exit(1)
-
+    log_file = "run_dzig_local.log"
+    
     print(f"Parsing {log_file}...")
     results = parse_log_file(log_file)
     
     # Print summary
     print_results_summary(results)
     
-    base_name = os.path.splitext(os.path.basename(log_file))[0]
-    output_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
-    os.makedirs(output_dir, exist_ok=True)
-
+    # Save to JSON
+    save_results_json(results, "parsed_results.json")
+    
     # Save to CSV
-    save_results_csv(results, os.path.join(output_dir, f"{base_name}.csv"))
+    save_results_csv(results, "parsed_results.csv")
     
     print("\n" + "=" * 80)
     print("Parsing complete!")
